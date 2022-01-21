@@ -1,12 +1,14 @@
 Package: imputeGeneric
-Title: What the Package Does (One Line, Title Case)
+Title: Generic imputation functions to easly implement imputation methods
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person(given = "Tobias",
+           family = "Rockel",
+           role = c("aut", "cre"),
+           email = "Rockel.To@gmail.com")
+Description: The general workflow of most imputation methods is quite similar.
+    The aim of this package is to implement some of this general workflow.
+License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
