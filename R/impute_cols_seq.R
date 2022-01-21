@@ -2,7 +2,7 @@
 #'
 #' Impute columns of a data set sequentially
 #'
-#' @param ds the data set to be imputed
+#' @param ds the data set to be imputed, must be a data frame with column names
 #' @param model_spec_parsnip The model type used for imputation. It is defined
 #'   via the `parsnip` package.
 #' @param cols_order ordering of the columns for imputation
@@ -38,6 +38,9 @@ impute_cols_seq <- function(ds,
                             rows_used_for_imputation = "only_complete",
                             M = is.na(ds)) {
   # Warning: never change M in this function!
+
+  if(!is.data.frame(ds) || is.null(colnames(ds)))
+    stop("ds must be a data frame with colnames")
 
   for (k in cols_order) {
     for (i in rows_order) {

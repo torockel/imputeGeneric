@@ -15,7 +15,7 @@ impute_cols_seq(
 )
 }
 \arguments{
-\item{ds}{the data set to be imputed}
+\item{ds}{the data set to be imputed, must be a data frame with column names}
 
 \item{model_spec_parsnip}{The model type used for imputation. It is defined
 via the \code{parsnip} package.}
