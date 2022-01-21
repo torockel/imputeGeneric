@@ -9,6 +9,9 @@ Authors@R:
 Description: The general workflow of most imputation methods is quite similar.
     The aim of this package is to implement some of this general workflow.
 License: GPL (>= 3)
+Imports:
+    parsnip,
+    stats
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
