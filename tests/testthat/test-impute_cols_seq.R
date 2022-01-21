@@ -1,11 +1,19 @@
 test_that("complete columns and rows works", {
-  ds_imp <- impute_cols_seq(
-    df_XY_10_X_mis,
-    cols_used_for_imputation = "only_complete",
-    rows_used_for_imputation = "only_complete")
-  res_ds <- df_XY_10_X_mis
-  res_ds[c(2, 7), "X"] <- c(3.25, 8.25)
-  expect_equal(ds_imp, res_ds)
+  ds_imp_test <- df_XYZ_10_mis
+  M <- is.na(df_XYZ_10_mis)
+  rows_comp <- !apply(M, 1, any)
+  lm_x <- lm(X ~ Z, df_XYZ_10_mis[rows_comp, ])
+  ds_imp_test$X[M[, "X"]] <- predict(lm_x, df_XYZ_10_mis[M[, "X"], ])
+  lm_y <- lm(Y ~ Z, df_XYZ_10_mis[rows_comp, ])
+  ds_imp_test$Y[M[, "Y"]] <- predict(lm_y, df_XYZ_10_mis[M[, "Y"], ])
+
+  expect_equal(
+    ds_imp_test,
+    impute_cols_seq(
+      df_XYZ_10_mis,
+      cols_used_for_imputation = "only_complete",
+      rows_used_for_imputation = "only_complete")
+  )
 })
 
 test_that("no data frame or no colnames throws an error", {
