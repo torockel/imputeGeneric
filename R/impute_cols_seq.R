@@ -10,7 +10,7 @@
 #'   columns? Possible choices: "only_complete", "already_imputed", "all"
 #' @param rows_order ordering of the rows for imputation
 #' @param rows_used_for_imputation Which rows should be used to impute other
-#'   rows? Possible choices: "only_complete", "already_imputed", "all"
+#'   rows? Possible choices: "only_complete", "partly_complete", "already_imputed", "all_except_i", "all"
 #' @param M missing data indicator matrix
 #'
 #' @details
@@ -51,8 +51,28 @@ impute_cols_seq <- function(ds,
       # Split ds
       # Depending on used rows and columns there are better places (more efficient)
       # to split the ds and train the model
-      rows_used_imp <- !apply(M, 1, any)
+
+      # Get row indices
+      if (rows_used_for_imputation == "only_complete") {
+        rows_used_imp <- !apply(M, 1, any)
+      } else if (rows_used_for_imputation %in% c("partly_complete", "already_imputed")) {
+        if (cols_used_for_imputation == "only_complete") {
+          rows_used_imp <- !M[, k]
+        } else {
+          stop("not implemented")
+        }
+      } else if (rows_used_for_imputation == "all_except_i") {
+        rows_used_imp <- seq_len(nrow(ds))[-i]
+      } else if (rows_used_for_imputation == "all") {
+        rows_used_imp <- seq_len(nrow(ds))
+      } else {
+        stop(paste0("'", rows_used_for_imputation, "' is no valid option for rows_used for imputation"))
+      }
+
+      # Get column indices
       cols_used_imp <- !apply(M, 2, any)
+
+      # Do the split
       ds_train <- ds[rows_used_imp, ]
       ds_mis <- ds[i, ]
 
@@ -63,6 +83,10 @@ impute_cols_seq <- function(ds,
         ds_train[, k]
       )
       ds[i, k] <- predict(model_fit, ds_mis)
+
+      if (rows_used_for_imputation == "already_imputed") {
+        M[i, k] <- FALSE
+      }
     }
   }
 
