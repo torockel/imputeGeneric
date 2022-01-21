@@ -48,3 +48,28 @@ test_that("complete columns and partly_complete rows work", {
   )
 })
 
+test_that("complete columns and already_imputed rows work", {
+  ds_imp_test <- df_XYZ_10_mis
+  M <- is.na(df_XYZ_10_mis)
+  ind_mis_X <- which(M[, "X"])
+  ind_comp_X <- which(!M[, "X"])
+  for(ind_mis in seq_along(ind_mis_X)) {
+    lm_x <- lm(X ~ Z, ds_imp_test[c(ind_comp_X, ind_mis_X[seq_len(ind_mis -1 )]), ], na.action = na.fail)
+    ds_imp_test$X[ind_mis_X[ind_mis]] <- predict(lm_x, ds_imp_test[ind_mis_X[ind_mis], ])
+  }
+  ind_mis_Y <- which(M[, "Y"])
+  ind_comp_Y <- which(!M[, "Y"])
+  for(ind_mis in seq_along(ind_mis_Y)) {
+    lm_y <- lm(Y ~ Z, ds_imp_test[c(ind_comp_Y, ind_mis_Y[seq_len(ind_mis -1 )]), ], na.action = na.fail)
+    ds_imp_test$Y[ind_mis_Y[ind_mis]] <- predict(lm_y, ds_imp_test[ind_mis_Y[ind_mis], ])
+  }
+
+  expect_equal(
+    ds_imp_test,
+    impute_cols_seq(
+      df_XYZ_10_mis,
+      cols_used_for_imputation = "only_complete",
+      rows_used_for_imputation = "already_imputed")
+  )
+})
+
