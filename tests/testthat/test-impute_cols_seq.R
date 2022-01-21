@@ -16,9 +16,9 @@ test_that("complete columns and rows works", {
   ds_imp_test <- df_XYZ_10_mis
   M <- is.na(df_XYZ_10_mis)
   rows_comp <- !apply(M, 1, any)
-  lm_x <- lm(X ~ Z, df_XYZ_10_mis[rows_comp, ])
+  lm_x <- lm(X ~ Z, df_XYZ_10_mis[rows_comp, ], na.action = na.fail)
   ds_imp_test$X[M[, "X"]] <- predict(lm_x, df_XYZ_10_mis[M[, "X"], ])
-  lm_y <- lm(Y ~ Z, df_XYZ_10_mis[rows_comp, ])
+  lm_y <- lm(Y ~ Z, df_XYZ_10_mis[rows_comp, ], na.action = na.fail)
   ds_imp_test$Y[M[, "Y"]] <- predict(lm_y, df_XYZ_10_mis[M[, "Y"], ])
 
   expect_equal(
@@ -30,4 +30,21 @@ test_that("complete columns and rows works", {
   )
 })
 
+
+test_that("complete columns and partly_complete rows work", {
+  ds_imp_test <- df_XYZ_10_mis
+  M <- is.na(df_XYZ_10_mis)
+  lm_x <- lm(X ~ Z, df_XYZ_10_mis[!M[, "X"], ], na.action = na.fail)
+  ds_imp_test$X[M[, "X"]] <- predict(lm_x, df_XYZ_10_mis[M[, "X"], ])
+  lm_y <- lm(Y ~ Z, df_XYZ_10_mis[!M[, "Y"], ], na.action = na.fail)
+  ds_imp_test$Y[M[, "Y"]] <- predict(lm_y, df_XYZ_10_mis[M[, "Y"], ])
+
+  expect_equal(
+    ds_imp_test,
+    impute_cols_seq(
+      df_XYZ_10_mis,
+      cols_used_for_imputation = "only_complete",
+      rows_used_for_imputation = "partly_complete")
+  )
+})
 
