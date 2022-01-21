@@ -1,3 +1,17 @@
+test_that("no data frame or no colnames throws an error", {
+  expect_error(
+    impute_cols_seq(c("asdf")),
+    "ds must be a data frame with colnames"
+  )
+  df_no_name <- data.frame(X = c(2, 3))
+  colnames(df_no_name) <- NULL
+  expect_error(
+    impute_cols_seq(df_no_name),
+    "ds must be a data frame with colnames"
+  )
+})
+
+
 test_that("complete columns and rows works", {
   ds_imp_test <- df_XYZ_10_mis
   M <- is.na(df_XYZ_10_mis)
@@ -16,15 +30,4 @@ test_that("complete columns and rows works", {
   )
 })
 
-test_that("no data frame or no colnames throws an error", {
-  expect_error(
-    impute_cols_seq(c("asdf")),
-    "ds must be a data frame with colnames"
-  )
-  df_no_name <- data.frame(X = c(2, 3))
-  colnames(df_no_name) <- NULL
-  expect_error(
-    impute_cols_seq(df_no_name),
-    "ds must be a data frame with colnames"
-  )
-})
+
