@@ -10,14 +10,14 @@
 #'   columns? Possible choices: "only_complete", "already_imputed", "all"
 #' @param rows_order ordering of the rows for imputation
 #' @param rows_used_for_imputation Which rows should be used to impute other
-#'   rows? Possible choices: "only_complete", "partly_complete", "already_imputed", "all_except_i", "all"
+#'   rows? Possible choices: "only_complete", "partly_complete",
+#'   "already_imputed", "all_except_i", "all"
 #' @param M missing data indicator matrix
 #'
-#' @details
-#' This function imputes the columns of the data set `ds` column by column. The
-#' imputation order of the column can be specified by `cols_order`. Furthermore,
-#' `cols_used_for_imputation` controls which columns are used for the
-#' imputation. The same options are available for the rows of `ds` via
+#' @details This function imputes the columns of the data set `ds` column by
+#' column. The imputation order of the column can be specified by `cols_order`.
+#' Furthermore, `cols_used_for_imputation` controls which columns are used for
+#' the imputation. The same options are available for the rows of `ds` via
 #' `rows_order` and `rows_used_for_imputation`. If `ds` is pre-imputed, the
 #' missing data indicator matrix can be supplied via `M`.
 #'
@@ -37,7 +37,8 @@ impute_cols_seq <- function(ds,
                             rows_order = seq_len(nrow(ds)),
                             rows_used_for_imputation = "only_complete",
                             M = is.na(ds)) {
-  # Warning: never change M in this function!
+  # Warning: never change M_start in this function!
+  M_start <- M
 
   if(!is.data.frame(ds) || is.null(colnames(ds)))
     stop("ds must be a data frame with colnames")
@@ -70,7 +71,12 @@ impute_cols_seq <- function(ds,
       }
 
       # Get column indices
-      cols_used_imp <- !apply(M, 2, any)
+      if (cols_used_for_imputation == "only_complete") {
+        cols_used_imp <- !apply(M_start, 2, any)
+      } else {
+        stop("not implemented")
+      }
+
 
       # Do the split
       ds_train <- ds[rows_used_imp, ]
