@@ -23,14 +23,16 @@ via the \code{parsnip} package.}
 \item{cols_used_for_imputation}{Which columns should be used to impute other
 columns? Possible choices: "only_complete", "already_imputed", "all", "all_no_update"}
 
-\item{cols_order}{ordering of the columns for imputation}
+\item{cols_order}{ordering of the columns for imputation. This can be a vector with
+indices or an \code{order_option} from \code{\link[=order_cols]{order_cols()}}.}
 
 \item{rows_used_for_imputation}{Which rows should be used to impute other
 rows? Possible choices: "only_complete", "partly_complete",
 "already_imputed", "all_except_i", "all_except_i_no_update", "all",
 "all_no_update"}
 
-\item{rows_order}{ordering of the rows for imputation}
+\item{rows_order}{Ordering of the rows for imputation. This can be a vector with
+indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
 
 \item{M}{missing data indicator matrix}
 }

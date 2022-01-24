@@ -7,12 +7,14 @@
 #'   via the `parsnip` package.
 #' @param cols_used_for_imputation Which columns should be used to impute other
 #'   columns? Possible choices: "only_complete", "already_imputed", "all", "all_no_update"
-#' @param cols_order ordering of the columns for imputation
+#' @param cols_order ordering of the columns for imputation. This can be a vector with
+#'   indices or an `order_option` from [order_cols()].
 #' @param rows_used_for_imputation Which rows should be used to impute other
 #'   rows? Possible choices: "only_complete", "partly_complete",
 #'   "already_imputed", "all_except_i", "all_except_i_no_update", "all",
 #'   "all_no_update"
-#' @param rows_order ordering of the rows for imputation
+#' @param rows_order Ordering of the rows for imputation. This can be a vector with
+#'   indices or an `order_option` from [order_rows()].
 #' @param M missing data indicator matrix
 #'
 #' @details This function imputes the columns of the data set `ds` column by
@@ -59,6 +61,14 @@ impute_cols_seq <- function(ds,
     if (any(is.na(ds))) {
       stop("If you want to use all rows or columns for imputation, ds must be complete.")
     }
+  }
+
+  if (is.character(cols_order) && length(cols_order) == 1 && !(cols_order %in% colnames(ds))) {
+    cols_order <- order_cols(ds, order_option = cols_order)
+  }
+
+  if (is.character(rows_order) && length(rows_order) == 1 && !(rows_order %in% rownames(ds))) {
+    rows_order <- order_rows(ds, order_option = cols_order)
   }
 
   for (k in cols_order) {
