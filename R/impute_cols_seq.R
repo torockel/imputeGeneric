@@ -59,11 +59,7 @@ impute_cols_seq <- function(ds,
       if (rows_used_for_imputation == "only_complete") {
         rows_used_imp <- !apply(M_start, 1, any)
       } else if (rows_used_for_imputation  == "partly_complete"){
-        if (cols_used_for_imputation == "only_complete") {
-          rows_used_imp <- !M_start[, k]
-        } else {
-          stop("not implemented")
-        }
+        rows_used_imp <- !M_start[, k]
       } else if (rows_used_for_imputation == "already_imputed") {
         rows_used_imp <- !M[, k]
       } else if (rows_used_for_imputation %in% c("all_except_i", "all_except_i_no_update")) {
