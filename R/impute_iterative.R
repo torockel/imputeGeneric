@@ -39,6 +39,8 @@ impute_iterative <- function(ds,
                              M = is.na(ds),
                              ...) {
 
+  # force M before initial imputation, later it will be wrong (all FALSE)
+  force(M)
   # Initial imputation
   if (!is.null(initial_imputation_fun)) {
     ds <- initial_imputation_fun(ds, ...)
