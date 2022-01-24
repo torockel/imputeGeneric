@@ -16,6 +16,7 @@
 #' @param rows_order Ordering of the rows for imputation. This can be a vector with
 #'   indices or an `order_option` from [order_rows()].
 #' @param M missing data indicator matrix
+#' @param ... arguments passed on to [parsnip::fit_xy()] and [stats::predict()]
 #'
 #' @details This function imputes the columns of the data set `ds` column by
 #' column. The imputation order of the column can be specified by `cols_order`.
@@ -47,7 +48,8 @@ impute_cols_seq <- function(ds,
                             cols_order = seq_len(ncol(ds)),
                             rows_used_for_imputation = "only_complete",
                             rows_order = seq_len(nrow(ds)),
-                            M = is.na(ds)) {
+                            M = is.na(ds),
+                            ...) {
   # Warning: never change M_start, ds_old in this function!
   M_start <- M
   ds_old <- ds
@@ -132,9 +134,10 @@ impute_cols_seq <- function(ds,
       model_fit <- fit_xy(
         model_spec_parsnip,
         ds_train[, cols_used_imp, drop = FALSE],
-        ds_train[, k]
+        ds_train[, k],
+        ...
       )
-      ds[i, k] <- predict(model_fit, ds_mis)
+      ds[i, k] <- predict(model_fit, ds_mis, ...)
 
       if (rows_used_for_imputation == "already_imputed" || cols_used_for_imputation == "already_imputed") {
         M[i, k] <- FALSE

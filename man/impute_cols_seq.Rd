@@ -11,7 +11,8 @@ impute_cols_seq(
   cols_order = seq_len(ncol(ds)),
   rows_used_for_imputation = "only_complete",
   rows_order = seq_len(nrow(ds)),
-  M = is.na(ds)
+  M = is.na(ds),
+  ...
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ rows? Possible choices: "only_complete", "partly_complete",
 indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
 
 \item{M}{missing data indicator matrix}
+
+\item{...}{arguments passed on to \code{\link[parsnip:reexports]{parsnip::fit_xy()}} and \code{\link[stats:predict]{stats::predict()}}}
 }
 \value{
 The imputed data set.
