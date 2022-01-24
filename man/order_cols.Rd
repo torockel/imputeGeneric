@@ -23,5 +23,5 @@ Order the indices of the columns of \code{ds} for imputation.
 }
 \examples{
 ds <- data.frame(X = c(NA, NA, NA, 4), Y = rep(2, 4), Z = c(1, NA, NA, 4))
-order_columns(ds, "highest_md_first")
+order_cols(ds, "highest_md_first")
 }
