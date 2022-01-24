@@ -62,6 +62,7 @@ impute_iterative <- function(ds,
         return(res_stop_fun)
       }
     }
+    nr_iterations <- nr_iterations + 1
   }
 
   ds
