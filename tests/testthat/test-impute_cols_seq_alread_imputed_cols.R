@@ -160,3 +160,30 @@ test_that("already_imputed columns and all_no_update rows work", {
     )
   )
 })
+
+test_that("cols_order work (using already_imputed columns and all rows)", {
+  ds_imp_test <- df_XYZ_10
+  M <- is.na(df_XYZ_10_mis)
+  # impute first Y and X later
+  ind_mis_Y <- which(M[, "Y"])
+  for (ind_mis in ind_mis_Y) {
+    lm_y <- lm(Y ~ Z, ds_imp_test, na.action = na.fail)
+    ds_imp_test$Y[ind_mis] <- predict(lm_y, ds_imp_test[ind_mis, ])
+  }
+  ind_mis_X <- which(M[, "X"])
+  for (ind_mis in ind_mis_X) {
+    lm_x <- lm(X ~ Z + Y, ds_imp_test, na.action = na.fail)
+    ds_imp_test$X[ind_mis] <- predict(lm_x, ds_imp_test[ind_mis, ])
+  }
+
+  expect_equal(
+    ds_imp_test,
+    impute_cols_seq(
+      df_XYZ_10, # use "completed" ds and M
+      cols_order = c("Y", "X"),
+      cols_used_for_imputation = "already_imputed",
+      rows_used_for_imputation = "all",
+      M = is.na(df_XYZ_10_mis)
+    )
+  )
+})
