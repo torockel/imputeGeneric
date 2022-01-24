@@ -13,9 +13,9 @@ order_indices <- function(ds, order_option, dimension, M = is.na(ds)) {
   rows_order <- switch(order_option,
     lowest_md_first = order(rowSums(M), decreasing = FALSE),
     highest_md_first = order(rowSums(M), decreasing = TRUE),
-    increasing_index = seq_len(nrow(ds)),
-    decreasing_index = seq(nrow(ds), 1, by = 1),
-    "no_ impelmented"
+    increasing_index = seq_len(nrow(M)),
+    decreasing_index = seq(nrow(M), 1, by = - 1),
+    "not_implemented"
   )
   if (isTRUE(all.equal(rows_order, "not_implemented"))) {
     stop(paste0("`", order_option, "` is not a valid option for ordering."))
@@ -57,6 +57,6 @@ order_rows <- function(ds, order_option, M = is.na(ds)) {
 #' @examples
 #' ds <- data.frame(X = c(NA, NA, NA, 4), Y = rep(2, 4), Z = c(1, NA, NA, 4))
 #' order_columns(ds, "highest_md_first")
-order_columns <- function(ds, order_option, M = is.na(ds)) {
+order_cols <- function(ds, order_option, M = is.na(ds)) {
   order_indices(ds, order_option, "cols", M)
 }
