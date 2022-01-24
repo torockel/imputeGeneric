@@ -145,3 +145,27 @@ test_that("complete columns and all rows work", {
       M = is.na(df_XYZ_10_mis))
   )
 })
+
+test_that("complete columns and all_no_update rows work", {
+  ds_imp_test <- df_XYZ_10_mis
+  M <- is.na(df_XYZ_10_mis)
+  ind_mis_X <- which(M[, "X"])
+  for(ind_mis in ind_mis_X) {
+    lm_x <- lm(X ~ Z, df_XYZ_10, na.action = na.fail)
+    ds_imp_test$X[ind_mis] <- predict(lm_x, df_XYZ_10[ind_mis, ])
+  }
+  ind_mis_Y <- which(M[, "Y"])
+  for(ind_mis in ind_mis_Y) {
+    lm_y <- lm(Y ~ Z, df_XYZ_10, na.action = na.fail)
+    ds_imp_test$Y[ind_mis] <- predict(lm_y, df_XYZ_10[ind_mis, ])
+  }
+
+  expect_equal(
+    ds_imp_test,
+    impute_cols_seq(
+      df_XYZ_10, # use "completed" ds and M
+      cols_used_for_imputation = "only_complete",
+      rows_used_for_imputation = "all_no_update",
+      M = is.na(df_XYZ_10_mis))
+  )
+})
