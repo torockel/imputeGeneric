@@ -32,6 +32,38 @@ test_that("wrong option for cols_used_for_imputation throws an error", {
   )
 })
 
+test_that("cols_order is passed to order_cols()", {
+  expect_equal(
+    impute_cols_seq(
+    df_XYZ_10_mis,
+    cols_order = "highest_md_first",
+    cols_used_for_imputation = "already_imputed"
+    ),
+    impute_cols_seq(
+      df_XYZ_10_mis,
+      cols_order = c("Y", "X", "Z"),
+      cols_used_for_imputation = "already_imputed"
+    )
+  )
+})
+
+test_that("rows_order is passed to order_rows()", {
+  expect_equal(
+    impute_cols_seq(
+      df_XYZ_10_mis,
+      rows_order = "highest_md_first",
+      rows_used_for_imputation = "already_imputed",
+      cols_used_for_imputation = "already_imputed"
+    ),
+    impute_cols_seq(
+      df_XYZ_10_mis,
+      rows_order = c(7, 1, 2, 4),
+      rows_used_for_imputation = "already_imputed",
+      cols_used_for_imputation = "already_imputed"
+    )
+  )
+})
+
 test_that("complete columns and rows works", {
   ds_imp_test <- df_XYZ_10_mis
   M <- is.na(df_XYZ_10_mis)

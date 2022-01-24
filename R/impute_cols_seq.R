@@ -68,7 +68,7 @@ impute_cols_seq <- function(ds,
   }
 
   if (is.character(rows_order) && length(rows_order) == 1 && !(rows_order %in% rownames(ds))) {
-    rows_order <- order_rows(ds, order_option = cols_order)
+    rows_order <- order_rows(ds, order_option = rows_order)
   }
 
   for (k in cols_order) {
