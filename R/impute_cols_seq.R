@@ -66,7 +66,7 @@ impute_cols_seq <- function(ds,
         }
       } else if (rows_used_for_imputation %in% c("all_except_i", "all_except_i_no_update")) {
         rows_used_imp <- seq_len(nrow(ds))[-i]
-      } else if (rows_used_for_imputation == "all") {
+      } else if (rows_used_for_imputation %in% c("all", "all_no_update")) {
         rows_used_imp <- seq_len(nrow(ds))
       } else {
         stop(paste0("'", rows_used_for_imputation, "' is no valid option for rows_used for imputation"))
@@ -81,7 +81,7 @@ impute_cols_seq <- function(ds,
 
 
       # Do the split
-      if (rows_used_for_imputation == "all_except_i_no_update") {
+      if (rows_used_for_imputation %in% c("all_except_i_no_update", "all_no_update")) {
         ds_train <- ds_old[rows_used_imp, ]
         ds_mis <- ds_old[i, ]
       } else {
