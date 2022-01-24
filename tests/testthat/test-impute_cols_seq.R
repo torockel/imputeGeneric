@@ -11,6 +11,13 @@ test_that("no data frame or no colnames throws an error", {
   )
 })
 
+test_that("wrong option for rows_used_for_imputation throws an error", {
+  expect_error(
+    impute_cols_seq(df_XYZ_10_mis, rows_used_for_imputation = "notAvalidOption"),
+    "'notAvalidOption' is not a valid option for rows_used for imputation"
+  )
+})
+
 test_that("complete columns and rows works", {
   ds_imp_test <- df_XYZ_10_mis
   M <- is.na(df_XYZ_10_mis)

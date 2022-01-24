@@ -71,7 +71,7 @@ impute_cols_seq <- function(ds,
       } else if (rows_used_for_imputation %in% c("all", "all_no_update")) {
         rows_used_imp <- seq_len(nrow(ds))
       } else {
-        stop(paste0("'", rows_used_for_imputation, "' is no valid option for rows_used for imputation"))
+        stop(paste0("'", rows_used_for_imputation, "' is not a valid option for rows_used for imputation"))
       }
 
       # Get column indices
