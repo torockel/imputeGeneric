@@ -21,7 +21,7 @@ impute_cols_seq(
 via the \code{parsnip} package.}
 
 \item{cols_used_for_imputation}{Which columns should be used to impute other
-columns? Possible choices: "only_complete", "already_imputed", "all"}
+columns? Possible choices: "only_complete", "already_imputed", "all", "all_no_update"}
 
 \item{cols_order}{ordering of the columns for imputation}
 
@@ -48,8 +48,8 @@ the imputation. The same options are available for the rows of \code{ds} via
 \code{rows_order} and \code{rows_used_for_imputation}. If \code{ds} is pre-imputed, the
 missing data indicator matrix can be supplied via \code{M}.
 
-The options "all" for \code{cols_used_for_imputation} and "all_except_i",
-"all_except_i_no_update", "all", "all_no_update" for
+The options "all" and "all_no_update" for \code{cols_used_for_imputation} and
+"all_except_i", "all_except_i_no_update", "all", "all_no_update" for
 \code{rows_used_for_imputation} are only available, if \code{ds} is complete.
 }
 \examples{
