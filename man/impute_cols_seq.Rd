@@ -51,6 +51,10 @@ missing data indicator matrix can be supplied via \code{M}.
 The options "all" and "all_no_update" for \code{cols_used_for_imputation} and
 "all_except_i", "all_except_i_no_update", "all", "all_no_update" for
 \code{rows_used_for_imputation} are only available, if \code{ds} is complete.
+If a "_no_update" option is chosen, it will override the other options.
+Therefore, the results of e.g. \code{cols_used_for_imputation} = "all_no_update"
+combined with \code{rows_used_for_imputation} = "all" or
+\code{rows_used_for_imputation} = "all_no_update" are the same.
 }
 \examples{
 # to be done

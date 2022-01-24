@@ -25,6 +25,10 @@
 #' The options "all" and "all_no_update" for `cols_used_for_imputation` and
 #' "all_except_i", "all_except_i_no_update", "all", "all_no_update" for
 #' `rows_used_for_imputation` are only available, if `ds` is complete.
+#' If a "_no_update" option is chosen, it will override the other options.
+#' Therefore, the results of e.g. `cols_used_for_imputation` = "all_no_update"
+#' combined with `rows_used_for_imputation` = "all" or
+#' `rows_used_for_imputation` = "all_no_update" are the same.
 #'
 #' @return The imputed data set.
 #' @export
@@ -95,7 +99,7 @@ impute_cols_seq <- function(ds,
         cols_used_imp <- !apply(M_start, 2, any)
       } else if(cols_used_for_imputation == "already_imputed") {
         cols_used_imp <- !apply(M, 2, any)
-      } else if(cols_used_for_imputation == "all") {
+      } else if(cols_used_for_imputation %in% c("all", "all_no_update")) {
         cols_used_imp <- seq_len(ncol(ds))[-k]
       } else {
         stop(paste0("'", cols_used_for_imputation, "' is not a valid option for cols_used_for_imputation"))
@@ -103,7 +107,9 @@ impute_cols_seq <- function(ds,
 
 
       # Do the split
-      if (rows_used_for_imputation %in% c("all_except_i_no_update", "all_no_update")) {
+      if (
+        rows_used_for_imputation %in% c("all_except_i_no_update", "all_no_update") ||
+        cols_used_for_imputation == "all_no_update") {
         ds_train <- ds_old[rows_used_imp, ]
         ds_mis <- ds_old[i, ]
       } else {
