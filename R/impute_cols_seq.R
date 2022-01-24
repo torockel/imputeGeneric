@@ -6,7 +6,7 @@
 #' @param model_spec_parsnip The model type used for imputation. It is defined
 #'   via the `parsnip` package.
 #' @param cols_used_for_imputation Which columns should be used to impute other
-#'   columns? Possible choices: "only_complete", "already_imputed", "all"
+#'   columns? Possible choices: "only_complete", "already_imputed", "all", "all_no_update"
 #' @param cols_order ordering of the columns for imputation
 #' @param rows_used_for_imputation Which rows should be used to impute other
 #'   rows? Possible choices: "only_complete", "partly_complete",
@@ -71,9 +71,17 @@ impute_cols_seq <- function(ds,
       if (rows_used_for_imputation == "only_complete") {
         rows_used_imp <- !apply(M_start, 1, any)
       } else if (rows_used_for_imputation  == "partly_complete"){
-        rows_used_imp <- !M_start[, k]
+        if (cols_used_for_imputation %in% c("all", "all_no_update")) {
+          rows_used_imp <- !apply(M_start, 1, any)
+        } else {
+          rows_used_imp <- !M_start[, k]
+        }
       } else if (rows_used_for_imputation == "already_imputed") {
-        rows_used_imp <- !M[, k]
+        if (cols_used_for_imputation %in% c("all", "all_no_update")) {
+          rows_used_imp <- !apply(M, 1, any)
+        } else {
+          rows_used_imp <- !M[, k]
+        }
       } else if (rows_used_for_imputation %in% c("all_except_i", "all_except_i_no_update")) {
         rows_used_imp <- seq_len(nrow(ds))[-i]
       } else if (rows_used_for_imputation %in% c("all", "all_no_update")) {
