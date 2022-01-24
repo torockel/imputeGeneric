@@ -28,7 +28,9 @@ columns? Possible choices: "only_complete", "already_imputed", "all"}
 \item{rows_order}{ordering of the rows for imputation}
 
 \item{rows_used_for_imputation}{Which rows should be used to impute other
-rows? Possible choices: "only_complete", "already_imputed", "all"}
+rows? Possible choices: "only_complete", "partly_complete",
+"already_imputed", "all_except_i", "all_except_i_no_update", "all",
+"all_no_update"}
 
 \item{M}{missing data indicator matrix}
 }
@@ -39,10 +41,10 @@ The imputed data set.
 Impute columns of a data set sequentially
 }
 \details{
-This function imputes the columns of the data set \code{ds} column by column. The
-imputation order of the column can be specified by \code{cols_order}. Furthermore,
-\code{cols_used_for_imputation} controls which columns are used for the
-imputation. The same options are available for the rows of \code{ds} via
+This function imputes the columns of the data set \code{ds} column by
+column. The imputation order of the column can be specified by \code{cols_order}.
+Furthermore, \code{cols_used_for_imputation} controls which columns are used for
+the imputation. The same options are available for the rows of \code{ds} via
 \code{rows_order} and \code{rows_used_for_imputation}. If \code{ds} is pre-imputed, the
 missing data indicator matrix can be supplied via \code{M}.
 }
