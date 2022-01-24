@@ -22,6 +22,10 @@
 #' `rows_order` and `rows_used_for_imputation`. If `ds` is pre-imputed, the
 #' missing data indicator matrix can be supplied via `M`.
 #'
+#' The options "all" for `cols_used_for_imputation` and "all_except_i",
+#' "all_except_i_no_update", "all", "all_no_update" for
+#' `rows_used_for_imputation` are only available, if `ds` is complete.
+#'
 #' @return The imputed data set.
 #' @export
 #'
@@ -38,12 +42,20 @@ impute_cols_seq <- function(ds,
                             rows_used_for_imputation = "only_complete",
                             rows_order = seq_len(nrow(ds)),
                             M = is.na(ds)) {
-  # Warning: never change M_start in this function!
+  # Warning: never change M_start, ds_old in this function!
   M_start <- M
   ds_old <- ds
 
-  if(!is.data.frame(ds) || is.null(colnames(ds)))
+  if (!is.data.frame(ds) || is.null(colnames(ds)))
     stop("ds must be a data frame with colnames")
+
+  if (
+    cols_used_for_imputation == "all" ||
+    rows_used_for_imputation %in% c("all_except_i", "all_except_i_no_update", "all", "all_no_update")) {
+    if (any(is.na(ds))) {
+      stop("If you want to use all rows or columns for imputation, ds must be complete.")
+    }
+  }
 
   for (k in cols_order) {
     for (i in rows_order) {

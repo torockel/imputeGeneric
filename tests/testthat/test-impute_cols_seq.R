@@ -18,6 +18,13 @@ test_that("wrong option for rows_used_for_imputation throws an error", {
   )
 })
 
+test_that("incomplete ds with all rows throws an error", {
+  expect_error(
+    impute_cols_seq(df_XY_10_X_mis, rows_used_for_imputation = "all"),
+    "If you want to use all rows or columns for imputation, ds must be complete"
+  )
+})
+
 test_that("complete columns and rows works", {
   ds_imp_test <- df_XYZ_10_mis
   M <- is.na(df_XYZ_10_mis)
