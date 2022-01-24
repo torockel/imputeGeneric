@@ -64,11 +64,11 @@ impute_cols_seq <- function(ds,
   }
 
   if (is.character(cols_order) && length(cols_order) == 1 && !(cols_order %in% colnames(ds))) {
-    cols_order <- order_cols(ds, order_option = cols_order)
+    cols_order <- order_cols(ds, order_option = cols_order, M = M)
   }
 
   if (is.character(rows_order) && length(rows_order) == 1 && !(rows_order %in% rownames(ds))) {
-    rows_order <- order_rows(ds, order_option = rows_order)
+    rows_order <- order_rows(ds, order_option = rows_order, M = M)
   }
 
   for (k in cols_order) {
