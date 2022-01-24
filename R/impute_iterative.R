@@ -8,7 +8,8 @@
 #' @param stop_fun a stopping function (see details below) or `NULL`. If `NULL`,
 #'   iterations are only stopped after `max_iter` is reached.
 #' @param initial_imputation_fun This function will do the initial imputation of
-#'   the missing values. If `NULL`, no initial imputation is done.
+#'   the missing values. If `NULL`, no initial imputation is done. Some common
+#'   choices like mean imputation are implemented in the package missMethods.
 #' @param ... Further arguments passed on to `initial_imputation_fun`,
 #'   `stop_fun` and [parsnip::fit_xy()], [stats::predict()] used with the
 #'   `model_spec_parsnip`.

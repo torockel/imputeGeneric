@@ -30,7 +30,8 @@ via the \code{parsnip} package.}
 iterations are only stopped after \code{max_iter} is reached.}
 
 \item{initial_imputation_fun}{This function will do the initial imputation of
-the missing values. If \code{NULL}, no initial imputation is done.}
+the missing values. If \code{NULL}, no initial imputation is done. Some common
+choices like mean imputation are implemented in the package missMethods.}
 
 \item{cols_used_for_imputation}{Which columns should be used to impute other
 columns? Possible choices: "only_complete", "already_imputed", "all", "all_no_update"}
