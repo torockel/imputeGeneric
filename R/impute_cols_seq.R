@@ -79,7 +79,7 @@ impute_cols_seq <- function(ds,
       } else if (rows_used_for_imputation %in% c("all", "all_no_update")) {
         rows_used_imp <- seq_len(nrow(ds))
       } else {
-        stop(paste0("'", rows_used_for_imputation, "' is not a valid option for rows_used for imputation"))
+        stop(paste0("'", rows_used_for_imputation, "' is not a valid option for rows_used_for_imputation"))
       }
 
       # Get column indices
@@ -87,8 +87,10 @@ impute_cols_seq <- function(ds,
         cols_used_imp <- !apply(M_start, 2, any)
       } else if(cols_used_for_imputation == "already_imputed") {
         cols_used_imp <- !apply(M, 2, any)
+      } else if(cols_used_for_imputation == "all") {
+        cols_used_imp <- seq_len(ncol(ds))[-k]
       } else {
-        stop("not implemented")
+        stop(paste0("'", cols_used_for_imputation, "' is not a valid option for cols_used_for_imputation"))
       }
 
 
