@@ -11,17 +11,24 @@ test_that("no data frame or no colnames throws an error", {
   )
 })
 
-test_that("wrong option for rows_used_for_imputation throws an error", {
-  expect_error(
-    impute_cols_seq(df_XYZ_10_mis, rows_used_for_imputation = "notAvalidOption"),
-    "'notAvalidOption' is not a valid option for rows_used for imputation"
-  )
-})
-
 test_that("incomplete ds with all rows throws an error", {
   expect_error(
     impute_cols_seq(df_XY_10_X_mis, rows_used_for_imputation = "all"),
     "If you want to use all rows or columns for imputation, ds must be complete"
+  )
+})
+
+test_that("wrong option for rows_used_for_imputation throws an error", {
+  expect_error(
+    impute_cols_seq(df_XYZ_10_mis, rows_used_for_imputation = "notAvalidOption"),
+    "'notAvalidOption' is not a valid option for rows_used_for_imputation"
+  )
+})
+
+test_that("wrong option for cols_used_for_imputation throws an error", {
+  expect_error(
+    impute_cols_seq(df_XYZ_10_mis, cols_used_for_imputation = "notAvalidOption"),
+    "'notAvalidOption' is not a valid option for cols_used_for_imputation"
   )
 })
 
