@@ -5,14 +5,14 @@
 #' @param ds the data set to be imputed, must be a data frame with column names
 #' @param model_spec_parsnip The model type used for imputation. It is defined
 #'   via the `parsnip` package.
-#' @param cols_order ordering of the columns for imputation
 #' @param cols_used_for_imputation Which columns should be used to impute other
 #'   columns? Possible choices: "only_complete", "already_imputed", "all"
-#' @param rows_order ordering of the rows for imputation
+#' @param cols_order ordering of the columns for imputation
 #' @param rows_used_for_imputation Which rows should be used to impute other
 #'   rows? Possible choices: "only_complete", "partly_complete",
 #'   "already_imputed", "all_except_i", "all_except_i_no_update", "all",
 #'   "all_no_update"
+#' @param rows_order ordering of the rows for imputation
 #' @param M missing data indicator matrix
 #'
 #' @details This function imputes the columns of the data set `ds` column by
@@ -33,10 +33,10 @@
 #' # to be done
 impute_cols_seq <- function(ds,
                             model_spec_parsnip = linear_reg(),
-                            cols_order = seq_len(ncol(ds)),
                             cols_used_for_imputation = "only_complete",
-                            rows_order = seq_len(nrow(ds)),
+                            cols_order = seq_len(ncol(ds)),
                             rows_used_for_imputation = "only_complete",
+                            rows_order = seq_len(nrow(ds)),
                             M = is.na(ds)) {
   # Warning: never change M_start in this function!
   M_start <- M
