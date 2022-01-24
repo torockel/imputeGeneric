@@ -11,7 +11,8 @@
 #' @param rows_order ordering of the rows for imputation
 #' @param rows_used_for_imputation Which rows should be used to impute other
 #'   rows? Possible choices: "only_complete", "partly_complete",
-#'   "already_imputed", "all_except_i", "all"
+#'   "already_imputed", "all_except_i", "all_except_i_no_update", "all",
+#'   "all_no_update"
 #' @param M missing data indicator matrix
 #'
 #' @details This function imputes the columns of the data set `ds` column by
@@ -39,6 +40,7 @@ impute_cols_seq <- function(ds,
                             M = is.na(ds)) {
   # Warning: never change M_start in this function!
   M_start <- M
+  ds_old <- ds
 
   if(!is.data.frame(ds) || is.null(colnames(ds)))
     stop("ds must be a data frame with colnames")
@@ -62,7 +64,7 @@ impute_cols_seq <- function(ds,
         } else {
           stop("not implemented")
         }
-      } else if (rows_used_for_imputation == "all_except_i") {
+      } else if (rows_used_for_imputation %in% c("all_except_i", "all_except_i_no_update")) {
         rows_used_imp <- seq_len(nrow(ds))[-i]
       } else if (rows_used_for_imputation == "all") {
         rows_used_imp <- seq_len(nrow(ds))
@@ -79,8 +81,14 @@ impute_cols_seq <- function(ds,
 
 
       # Do the split
-      ds_train <- ds[rows_used_imp, ]
-      ds_mis <- ds[i, ]
+      if (rows_used_for_imputation == "all_except_i_no_update") {
+        ds_train <- ds_old[rows_used_imp, ]
+        ds_mis <- ds_old[i, ]
+      } else {
+        ds_train <- ds[rows_used_imp, ]
+        ds_mis <- ds[i, ]
+      }
+
 
       # Train the model and predict the missing values
       model_fit <- fit_xy(
