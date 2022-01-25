@@ -62,12 +62,12 @@ Iterative imputation of a data set
 \section{stop_fun}{
  The \code{stop_fun} should take the arguments \code{ds} (the data
 set imputed in the current iteration), \code{ds_old} (the data set imputed in
-the last iteration) and \code{M} in this order. Further arguments can be passed
-on via \code{...}. The \code{stop_fun} must return \code{FALSE} to allow for a next
-iteration. If \code{stop_fun} returns not \code{FALSE} the iteration is stopped and
-the return value of \code{stop_fun} is returned as result of
-\code{impute_iterative()}. Therefore, this return value should normally include
-the imputed data set \code{ds} or \code{ds_old}.
+the last iteration) and a list (with named elements \code{M} \code{nr_iterations},
+\code{max_iter}) in this order. Further arguments can be passed on via \code{...}. The
+\code{stop_fun} must return \code{FALSE} to allow for a next iteration. If \code{stop_fun}
+returns not \code{FALSE} the iteration is stopped and the return value of
+\code{stop_fun} is returned as result of \code{impute_iterative()}. Therefore, this
+return value should normally include the imputed data set \code{ds} or \code{ds_old}.
 }
 
 \examples{

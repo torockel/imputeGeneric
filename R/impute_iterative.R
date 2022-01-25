@@ -16,12 +16,12 @@
 #'
 #' @section stop_fun: The `stop_fun` should take the arguments `ds` (the data
 #'   set imputed in the current iteration), `ds_old` (the data set imputed in
-#'   the last iteration) and `M` in this order. Further arguments can be passed
-#'   on via `...`. The `stop_fun` must return `FALSE` to allow for a next
-#'   iteration. If `stop_fun` returns not `FALSE` the iteration is stopped and
-#'   the return value of `stop_fun` is returned as result of
-#'   `impute_iterative()`. Therefore, this return value should normally include
-#'   the imputed data set `ds` or `ds_old`.
+#'   the last iteration) and a list (with named elements `M` `nr_iterations`,
+#'   `max_iter`) in this order. Further arguments can be passed on via `...`. The
+#'   `stop_fun` must return `FALSE` to allow for a next iteration. If `stop_fun`
+#'   returns not `FALSE` the iteration is stopped and the return value of
+#'   `stop_fun` is returned as result of `impute_iterative()`. Therefore, this
+#'   return value should normally include the imputed data set `ds` or `ds_old`.
 #'
 #' @return an imputed data set.
 #' @export
@@ -60,7 +60,10 @@ impute_iterative <- function(ds,
       ...
     )
     if (!is.null(stop_fun)) {
-      res_stop_fun <- stop_fun(ds, ds_old, M, ...)
+      res_stop_fun <- stop_fun(
+        ds, ds_old,
+        list(M = M, nr_iterations = nr_iterations, max_iter = max_iter), ...
+        )
       if (!isTRUE(all.equal(FALSE, res_stop_fun))) {
         return(res_stop_fun)
       }
