@@ -8,6 +8,11 @@ test_that("initial_imputation_fun works", {
   )
 })
 
+test_that("Warning for incomplete ds is shown (only once)", {
+  expect_snapshot(impute_iterative(
+    df_XYZ_10_mis, max_iter = 2, rows_used_for_imputation =  "all", cols_used_for_imputation = "all"))
+})
+
 test_that("initial_imputation_fun and max_iter = 1 works", {
   ds_imp <- missMethods::impute_mean(df_XYZ_10_mis)
   ds_imp <- impute_cols_seq(ds_imp, M = is.na(df_XYZ_10_mis))
