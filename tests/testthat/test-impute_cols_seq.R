@@ -11,10 +11,10 @@ test_that("no data frame or no colnames throws an error", {
   )
 })
 
-test_that("incomplete ds with all rows throws an error", {
-  expect_error(
-    impute_cols_seq(df_XY_10_X_mis, rows_used_for_imputation = "all"),
-    "If you want to use all rows or columns for imputation, ds must be complete"
+test_that("incomplete ds after imputation gives a warning", {
+  expect_warning(
+    impute_cols_seq(df_XYZ_10_mis, rows_used_for_imputation = "all", cols_used_for_imputation = "all"),
+    "Imputation is not complete. There are still missing values in `ds`."
   )
 })
 

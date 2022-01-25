@@ -12,6 +12,7 @@ impute_cols_seq(
   rows_used_for_imputation = "only_complete",
   rows_order = seq_len(nrow(ds)),
   M = is.na(ds),
+  show_warning_incomplete_imputation = TRUE,
   ...
 )
 }
@@ -37,6 +38,9 @@ indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
 
 \item{M}{missing data indicator matrix}
 
+\item{show_warning_incomplete_imputation}{Should a warning be given, if the
+returned data set still contains \code{NA}?}
+
 \item{...}{arguments passed on to \code{\link[parsnip:reexports]{parsnip::fit_xy()}} and \code{\link[stats:predict]{stats::predict()}}}
 }
 \value{
@@ -55,7 +59,8 @@ missing data indicator matrix can be supplied via \code{M}.
 
 The options "all" and "all_no_update" for \code{cols_used_for_imputation} and
 "all_except_i", "all_except_i_no_update", "all", "all_no_update" for
-\code{rows_used_for_imputation} are only available, if \code{ds} is complete.
+\code{rows_used_for_imputation} should only be used, if \code{ds} is complete or the
+model (\code{model_spec_parsnip}) can handle the missing data.
 If a "_no_update" option is chosen, it will override the other options.
 Therefore, the results of e.g. \code{cols_used_for_imputation} = "all_no_update"
 combined with \code{rows_used_for_imputation} = "all" or

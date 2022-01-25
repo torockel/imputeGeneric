@@ -16,6 +16,8 @@
 #' @param rows_order Ordering of the rows for imputation. This can be a vector with
 #'   indices or an `order_option` from [order_rows()].
 #' @param M missing data indicator matrix
+#' @param show_warning_incomplete_imputation Should a warning be given, if the
+#'   returned data set still contains `NA`?
 #' @param ... arguments passed on to [parsnip::fit_xy()] and [stats::predict()]
 #'
 #' @details This function imputes the columns of the data set `ds` column by
@@ -27,7 +29,8 @@
 #'
 #' The options "all" and "all_no_update" for `cols_used_for_imputation` and
 #' "all_except_i", "all_except_i_no_update", "all", "all_no_update" for
-#' `rows_used_for_imputation` are only available, if `ds` is complete.
+#' `rows_used_for_imputation` should only be used, if `ds` is complete or the
+#'  model (`model_spec_parsnip`) can handle the missing data.
 #' If a "_no_update" option is chosen, it will override the other options.
 #' Therefore, the results of e.g. `cols_used_for_imputation` = "all_no_update"
 #' combined with `rows_used_for_imputation` = "all" or
@@ -49,6 +52,7 @@ impute_cols_seq <- function(ds,
                             rows_used_for_imputation = "only_complete",
                             rows_order = seq_len(nrow(ds)),
                             M = is.na(ds),
+                            show_warning_incomplete_imputation = TRUE,
                             ...) {
   # Warning: never change M_start, ds_old in this function!
   M_start <- M
@@ -56,14 +60,6 @@ impute_cols_seq <- function(ds,
 
   if (!is.data.frame(ds) || is.null(colnames(ds)))
     stop("ds must be a data frame with colnames")
-
-  if (
-    cols_used_for_imputation %in% c("all", "all_no_update") ||
-    rows_used_for_imputation %in% c("all_except_i", "all_except_i_no_update", "all", "all_no_update")) {
-    if (any(is.na(ds))) {
-      stop("If you want to use all rows or columns for imputation, ds must be complete.")
-    }
-  }
 
   if (is.character(cols_order) && length(cols_order) == 1 && !(cols_order %in% colnames(ds))) {
     cols_order <- order_cols(ds, order_option = cols_order, M = M)
@@ -143,6 +139,10 @@ impute_cols_seq <- function(ds,
         M[i, k] <- FALSE
       }
     }
+  }
+
+  if (show_warning_incomplete_imputation && any(is.na(ds))) {
+    warning("Imputation is not complete. There are still missing values in `ds`.")
   }
 
   ds
