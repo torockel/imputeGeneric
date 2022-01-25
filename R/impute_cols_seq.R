@@ -141,9 +141,6 @@ impute_cols_seq <- function(ds,
     }
   }
 
-  if (show_warning_incomplete_imputation && any(is.na(ds))) {
-    warning("Imputation is not complete. There are still missing values in `ds`.")
-  }
-
+  warn_incomplete(show_warning_incomplete_imputation, ds)
   ds
 }

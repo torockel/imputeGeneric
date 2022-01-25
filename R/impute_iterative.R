@@ -38,6 +38,7 @@ impute_iterative <- function(ds,
                              rows_used_for_imputation = "only_complete",
                              rows_order = seq_len(nrow(ds)),
                              M = is.na(ds),
+                             show_warning_incomplete_imputation = TRUE,
                              ...) {
 
   # force M before initial imputation, later it will be wrong (all FALSE)
@@ -57,6 +58,7 @@ impute_iterative <- function(ds,
       rows_used_for_imputation = rows_used_for_imputation,
       rows_order = rows_order,
       M = M,
+      show_warning_incomplete_imputation = FALSE, # checked only once at the end
       ...
     )
     if (!is.null(stop_fun)) {
@@ -71,5 +73,6 @@ impute_iterative <- function(ds,
     nr_iterations <- nr_iterations + 1
   }
 
+  warn_incomplete(show_warning_incomplete_imputation, ds)
   ds
 }
