@@ -4,7 +4,7 @@ stop_ds_difference <- function(ds, ds_old, info_list, stop_eps = 1e-6, stop_p = 
   if (stop_sum_diffs) {
     difference <- sum(differences, na.rm = stop_na_rm)
   } else {
-    difference <- mean(differences, na.rm = stop_na_rm)
+    difference <- mean(unlist(differences), na.rm = stop_na_rm)
   }
   difference <- difference^(1 / stop_p)
   if (difference < stop_eps) {

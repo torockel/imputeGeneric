@@ -1,9 +1,23 @@
-test_that("stop_ds_difference works returns number of iterations", {
+test_that("stop_ds_difference() works returns number of iterations", {
   expect_equal(
-    structure(df_XYZ_10, nr_iterations = 42),
+    structure(df_XYZ_10, nr_iterations = info_list$nr_iterations),
     stop_ds_difference(
     df_XYZ_10, df_XYZ_10,
-    list(M = is.na(df_XYZ_10_mis), nr_iterations = 42, max_iter = 70)
+    info_list
   )
+  )
+})
+
+
+test_that("stop_ds_difference() switch sum/mean", {
+  df_XYZ_10_2 <- df_XYZ_10
+  df_XYZ_10_2[2,2] <- df_XYZ_10_2[2,2] + 1
+
+  # sum of differences is 1 >= 0.5
+  expect_false(stop_ds_difference(df_XYZ_10, df_XYZ_10_2, info_list, stop_eps = 0.5))
+  # but mean is < 0.5
+  expect_equal(
+    structure(df_XYZ_10, nr_iterations = info_list$nr_iterations),
+    stop_ds_difference(df_XYZ_10, df_XYZ_10_2, info_list, stop_eps = 0.5, stop_sum_diffs = FALSE)
   )
 })
