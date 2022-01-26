@@ -74,5 +74,5 @@ impute_iterative <- function(ds,
   }
 
   warn_incomplete(show_warning_incomplete_imputation, ds)
-  ds
+  structure(ds, nr_iterations = max_iter)
 }

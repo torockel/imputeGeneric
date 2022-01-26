@@ -1,6 +1,6 @@
 test_that("initial_imputation_fun works", {
   expect_equal(
-    missMethods::impute_mean(df_XYZ_10_mis),
+    structure(missMethods::impute_mean(df_XYZ_10_mis), nr_iterations = 0),
     impute_iterative(
       df_XYZ_10_mis,
       initial_imputation_fun = missMethods::impute_mean, max_iter = 0
@@ -19,6 +19,7 @@ test_that("initial_imputation_fun and max_iter = 1 works", {
     ds_imp, cols_used_for_imputation = "all_no_update",
     rows_used_for_imputation = "all_no_update", M = is.na(df_XYZ_10_mis)
     )
+  ds_imp <- structure(ds_imp, nr_iterations = 1)
   expect_equal(
     ds_imp,
     impute_iterative(
@@ -39,6 +40,7 @@ test_that("initial_imputation_fun and max_iter = 2 works", {
       rows_used_for_imputation = "all_no_update"
     )
   }
+  ds_imp <- structure(ds_imp, nr_iterations = 2)
   expect_equal(
     ds_imp,
     impute_iterative(
