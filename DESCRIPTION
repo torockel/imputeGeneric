@@ -7,11 +7,14 @@ Authors@R:
            role = c("aut", "cre"),
            email = "Rockel.To@gmail.com")
 Description: The general workflow of most imputation methods is quite similar.
-    The aim of this package is to implement some of this general workflow.
+    The aim of this package is to provide most of this general workflow to make
+    the implementation of imputation methods much easier.
     The heart of an imputation method is normally the used model. These models
     can be defined using the `parsnip` package or customised specifications.
     The "rest" of an imputation method are more technical specification e.g. 
     which columns and rows should be used for imputation and in which order. 
+    These technical specifications can be easily set inside the imputation
+    functions.
 License: GPL (>= 3)
 Imports:
     parsnip,
