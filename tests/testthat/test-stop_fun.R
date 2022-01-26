@@ -50,3 +50,18 @@ test_that("stop_ds_difference() stop_na_rm works", {
     "You need stop_na_rm = TRUE, if ds or ds_old contains missing values."
   )
 })
+
+test_that("stop_ds_difference() works inside impute_iterative()", {
+  ds_imp <- impute_cols_seq(
+    df_XYZ_10_mis, cols_used_for_imputation = "only_complete",
+    rows_used_for_imputation = "only_complete"
+  )
+  expect_equal(
+    structure(ds_imp, nr_iterations = 2),
+    impute_iterative(
+      df_XYZ_10_mis, stop_fun = stop_ds_difference,
+      cols_used_for_imputation = "only_complete",
+      rows_used_for_imputation = "only_complete"
+    )
+  )
+})
