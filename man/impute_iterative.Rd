@@ -10,11 +10,12 @@ impute_iterative(
   max_iter = 10,
   stop_fun = NULL,
   initial_imputation_fun = NULL,
-  cols_used_for_imputation = "only_complete",
+  cols_used_for_imputation = "all_no_update",
   cols_order = seq_len(ncol(ds)),
-  rows_used_for_imputation = "only_complete",
+  rows_used_for_imputation = "all_no_update",
   rows_order = seq_len(nrow(ds)),
   M = is.na(ds),
+  show_warning_incomplete_imputation = TRUE,
   ...
 )
 }
@@ -48,6 +49,9 @@ rows? Possible choices: "only_complete", "partly_complete",
 indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
 
 \item{M}{missing data indicator matrix}
+
+\item{show_warning_incomplete_imputation}{Should a warning be given, if the
+returned data set still contains \code{NA}?}
 
 \item{...}{Further arguments passed on to \code{initial_imputation_fun},
 \code{stop_fun} and \code{\link[parsnip:reexports]{parsnip::fit_xy()}}, \code{\link[stats:predict]{stats::predict()}} used with the
