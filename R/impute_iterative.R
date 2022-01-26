@@ -61,6 +61,7 @@ impute_iterative <- function(ds,
       show_warning_incomplete_imputation = FALSE, # checked only once at the end
       ...
     )
+    nr_iterations <- nr_iterations + 1
     if (!is.null(stop_fun)) {
       res_stop_fun <- stop_fun(
         ds, ds_old,
@@ -70,7 +71,6 @@ impute_iterative <- function(ds,
         return(res_stop_fun)
       }
     }
-    nr_iterations <- nr_iterations + 1
   }
 
   warn_incomplete(show_warning_incomplete_imputation, ds)
