@@ -39,3 +39,14 @@ test_that("stop_ds_difference() switch sum/mean", {
     stop_ds_difference(df_XYZ_10, df_XYZ_10_2, info_list, stop_eps = 0.5, stop_sum_diffs = FALSE)
   )
 })
+
+test_that("stop_ds_difference() stop_na_rm works", {
+  expect_equal(
+    df_XYZ_10_stop,
+    stop_ds_difference(df_XYZ_10, df_XYZ_10_mis, info_list, stop_na_rm = TRUE)
+  )
+  expect_error(
+    stop_ds_difference(df_XYZ_10, df_XYZ_10_mis, info_list, stop_na_rm = FALSE),
+    "You need stop_na_rm = TRUE, if ds or ds_old contains missing values."
+  )
+})

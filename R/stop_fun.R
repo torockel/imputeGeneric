@@ -1,6 +1,9 @@
 stop_ds_difference <- function(ds, ds_old, info_list, stop_eps = 1e-6, stop_p = 1,
                                stop_sum_diffs = TRUE, stop_na_rm = TRUE) {
   differences <- abs(ds - ds_old)^stop_p
+  if (!stop_na_rm && any(is.na(differences))) {
+    stop("You need stop_na_rm = TRUE, if ds or ds_old contains missing values.")
+  }
   if (stop_sum_diffs) {
     difference <- sum(differences, na.rm = stop_na_rm)
   } else {
