@@ -12,3 +12,4 @@ df_XY_10_X_mis <- df_XYZ_10_mis[, c("X", "Y")]
 
 # info_list for testing stop funs ---------------------------------------------
 info_list <- list(M = is.na(df_XYZ_10_mis), nr_iterations = 42, max_iter = 70)
+df_XYZ_10_stop <- structure(df_XYZ_10, nr_iterations = info_list$nr_iterations)
