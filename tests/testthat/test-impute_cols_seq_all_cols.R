@@ -134,6 +134,22 @@ test_that("all columns and all rows work", {
   )
 })
 
+test_that("all columns and rows with missing value and rpart works", {
+  ds_imp_test <- df_XYZ_10_mis
+  rpart_x <- fit(decision_tree("regression"), X ~ Y + Z, df_XYZ_10_mis)
+  ds_imp_test$X[is.na(df_XYZ_10_mis$X)] <- unlist(predict(rpart_x, df_XYZ_10_mis[is.na(df_XYZ_10_mis$X), ]))
+  rpart_y <- fit(decision_tree("regression"), Y ~ X + Z, df_XYZ_10_mis)
+  ds_imp_test$Y[is.na(df_XYZ_10_mis$Y)] <- unlist(predict(rpart_y, df_XYZ_10_mis[is.na(df_XYZ_10_mis$Y), ]))
+  expect_false(any(is.na(ds_imp_test)))
+  expect_equal(
+    ds_imp_test,
+    impute_cols_seq(
+      df_XYZ_10_mis, decision_tree("regression"),
+      cols_used_for_imputation = "all_no_update", rows_used_for_imputation = "all_no_update"
+      )
+  )
+})
+
 test_that("all columns and all_no_update rows work", {
   ds_imp_test <- df_XYZ_10_mis
   M <- is.na(df_XYZ_10_mis)
