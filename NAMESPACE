@@ -2,8 +2,12 @@
 
 export(impute_cols_seq)
 export(impute_iterative)
+export(model_donor)
 export(order_cols)
 export(order_rows)
+export(predict_donor)
 export(stop_ds_difference)
 import(parsnip)
+importFrom(gower,gower_topn)
+importFrom(stats,complete.cases)
 importFrom(stats,predict)

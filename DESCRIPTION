@@ -17,6 +17,7 @@ Description: The general workflow of most imputation methods is quite similar.
     functions.
 License: GPL (>= 3)
 Imports:
+    gower,
     parsnip,
     stats
 Encoding: UTF-8
