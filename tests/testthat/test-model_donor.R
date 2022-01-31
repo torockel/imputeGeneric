@@ -6,8 +6,6 @@ test_that("model_donor simultan_complete works", {
   ))
 })
 
-# Add tests for simultan_incomplete and knn_simultan_incomplete
-
 test_that("model_donor knn_simultan_complete works", {
   comp_cases <- df_XYZ_10_mis[complete.cases(df_XYZ_10_mis), ]
   top_3 <- gower::gower_topn(df_XYZ_10_mis[2, ], comp_cases, n = 3)$index[, 1]
@@ -26,6 +24,15 @@ test_that("model_donor simultan_incomplete works", {
   expect_equal(
     structure(df_XYZ_10_mis[complete.cases(df_XYZ_10_mis), ], donor_selection = "simultan_incomplete"),
     model_donor(df_XYZ_10_mis, is.na(df_XYZ_10_mis), i = 7, donor_selection = "simultan_incomplete")
+  )
+})
+
+test_that("model_donor knn_simultan_incomplete works", {
+  cases_comp_Y <- df_XYZ_10_mis[!is.na(df_XYZ_10_mis$Y), ]
+  top_3 <- gower::gower_topn(df_XYZ_10_mis[4, ], cases_comp_Y, n = 3)$index[, 1]
+  expect_equal(
+    structure(cases_comp_Y[top_3, ], donor_selection = "knn_simultan_incomplete"),
+    model_donor(df_XYZ_10_mis, is.na(df_XYZ_10_mis), 4, donor_selection = "knn_simultan_incomplete", donor_k = 3)
   )
 })
 
