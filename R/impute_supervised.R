@@ -73,9 +73,7 @@ impute_supervised <- function(ds,
     cols_order <- order_cols(ds, order_option = cols_order, M = M)
   }
 
-  if (is.character(rows_order) && length(rows_order) == 1 && !(rows_order %in% rownames(ds))) {
-    rows_order <- order_rows(ds, order_option = rows_order, M = M)
-  }
+  rows_order <- ckeck_and_set_rows_order(rows_order, ds, M)
 
   for (k in cols_order) {
     for (i in rows_order) {
