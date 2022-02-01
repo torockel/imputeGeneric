@@ -23,6 +23,6 @@ model_donor(ds, M, i, donor_selection = "complete_rows", donor_k = 10)
 A "model" for \code{\link[=predict_donor]{predict_donor()}} which is merely a data frame.
 }
 \description{
-This function is intended to be used inside of \code{\link[=impute_cols_sim]{impute_cols_sim()}} as
+This function is intended to be used inside of \code{\link[=impute_unsupervised]{impute_unsupervised()}} as
 \code{model_fun}.
 }

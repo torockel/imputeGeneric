@@ -2,6 +2,7 @@
 
 export(impute_iterative)
 export(impute_supervised)
+export(impute_unsupervised)
 export(model_donor)
 export(order_cols)
 export(order_rows)

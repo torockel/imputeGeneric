@@ -22,5 +22,5 @@ predict_donor(ds_donors, ds, M, i, donor_aggregation = "choose_random")
 The imputation values for row \code{i}
 }
 \description{
-This function is intended to be used inside of \code{\link[=impute_cols_sim]{impute_cols_sim()}} as \code{predict_fun}.
+This function is intended to be used inside of \code{\link[=impute_unsupervised]{impute_unsupervised()}} as \code{predict_fun}.
 }
