@@ -4,7 +4,7 @@
 \alias{model_donor}
 \title{Model for donor-based imputation}
 \usage{
-model_donor(ds, M, i, donor_selection = "simultan_complete", donor_k = 10)
+model_donor(ds, M, i, donor_selection = "complete_rows", donor_k = 10)
 }
 \arguments{
 \item{ds}{the data set to be imputed, must be a data frame with column names}
@@ -13,13 +13,16 @@ model_donor(ds, M, i, donor_selection = "simultan_complete", donor_k = 10)
 
 \item{i}{row of i}
 
-\item{donor_selection}{How to select the donors?}
+\item{donor_selection}{How to select the donors? Possible choices are
+\code{complete_rows}, \code{partly_complete_rows}, \code{knn_complete_rows},
+\code{knn_partly_complete_rows}}
 
-\item{donor_k}{number of selected closest donor}
+\item{donor_k}{number of selected closest donor, only used for knn \code{donor_selection}s}
 }
 \value{
 A "model" for \code{\link[=predict_donor]{predict_donor()}} which is merely a data frame.
 }
 \description{
-This function is intended to be used inside of \code{\link[=impute_cols_sim]{impute_cols_sim()}} as \code{model_fun}.
+This function is intended to be used inside of \code{\link[=impute_cols_sim]{impute_cols_sim()}} as
+\code{model_fun}.
 }

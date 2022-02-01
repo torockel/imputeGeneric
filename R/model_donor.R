@@ -1,25 +1,28 @@
 #' Model for donor-based imputation
 #'
-#' This function is intended to be used inside of [impute_cols_sim()] as `model_fun`.
+#' This function is intended to be used inside of [impute_cols_sim()] as
+#' `model_fun`.
 #'
 #' @inheritParams impute_cols_seq
 #' @param i row of i
-#' @param donor_selection How to select the donors?
-#' @param donor_k number of selected closest donor
+#' @param donor_selection How to select the donors? Possible choices are
+#'   `complete_rows`, `partly_complete_rows`, `knn_complete_rows`,
+#'   `knn_partly_complete_rows`
+#' @param donor_k number of selected closest donor, only used for knn `donor_selection`s
 #'
 #' @return A "model" for [predict_donor()] which is merely a data frame.
 #' @export
 #' @importFrom gower gower_topn
 #' @importFrom stats complete.cases
-model_donor <- function(ds, M, i, donor_selection = "simultan_complete", donor_k = 10) {
-  if (donor_selection %in% c("simultan_complete", "knn_simultan_complete")) {
+model_donor <- function(ds, M, i, donor_selection = "complete_rows", donor_k = 10) {
+  if (donor_selection %in% c("complete_rows", "knn_complete_rows")) {
     suitable_rows <- complete.cases(ds)
-  } else if(donor_selection %in% c("simultan_incomplete", "knn_simultan_incomplete")) {
+  } else if(donor_selection %in% c("partly_complete_rows", "knn_partly_complete_rows")) {
     suitable_rows <- apply(M, 1, function(x) !any(M[i, ] & x))
   } else {
     stop(paste0("'", donor_selection, "' is not a valid option for donor_selection"))
   }
-  if (donor_selection %in% c("knn_simultan_complete", "knn_simultan_incomplete")) {
+  if (donor_selection %in% c("knn_complete_rows", "knn_partly_complete_rows")) {
     suitable_rows_ind <- which(suitable_rows)
     best_k <- gower::gower_topn(ds[i, ], ds[suitable_rows, ], n = donor_k)$index[, 1]
     suitable_rows <- suitable_rows_ind[best_k]
