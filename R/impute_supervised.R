@@ -1,6 +1,8 @@
-#' supervised imputation
+#' Supervised imputation
 #'
-#' Impute a data set with a supervised inner method
+#' Impute a data set with a supervised inner method. This function is one main
+#' function which can be used inside of [impute_iterative()]. If you need
+#' pre-imputation or iterations, directly use [impute_iterative()].
 #'
 #' @param ds the data set to be imputed, must be a data frame with column names
 #' @param model_spec_parsnip The model type used for imputation. It is defined
@@ -20,12 +22,20 @@
 #'   returned data set still contains `NA`?
 #' @param ... arguments passed on to [parsnip::fit_xy()] and [stats::predict()]
 #'
-#' @details This function imputes the columns of the data set `ds` column by
+#' @details
+#' This function imputes the columns of the data set `ds` column by
 #' column. The imputation order of the column can be specified by `cols_order`.
 #' Furthermore, `cols_used_for_imputation` controls which columns are used for
 #' the imputation. The same options are available for the rows of `ds` via
 #' `rows_order` and `rows_used_for_imputation`. If `ds` is pre-imputed, the
 #' missing data indicator matrix can be supplied via `M`.
+#'
+#' The inner method can be specified via `model_spec_parsnip` which should be a
+#' parsnip model type like [parsnip::linear_reg()], [parsnip::rand_forest()]
+#' (for a complete list see <https://www.tidymodels.org/find/parsnip>, you can
+#' also build a new parsnip model and use it inside of `impute_supervised()`,
+#' see <https://www.tidymodels.org/learn/develop/models> for more information
+#' on building a parsnip model).
 #'
 #' The options "all" and "all_no_update" for `cols_used_for_imputation` and
 #' "all_except_i", "all_except_i_no_update", "all", "all_no_update" for

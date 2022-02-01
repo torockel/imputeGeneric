@@ -2,7 +2,7 @@
 % Please edit documentation in R/impute_supervised.R
 \name{impute_supervised}
 \alias{impute_supervised}
-\title{supervised imputation}
+\title{Supervised imputation}
 \usage{
 impute_supervised(
   ds,
@@ -47,7 +47,9 @@ returned data set still contains \code{NA}?}
 The imputed data set.
 }
 \description{
-Impute a data set with a supervised inner method
+Impute a data set with a supervised inner method. This function is one main
+function which can be used inside of \code{\link[=impute_iterative]{impute_iterative()}}. If you need
+pre-imputation or iterations, directly use \code{\link[=impute_iterative]{impute_iterative()}}.
 }
 \details{
 This function imputes the columns of the data set \code{ds} column by
@@ -56,6 +58,13 @@ Furthermore, \code{cols_used_for_imputation} controls which columns are used for
 the imputation. The same options are available for the rows of \code{ds} via
 \code{rows_order} and \code{rows_used_for_imputation}. If \code{ds} is pre-imputed, the
 missing data indicator matrix can be supplied via \code{M}.
+
+The inner method can be specified via \code{model_spec_parsnip} which should be a
+parsnip model type like \code{\link[parsnip:linear_reg]{parsnip::linear_reg()}}, \code{\link[parsnip:rand_forest]{parsnip::rand_forest()}}
+(for a complete list see \url{https://www.tidymodels.org/find/parsnip}, you can
+also build a new parsnip model and use it inside of \code{impute_supervised()},
+see \url{https://www.tidymodels.org/learn/develop/models} for more information
+on building a parsnip model).
 
 The options "all" and "all_no_update" for \code{cols_used_for_imputation} and
 "all_except_i", "all_except_i_no_update", "all", "all_no_update" for
