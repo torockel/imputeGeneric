@@ -9,7 +9,7 @@ test_that("already_imputed columns and complete rows works", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10_mis,
       cols_used_for_imputation = "already_imputed",
       rows_used_for_imputation = "only_complete"
@@ -27,7 +27,7 @@ test_that("already_imputed columns and partly_complete rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10_mis,
       cols_used_for_imputation = "already_imputed",
       rows_used_for_imputation = "partly_complete"
@@ -53,7 +53,7 @@ test_that("already_imputed columns and already_imputed rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10_mis,
       cols_used_for_imputation = "already_imputed",
       rows_used_for_imputation = "already_imputed"
@@ -77,7 +77,7 @@ test_that("already_imputed columns and all_except_i_no_update rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "already_imputed",
       rows_used_for_imputation = "all_except_i_no_update",
@@ -102,7 +102,7 @@ test_that("already_imputed columns and all_except_i rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "already_imputed",
       rows_used_for_imputation = "all_except_i",
@@ -127,7 +127,7 @@ test_that("already_imputed columns and all rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "already_imputed",
       rows_used_for_imputation = "all",
@@ -152,7 +152,7 @@ test_that("already_imputed columns and all_no_update rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "already_imputed",
       rows_used_for_imputation = "all_no_update",
@@ -178,7 +178,7 @@ test_that("cols_order work (using already_imputed columns and all rows)", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_order = c("Y", "X"),
       cols_used_for_imputation = "already_imputed",

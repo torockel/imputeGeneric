@@ -52,7 +52,7 @@ test_that("stop_ds_difference() stop_na_rm works", {
 })
 
 test_that("stop_ds_difference() works inside impute_iterative()", {
-  ds_imp <- impute_cols_seq(
+  ds_imp <- impute_supervised(
     df_XYZ_10_mis, cols_used_for_imputation = "only_complete",
     rows_used_for_imputation = "only_complete"
   )

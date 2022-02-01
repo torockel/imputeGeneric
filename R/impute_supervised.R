@@ -1,6 +1,6 @@
-#' Sequentially imputation (columns)
+#' supervised imputation
 #'
-#' Impute columns of a data set sequentially
+#' Impute a data set with a supervised inner method
 #'
 #' @param ds the data set to be imputed, must be a data frame with column names
 #' @param model_spec_parsnip The model type used for imputation. It is defined
@@ -43,9 +43,7 @@
 #' @importFrom stats predict
 #'
 #'
-#' @examples
-#' # to be done
-impute_cols_seq <- function(ds,
+impute_supervised <- function(ds,
                             model_spec_parsnip = linear_reg(),
                             cols_used_for_imputation = "only_complete",
                             cols_order = seq_len(ncol(ds)),

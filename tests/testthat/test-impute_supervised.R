@@ -1,46 +1,46 @@
 test_that("no data frame or no colnames throws an error", {
   expect_error(
-    impute_cols_seq(c("asdf")),
+    impute_supervised(c("asdf")),
     "ds must be a data frame with colnames"
   )
   df_no_name <- data.frame(X = c(2, 3))
   colnames(df_no_name) <- NULL
   expect_error(
-    impute_cols_seq(df_no_name),
+    impute_supervised(df_no_name),
     "ds must be a data frame with colnames"
   )
 })
 
 test_that("incomplete ds after imputation gives a warning", {
   expect_warning(
-    impute_cols_seq(df_XYZ_10_mis, rows_used_for_imputation = "all", cols_used_for_imputation = "all"),
+    impute_supervised(df_XYZ_10_mis, rows_used_for_imputation = "all", cols_used_for_imputation = "all"),
     "Imputation is not complete. There are still missing values in `ds`."
   )
 })
 
 test_that("wrong option for rows_used_for_imputation throws an error", {
   expect_error(
-    impute_cols_seq(df_XYZ_10_mis, rows_used_for_imputation = "notAvalidOption"),
+    impute_supervised(df_XYZ_10_mis, rows_used_for_imputation = "notAvalidOption"),
     "'notAvalidOption' is not a valid option for rows_used_for_imputation"
   )
 })
 
 test_that("wrong option for cols_used_for_imputation throws an error", {
   expect_error(
-    impute_cols_seq(df_XYZ_10_mis, cols_used_for_imputation = "notAvalidOption"),
+    impute_supervised(df_XYZ_10_mis, cols_used_for_imputation = "notAvalidOption"),
     "'notAvalidOption' is not a valid option for cols_used_for_imputation"
   )
 })
 
 test_that("cols_order is passed to order_cols()", {
   expect_equal(
-      impute_cols_seq(
+      impute_supervised(
       df_XYZ_10,
       cols_order = "highest_md_first",
       cols_used_for_imputation = "already_imputed",
       M = is.na(df_XYZ_10_mis)
     ),
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10,
       cols_order = c("Y", "X", "Z"),
       cols_used_for_imputation = "already_imputed",
@@ -51,14 +51,14 @@ test_that("cols_order is passed to order_cols()", {
 
 test_that("rows_order and M is passed to order_rows()", {
   expect_equal(
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10,
       rows_order = "highest_md_first",
       rows_used_for_imputation = "all",
       cols_used_for_imputation = "already_imputed",
       M = is.na(df_XYZ_10_mis)
     ),
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10,
       rows_order = c(7, 1, 2, 4),
       rows_used_for_imputation = "all",
@@ -79,7 +79,7 @@ test_that("complete columns and rows works", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10_mis,
       cols_used_for_imputation = "only_complete",
       rows_used_for_imputation = "only_complete"
@@ -97,7 +97,7 @@ test_that("complete columns and partly_complete rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10_mis,
       cols_used_for_imputation = "only_complete",
       rows_used_for_imputation = "partly_complete"
@@ -123,7 +123,7 @@ test_that("complete columns and already_imputed rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10_mis,
       cols_used_for_imputation = "only_complete",
       rows_used_for_imputation = "already_imputed"
@@ -147,7 +147,7 @@ test_that("complete columns and all_except_i_no_update rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "only_complete",
       rows_used_for_imputation = "all_except_i_no_update",
@@ -172,7 +172,7 @@ test_that("complete columns and all_except_i rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "only_complete",
       rows_used_for_imputation = "all_except_i",
@@ -197,7 +197,7 @@ test_that("complete columns and all rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "only_complete",
       rows_used_for_imputation = "all",
@@ -222,7 +222,7 @@ test_that("complete columns and all_no_update rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "only_complete",
       rows_used_for_imputation = "all_no_update",

@@ -3,7 +3,7 @@
 #' Iterative imputation of a data set
 #'
 #'
-#' @inheritParams impute_cols_seq
+#' @inheritParams impute_supervised
 #' @param max_iter maximum number of iterations
 #' @param stop_fun a stopping function (see details below) or `NULL`. If `NULL`,
 #'   iterations are only stopped after `max_iter` is reached.
@@ -51,7 +51,7 @@ impute_iterative <- function(ds,
   nr_iterations <- 1
   while(nr_iterations <= max_iter) {
     ds_old <- ds
-    ds <- impute_cols_seq(
+    ds <- impute_supervised(
       ds, model_spec_parsnip = model_spec_parsnip,
       cols_used_for_imputation = cols_used_for_imputation,
       cols_order = cols_order,

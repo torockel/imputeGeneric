@@ -9,7 +9,7 @@ test_that("all columns and (complete and partly_complete) rows works", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "all",
       rows_used_for_imputation = "only_complete",
@@ -19,7 +19,7 @@ test_that("all columns and (complete and partly_complete) rows works", {
   # if all columns are considered, partly_complete are only complete observed rows
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "all",
       rows_used_for_imputation = "partly_complete",
@@ -50,7 +50,7 @@ test_that("all columns and already_imputed rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "all",
       rows_used_for_imputation = "already_imputed",
@@ -75,7 +75,7 @@ test_that("all columns and all_except_i_no_update rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "all",
       rows_used_for_imputation = "all_except_i_no_update",
@@ -100,7 +100,7 @@ test_that("all columns and all_except_i rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "all",
       rows_used_for_imputation = "all_except_i",
@@ -125,7 +125,7 @@ test_that("all columns and all rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "all",
       rows_used_for_imputation = "all",
@@ -143,7 +143,7 @@ test_that("all columns and rows with missing value and rpart works", {
   expect_false(any(is.na(ds_imp_test)))
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10_mis, decision_tree("regression"),
       cols_used_for_imputation = "all_no_update", rows_used_for_imputation = "all_no_update"
       )
@@ -166,7 +166,7 @@ test_that("all columns and all_no_update rows work", {
 
   expect_equal(
     ds_imp_test,
-    impute_cols_seq(
+    impute_supervised(
       df_XYZ_10, # use "completed" ds and M
       cols_used_for_imputation = "all",
       rows_used_for_imputation = "all_no_update",

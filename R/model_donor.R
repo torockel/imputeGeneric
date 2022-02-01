@@ -3,7 +3,7 @@
 #' This function is intended to be used inside of [impute_cols_sim()] as
 #' `model_fun`.
 #'
-#' @inheritParams impute_cols_seq
+#' @inheritParams impute_supervised
 #' @param i row of i
 #' @param donor_selection How to select the donors? Possible choices are
 #'   `complete_rows`, `partly_complete_rows`, `knn_complete_rows`,

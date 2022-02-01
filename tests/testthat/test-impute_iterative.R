@@ -15,7 +15,7 @@ test_that("Warning for incomplete ds is shown (only once)", {
 
 test_that("initial_imputation_fun and max_iter = 1 works", {
   ds_imp <- missMethods::impute_mean(df_XYZ_10_mis)
-  ds_imp <- impute_cols_seq(
+  ds_imp <- impute_supervised(
     ds_imp, cols_used_for_imputation = "all_no_update",
     rows_used_for_imputation = "all_no_update", M = is.na(df_XYZ_10_mis)
     )
@@ -34,7 +34,7 @@ test_that("initial_imputation_fun and max_iter = 1 works", {
 test_that("initial_imputation_fun and max_iter = 2 works", {
   ds_imp <- missMethods::impute_mean(df_XYZ_10_mis)
   for(i in 1:2) {
-    ds_imp <- impute_cols_seq(
+    ds_imp <- impute_supervised(
       ds_imp, M = is.na(df_XYZ_10_mis),
       cols_used_for_imputation = "all_no_update",
       rows_used_for_imputation = "all_no_update"
