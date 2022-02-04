@@ -6,7 +6,7 @@ ckeck_and_set_rows_order <- function(rows_order, ds, M) {
 }
 
 warn_incomplete <- function(show_warning, ds) {
-  if (show_warning && any(is.na(ds))) {
+  if (show_warning && anyNA(ds)) {
     warning("Imputation is not complete. There are still missing values in `ds`.")
   }
 }

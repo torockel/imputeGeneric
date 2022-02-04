@@ -140,7 +140,7 @@ test_that("all columns and rows with missing value and rpart works", {
   ds_imp_test$X[is.na(df_XYZ_10_mis$X)] <- unlist(predict(rpart_x, df_XYZ_10_mis[is.na(df_XYZ_10_mis$X), ]))
   rpart_y <- fit(decision_tree("regression"), Y ~ X + Z, df_XYZ_10_mis)
   ds_imp_test$Y[is.na(df_XYZ_10_mis$Y)] <- unlist(predict(rpart_y, df_XYZ_10_mis[is.na(df_XYZ_10_mis$Y), ]))
-  expect_false(any(is.na(ds_imp_test)))
+  expect_false(anyNA(ds_imp_test))
   expect_equal(
     ds_imp_test,
     impute_supervised(
