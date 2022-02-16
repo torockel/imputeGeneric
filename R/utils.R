@@ -47,16 +47,6 @@ get_col_indices <- function(cols_used_for_imputation, M_start, M, k = NULL) {
 }
 
 check_update_combinations <- function(update_model, update_ds_model, rows_used_for_imputation) {
-  if (update_model == "everytime" && update_ds_model != "everytime") {
-    warning("update_ds_model is set to everytime because model is updated everytime")
-    assign("update_ds_model", "everytime", pos = parent.frame(1))
-  }
-
-  if(update_model == "each_column" && update_ds_model == "everytime") {
-    warning("update_ds_model is set to each_column because only one model is constructed per column")
-    assign("update_ds_model", "each_column", pos = parent.frame(1))
-  }
-
   if(update_model == "each_column" && rows_used_for_imputation == "all_except_i") {
     warning("update_model is set to everytime because a new model is constructed for every row")
     assign("update_model", "everytime", pos = parent.frame(1))
