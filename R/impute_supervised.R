@@ -8,13 +8,12 @@
 #' @param model_spec_parsnip The model type used for imputation. It is defined
 #'   via the `parsnip` package.
 #' @param cols_used_for_imputation Which columns should be used to impute other
-#'   columns? Possible choices: "only_complete", "already_imputed", "all", "all_no_update"
+#'   columns? Possible choices: "only_complete", "already_imputed", "all"
 #' @param cols_order ordering of the columns for imputation. This can be a vector with
 #'   indices or an `order_option` from [order_cols()].
 #' @param rows_used_for_imputation Which rows should be used to impute other
-#'   rows? Possible choices: "only_complete", "partly_complete",
-#'   "already_imputed", "all_except_i", "all_except_i_no_update", "all",
-#'   "all_no_update"
+#'   rows? Possible choices: "only_complete", "partly_complete", "complete_in_k",
+#'   "already_imputed", "all_except_i", "all"
 #' @param rows_order Ordering of the rows for imputation. This can be a vector with
 #'   indices or an `order_option` from [order_rows()].
 #' @param M missing data indicator matrix
@@ -59,6 +58,8 @@ impute_supervised <- function(ds,
                             cols_order = seq_len(ncol(ds)),
                             rows_used_for_imputation = "only_complete",
                             rows_order = seq_len(nrow(ds)),
+                            update_model = "each_column",
+                            update_ds_model = "each_column",
                             M = is.na(ds),
                             show_warning_incomplete_imputation = TRUE,
                             ...) {
@@ -75,44 +76,91 @@ impute_supervised <- function(ds,
 
   rows_order <- ckeck_and_set_rows_order(rows_order, ds, M)
 
+  update_model <- match.arg(update_model, c("everytime", "each_column"))
+  update_ds_model <- match.arg(update_ds_model, c("everytime", "each_column", "every_iteration"))
+
+
+  if (update_model == "everytime" && update_ds_model != "everytime") {
+    warning("update_ds_model is set to everytime because model is updated everytime")
+    update_ds_model <- "everytime"
+  }
+
+  if(update_model == "each_column" && update_ds_model == "everytime") {
+    warning("update_ds_model is set to each_column because only one model is constructed per column")
+    update_ds_model <- "each_column"
+  }
+
+  if(rows_used_for_imputation == "all_except_i" && update_model == "each_column") {
+    warning("update_model is set to everytime because a new model is constructed for every row")
+    update_model <- "everytime"
+  }
+
   for (k in cols_order) {
-    for (i in rows_order) {
-      if (!M[i, k]) { # only impute, if ds[i,k] is missing
-        next
-      }
-
-      # Split ds
-      # Depending on used rows and columns there are better places (more efficient)
-      # to split the ds and train the model
-
-      # Get row and column indices
-      rows_used_imp <- get_row_indices(rows_used_for_imputation, cols_used_for_imputation, M_start, M, i, k)
+    if(update_model == "each_column") {
       cols_used_imp <- get_col_indices(cols_used_for_imputation, M_start, M, k)
+      rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, k, cols_used_imp)
 
-      # Do the split
-      if (
-        rows_used_for_imputation %in% c("all_except_i_no_update", "all_no_update") ||
-        cols_used_for_imputation == "all_no_update") {
-        ds_train <- ds_old[rows_used_imp, ]
-        ds_mis <- ds_old[i, ]
+      if (update_ds_model == "only_once") {
+        ds_used <- ds_old
       } else {
-        ds_train <- ds[rows_used_imp, ]
-        ds_mis <- ds[i, ]
+        ds_used <- ds
       }
 
+      ds_train <- ds_used[rows_used_imp, ]
+      ds_mis_k <- ds_used[M_start[, k], ]
 
-      # Train the model and predict the missing values
       model_fit <- fit_xy(
         model_spec_parsnip,
         ds_train[, cols_used_imp, drop = FALSE],
         ds_train[, k],
         ...
       )
-      ds[i, k] <- predict(model_fit, ds_mis, ...)
 
-      if (rows_used_for_imputation == "already_imputed" || cols_used_for_imputation == "already_imputed") {
-        M[i, k] <- FALSE
-      }
+      ds[M_start[, k], k] <- predict(model_fit, ds_mis_k, ...)
+      M[M_start[, k], k] <- FALSE
+
+    } else{
+      stop("not implemented")
+    #   for (i in rows_order) {
+    #     if (!M[i, k]) { # only impute, if ds[i,k] is missing
+    #       next
+    #     }
+    #
+    #     # Split ds
+    #     # Depending on used rows and columns there are better places (more efficient)
+    #     # to split the ds and train the model
+    #
+    #     # Get row and column indices
+    #     cols_used_imp <- get_col_indices(cols_used_for_imputation, M_start, M, k)
+    #     rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, i, k, cols_used_imp)
+    #
+    #
+    #     # Do the split
+    #     if (
+    #       rows_used_for_imputation %in% c("all_except_i_no_update", "all_no_update") ||
+    #       cols_used_for_imputation == "all_no_update") {
+    #       ds_train <- ds_old[rows_used_imp, ]
+    #       ds_mis <- ds_old[i, ]
+    #     } else {
+    #       ds_train <- ds[rows_used_imp, ]
+    #       ds_mis <- ds[i, ]
+    #     }
+    #
+    #
+    #     # Train the model and predict the missing values
+    #     model_fit <- fit_xy(
+    #       model_spec_parsnip,
+    #       ds_train[, cols_used_imp, drop = FALSE],
+    #       ds_train[, k],
+    #       ...
+    #     )
+    #     ds[i, k] <- predict(model_fit, ds_mis, ...)
+    #
+    #     if (rows_used_for_imputation == "already_imputed" || cols_used_for_imputation == "already_imputed") {
+    #       M[i, k] <- FALSE
+    #     }
+    #   }
+    # }
     }
   }
 

@@ -11,7 +11,7 @@ warn_incomplete <- function(show_warning, ds) {
   }
 }
 
-get_row_indices <- function(rows_used_for_imputation, M_start = NULL, M = NULL, i = NULL, k = NULL, cols_used_imp = NULL) {
+get_row_indices <- function(rows_used_for_imputation, M_start = NULL, M = NULL, k = NULL, cols_used_imp = NULL, i = NULL) {
   if (rows_used_for_imputation == "only_complete") {
     rows_used_imp <- !apply(M_start, 1, any)
   } else if (rows_used_for_imputation  == "partly_complete"){
