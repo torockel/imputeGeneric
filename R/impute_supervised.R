@@ -85,40 +85,9 @@ impute_supervised <- function(ds,
       # Depending on used rows and columns there are better places (more efficient)
       # to split the ds and train the model
 
-      # Get row indices
-      if (rows_used_for_imputation == "only_complete") {
-        rows_used_imp <- !apply(M_start, 1, any)
-      } else if (rows_used_for_imputation  == "partly_complete"){
-        if (cols_used_for_imputation %in% c("all", "all_no_update")) {
-          rows_used_imp <- !apply(M_start, 1, any)
-        } else {
-          rows_used_imp <- !M_start[, k]
-        }
-      } else if (rows_used_for_imputation == "already_imputed") {
-        if (cols_used_for_imputation %in% c("all", "all_no_update")) {
-          rows_used_imp <- !apply(M, 1, any)
-        } else {
-          rows_used_imp <- !M[, k]
-        }
-      } else if (rows_used_for_imputation %in% c("all_except_i", "all_except_i_no_update")) {
-        rows_used_imp <- seq_len(nrow(ds))[-i]
-      } else if (rows_used_for_imputation %in% c("all", "all_no_update")) {
-        rows_used_imp <- seq_len(nrow(ds))
-      } else {
-        stop(paste0("'", rows_used_for_imputation, "' is not a valid option for rows_used_for_imputation"))
-      }
-
-      # Get column indices
-      if (cols_used_for_imputation == "only_complete") {
-        cols_used_imp <- !apply(M_start, 2, any)
-      } else if(cols_used_for_imputation == "already_imputed") {
-        cols_used_imp <- !apply(M, 2, any)
-      } else if(cols_used_for_imputation %in% c("all", "all_no_update")) {
-        cols_used_imp <- seq_len(ncol(ds))[-k]
-      } else {
-        stop(paste0("'", cols_used_for_imputation, "' is not a valid option for cols_used_for_imputation"))
-      }
-
+      # Get row and column indices
+      rows_used_imp <- get_row_indices(rows_used_for_imputation, cols_used_for_imputation, M_start, M, i, k)
+      cols_used_imp <- get_col_indices(cols_used_for_imputation, M_start, M, k)
 
       # Do the split
       if (
