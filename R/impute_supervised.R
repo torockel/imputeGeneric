@@ -19,7 +19,7 @@
 #' @param M missing data indicator matrix
 #' @param show_warning_incomplete_imputation Should a warning be given, if the
 #'   returned data set still contains `NA`?
-#' @param ... arguments passed on to [parsnip::fit_xy()] and [stats::predict()]
+#' @param ... arguments passed on to [stats::predict()]
 #'
 #' @details
 #' This function imputes the columns of the data set `ds` column by
@@ -99,8 +99,7 @@ impute_supervised <- function(ds,
       model_fit <- fit_xy(
         model_spec_parsnip,
         ds_train[, cols_used_imp, drop = FALSE],
-        ds_train[, k],
-        ...
+        ds_train[, k]
       )
 
       ds[M_start[, k], k] <- predict(model_fit, ds_mis_k, ...)
@@ -131,8 +130,7 @@ impute_supervised <- function(ds,
         model_fit <- fit_xy(
           model_spec_parsnip,
           ds_train[, cols_used_imp, drop = FALSE],
-          ds_train[, k],
-          ...
+          ds_train[, k]
         )
         ds[i, k] <- predict(model_fit, ds_mis, ...)
         M[i, k] <- FALSE
