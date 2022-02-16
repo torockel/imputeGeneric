@@ -131,3 +131,36 @@ test_that("get_row_indices() errors for wrong option", {
     "'asdf' is not a valid option for rows_used_for_imputation"
   )
 })
+
+# check_update_combinations() -------------------------------------------------
+test_that("check_update_combinations() works", {
+  test_fun <- function(update_model, update_ds_model, rows_used_for_imputation){
+    check_update_combinations(update_model, update_ds_model, rows_used_for_imputation)
+    1 + 1
+    list(update_model, update_ds_model, rows_used_for_imputation)
+  }
+  expect_warning(
+    test_fun("everytime", "not_every_time", "asdf"),
+    "update_ds_model is set to everytime because model is updated everytime"
+  )
+  expect_equal(
+    suppressWarnings(test_fun("everytime", "not_every_time", "asdf")),
+    list("everytime", "everytime", "asdf")
+  )
+  expect_equal(
+    suppressWarnings(test_fun("each_column", "everytime", "asdf")),
+    list("each_column", "each_column", "asdf")
+  )
+
+  expect_equal(
+    suppressWarnings(test_fun("each_column", "asdf", "all_except_i")),
+    list("everytime", "asdf", "all_except_i")
+  )
+})
+
+test_that("check_update_combinations() is called by impute_supervised()", {
+  expect_warning(
+    impute_supervised(df_XYZ_10, update_model = "everytime", update_ds_model = "each_column"),
+    "update_ds_model is set to everytime because model is updated everytime"
+  )
+})

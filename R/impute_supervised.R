@@ -78,22 +78,7 @@ impute_supervised <- function(ds,
 
   update_model <- match.arg(update_model, c("everytime", "each_column"))
   update_ds_model <- match.arg(update_ds_model, c("everytime", "each_column", "every_iteration"))
-
-
-  if (update_model == "everytime" && update_ds_model != "everytime") {
-    warning("update_ds_model is set to everytime because model is updated everytime")
-    update_ds_model <- "everytime"
-  }
-
-  if(update_model == "each_column" && update_ds_model == "everytime") {
-    warning("update_ds_model is set to each_column because only one model is constructed per column")
-    update_ds_model <- "each_column"
-  }
-
-  if(rows_used_for_imputation == "all_except_i" && update_model == "each_column") {
-    warning("update_model is set to everytime because a new model is constructed for every row")
-    update_model <- "everytime"
-  }
+  check_update_combinations(update_model, update_ds_model, rows_used_for_imputation)
 
   for (k in cols_order) {
     if(update_model == "each_column") {
