@@ -13,3 +13,19 @@ df_XY_10_X_mis <- df_XYZ_10_mis[, c("X", "Y")]
 # info_list for testing stop funs ---------------------------------------------
 info_list <- list(M = is.na(df_XYZ_10_mis), nr_iterations = 42, max_iter = 70)
 df_XYZ_10_stop <- structure(df_XYZ_10, nr_iterations = info_list$nr_iterations)
+
+
+# MD-Indicator matrices -------------------------------------------------------
+M1 <- matrix(c(TRUE, TRUE, TRUE,
+               TRUE, TRUE, FALSE,
+               TRUE, FALSE, TRUE,
+               TRUE, FALSE, FALSE,
+               FALSE, TRUE, TRUE,
+               FALSE, TRUE, FALSE,
+               FALSE, FALSE, TRUE,
+               FALSE, FALSE, FALSE),
+             ncol = 3, byrow = TRUE)
+M2 <- matrix(c(FALSE, FALSE, TRUE,
+               TRUE, FALSE, FALSE,
+               FALSE, FALSE, FALSE),
+             ncol = 3, byrow = TRUE)
