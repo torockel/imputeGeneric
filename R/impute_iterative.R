@@ -10,9 +10,8 @@
 #' @param initial_imputation_fun This function will do the initial imputation of
 #'   the missing values. If `NULL`, no initial imputation is done. Some common
 #'   choices like mean imputation are implemented in the package missMethods.
-#' @param ... Further arguments passed on to `initial_imputation_fun`,
-#'   `stop_fun` and [parsnip::fit_xy()], [stats::predict()] used with the
-#'   `model_spec_parsnip`.
+#' @param ... Further arguments passed on to
+#'   `stop_fun` and [stats::predict()].
 #'
 #' @section stop_fun: The `stop_fun` should take the arguments `ds` (the data
 #'   set imputed in the current iteration), `ds_old` (the data set imputed in
@@ -45,7 +44,7 @@ impute_iterative <- function(ds,
   force(M)
   # Initial imputation
   if (!is.null(initial_imputation_fun)) {
-    ds <- initial_imputation_fun(ds, ...)
+    ds <- initial_imputation_fun(ds)
   }
 
   nr_iterations <- 1
