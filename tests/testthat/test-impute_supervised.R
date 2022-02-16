@@ -1,3 +1,4 @@
+# Warnings and errors ---------------------------------------------------------
 test_that("no data frame or no colnames throws an error", {
   expect_error(
     impute_supervised(c("asdf")),
@@ -32,6 +33,14 @@ test_that("wrong option for cols_used_for_imputation throws an error", {
   )
 })
 
+test_that("check_update_combinations() is called by impute_supervised()", {
+  expect_warning(
+    impute_supervised(df_XYZ_10, rows_used_for_imputation = "all_except_i", update_model = "each_column"),
+    "update_model is set to everytime because a new model is constructed for every row"
+  )
+})
+
+# Test function calls for ordering rows and cols ------------------------------
 test_that("cols_order is passed to order_cols()", {
   ds_imp_highest_md_first <- impute_supervised(
     df_XYZ_10,
@@ -40,7 +49,7 @@ test_that("cols_order is passed to order_cols()", {
     M = is.na(df_XYZ_10_mis)
   )
   expect_equal(
-      impute_supervised(
+    impute_supervised(
       df_XYZ_10,
       cols_order = "highest_md_first",
       cols_used_for_imputation = "already_imputed",
@@ -79,6 +88,24 @@ test_that("rows_order and M is passed to order_rows()", {
   )
 })
 
+# parsnip model via rpart -----------------------------------------------------
+test_that("all columns and rows with missing value and rpart works", {
+  ds_imp_test <- df_XYZ_10_mis
+  rpart_x <- fit(decision_tree("regression"), X ~ Y + Z, df_XYZ_10_mis)
+  ds_imp_test$X[is.na(df_XYZ_10_mis$X)] <- unlist(predict(rpart_x, df_XYZ_10_mis[is.na(df_XYZ_10_mis$X), ]))
+  rpart_y <- fit(decision_tree("regression"), Y ~ X + Z, df_XYZ_10_mis)
+  ds_imp_test$Y[is.na(df_XYZ_10_mis$Y)] <- unlist(predict(rpart_y, df_XYZ_10_mis[is.na(df_XYZ_10_mis$Y), ]))
+  expect_false(anyNA(ds_imp_test))
+  expect_equal(
+    ds_imp_test,
+    impute_supervised(
+      df_XYZ_10_mis, decision_tree("regression"),
+      cols_used_for_imputation = "all", rows_used_for_imputation = "all", update_ds_model = "every_iteration"
+    )
+  )
+})
+
+# Basic fests for update model and model ds every column ----------------------
 test_that("complete columns and rows works", {
   ds_imp_test <- df_XYZ_10_mis
   M <- is.na(df_XYZ_10_mis)
@@ -174,4 +201,148 @@ test_that("complete columns and all rows work", {
       M = is.na(df_XYZ_10_mis)
     )
   )
+})
+
+
+# Tests for update model every column and model ds every_iteration  ----------------------
+test_that("update model every column and model ds every iteration works", {
+  ds_imp_test <- df_XYZ_10_mis
+  M <- is.na(df_XYZ_10_mis)
+  ind_mis_X <- which(M[, "X"])
+  for (ind_mis in ind_mis_X) {
+    lm_x <- lm(X ~ Z + Y, df_XYZ_10, na.action = na.fail)
+    ds_imp_test$X[ind_mis] <- predict(lm_x, df_XYZ_10[ind_mis, ])
+  }
+  ind_mis_Y <- which(M[, "Y"])
+  for (ind_mis in ind_mis_Y) {
+    lm_y <- lm(Y ~ Z + X, df_XYZ_10, na.action = na.fail)
+    ds_imp_test$Y[ind_mis] <- predict(lm_y, df_XYZ_10[ind_mis, ])
+  }
+
+  expect_equal(
+    ds_imp_test,
+    impute_supervised(
+      df_XYZ_10, # use "completed" ds and M
+      cols_used_for_imputation = "all",
+      rows_used_for_imputation = "all",
+      update_ds_model = "every_iteration",
+      M = is.na(df_XYZ_10_mis)
+    )
+  )
+})
+
+
+# Tests for update model everytime and model ds everytime --------------------
+test_that("all columns and (complete and partly_complete) rows works with updates every time", {
+  ds_imp_test <- df_XYZ_10
+  M <- is.na(df_XYZ_10_mis)
+  rows_comp <- !apply(M, 1, any)
+  lm_x <- lm(X ~ Z + Y, df_XYZ_10[rows_comp, ], na.action = na.fail)
+  ds_imp_test$X[M[, "X"]] <- predict(lm_x, df_XYZ_10[M[, "X"], ])
+  lm_y <- lm(Y ~ Z + X, ds_imp_test[rows_comp, ], na.action = na.fail)
+  ds_imp_test$Y[M[, "Y"]] <- predict(lm_y, ds_imp_test[M[, "Y"], ])
+
+  expect_equal(
+    ds_imp_test,
+    impute_supervised(
+      df_XYZ_10, # use "completed" ds and M
+      cols_used_for_imputation = "all",
+      rows_used_for_imputation = "only_complete",
+      update_model = "everytime",
+      update_ds_model = "everytime",
+      M = is.na(df_XYZ_10_mis)
+    )
+  )
+  # if all columns are considered, partly_complete are only complete observed rows
+  expect_equal(
+    ds_imp_test,
+    impute_supervised(
+      df_XYZ_10, # use "completed" ds and M
+      cols_used_for_imputation = "all",
+      rows_used_for_imputation = "partly_complete",
+      update_model = "everytime",
+      update_ds_model = "everytime",
+      M = is.na(df_XYZ_10_mis)
+    )
+  )
+})
+
+# Tests for update model everytime and model ds each_column -------------------
+test_that("update model everytime and model ds each_column throws an error", {
+  expect_error(
+    impute_supervised(df_XYZ_10_mis, update_model = "everytime", update_ds_model = "each_column"),
+    "Combination of update_model and update_ds_model is not implemented."
+  )
+})
+
+# Tests for update model everytime and model ds every_iteration --------------------
+
+test_that("all_no_update columns and (complete and partly_complete) rows works", {
+  ds_imp_test <- df_XYZ_10
+  M <- is.na(df_XYZ_10_mis)
+  rows_comp <- !apply(M, 1, any)
+  lm_x <- lm(X ~ Z + Y, df_XYZ_10[rows_comp, ], na.action = na.fail)
+  ds_imp_test$X[M[, "X"]] <- predict(lm_x, df_XYZ_10[M[, "X"], ])
+  lm_y <- lm(Y ~ Z + X, df_XYZ_10[rows_comp, ], na.action = na.fail)
+  ds_imp_test$Y[M[, "Y"]] <- predict(lm_y, df_XYZ_10[M[, "Y"], ])
+
+  expect_equal(
+    ds_imp_test,
+    impute_supervised(
+      df_XYZ_10, # use "completed" ds and M
+      cols_used_for_imputation = "all",
+      rows_used_for_imputation = "only_complete",
+      update_model = "everytime",
+      update_ds_model = "every_iteration",
+      M = is.na(df_XYZ_10_mis)
+    )
+  )
+
+  # if all columns are considered, partly_complete are only complete observed rows
+  expect_equal(
+    ds_imp_test,
+    impute_supervised(
+      df_XYZ_10, # use "completed" ds and M
+      cols_used_for_imputation = "all",
+      rows_used_for_imputation = "partly_complete",
+      update_model = "everytime",
+      update_ds_model = "every_iteration",
+      M = is.na(df_XYZ_10_mis)
+    )
+  )
+})
+
+test_that("update model everytime and model ds every_iteration  works", {
+
+  ds_imp_test <- df_XYZ_10
+  M <- is.na(df_XYZ_10_mis)
+  lm_x <- lm(X ~ Z + Y, df_XYZ_10, na.action = na.fail)
+  ds_imp_test$X[M[, "X"]] <- predict(lm_x, df_XYZ_10[M[, "X"], ])
+  lm_y <- lm(Y ~ Z + X, df_XYZ_10, na.action = na.fail)
+  ds_imp_test$Y[M[, "Y"]] <- predict(lm_y, df_XYZ_10[M[, "Y"], ])
+
+  ds_imp_sup <- impute_supervised(
+    df_XYZ_10, # use "completed" ds and M
+    cols_used_for_imputation = "all",
+    rows_used_for_imputation = "all",
+    update_model = "everytime",
+    update_ds_model = "every_iteration",
+    M = is.na(df_XYZ_10_mis)
+  )
+  expect_equal(
+    ds_imp_sup,
+    ds_imp_test
+  )
+  # There is a real difference between update_ds_model evertime and every_iteration:
+  expect_false(isTRUE(all.equal(
+    ds_imp_sup,
+    impute_supervised(
+      df_XYZ_10, # use "completed" ds and M
+      cols_used_for_imputation = "all",
+      rows_used_for_imputation = "all",
+      update_model = "everytime",
+      update_ds_model = "everytime",
+      M = is.na(df_XYZ_10_mis)
+    )
+  )))
 })
