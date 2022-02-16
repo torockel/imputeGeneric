@@ -85,10 +85,12 @@ impute_supervised <- function(ds,
       cols_used_imp <- get_col_indices(cols_used_for_imputation, M_start, M, k)
       rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, k, cols_used_imp)
 
-      if (update_ds_model == "only_once") {
+      if (update_ds_model == "every_iteration") {
         ds_used <- ds_old
-      } else {
+      } else if (update_ds_model %in% c("everytime", "each_column")) {
         ds_used <- ds
+      } else {
+        stop("Combination of update_model and update_ds_model is not implemented.")
       }
 
       ds_train <- ds_used[rows_used_imp, ]
@@ -105,47 +107,36 @@ impute_supervised <- function(ds,
       M[M_start[, k], k] <- FALSE
 
     } else{
-      stop("not implemented")
-    #   for (i in rows_order) {
-    #     if (!M[i, k]) { # only impute, if ds[i,k] is missing
-    #       next
-    #     }
-    #
-    #     # Split ds
-    #     # Depending on used rows and columns there are better places (more efficient)
-    #     # to split the ds and train the model
-    #
-    #     # Get row and column indices
-    #     cols_used_imp <- get_col_indices(cols_used_for_imputation, M_start, M, k)
-    #     rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, i, k, cols_used_imp)
-    #
-    #
-    #     # Do the split
-    #     if (
-    #       rows_used_for_imputation %in% c("all_except_i_no_update", "all_no_update") ||
-    #       cols_used_for_imputation == "all_no_update") {
-    #       ds_train <- ds_old[rows_used_imp, ]
-    #       ds_mis <- ds_old[i, ]
-    #     } else {
-    #       ds_train <- ds[rows_used_imp, ]
-    #       ds_mis <- ds[i, ]
-    #     }
-    #
-    #
-    #     # Train the model and predict the missing values
-    #     model_fit <- fit_xy(
-    #       model_spec_parsnip,
-    #       ds_train[, cols_used_imp, drop = FALSE],
-    #       ds_train[, k],
-    #       ...
-    #     )
-    #     ds[i, k] <- predict(model_fit, ds_mis, ...)
-    #
-    #     if (rows_used_for_imputation == "already_imputed" || cols_used_for_imputation == "already_imputed") {
-    #       M[i, k] <- FALSE
-    #     }
-    #   }
-    # }
+      for (i in rows_order) {
+        if (!M[i, k]) { # only impute, if ds[i,k] is missing
+          next
+        }
+
+        # Get row and column indices
+        cols_used_imp <- get_col_indices(cols_used_for_imputation, M_start, M, k)
+        rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, k, cols_used_imp, i)
+
+        if (update_ds_model == "every_iteration") {
+          ds_used <- ds_old
+        } else if (update_ds_model == "everytime") {
+          ds_used <- ds
+        } else { # "each_column" is not implemented
+          stop("Combination of update_model and update_ds_model is not implemented.")
+        }
+
+        ds_train <- ds_used[rows_used_imp, ]
+        ds_mis <- ds_used[i, ]
+
+        # Train the model and predict the missing values
+        model_fit <- fit_xy(
+          model_spec_parsnip,
+          ds_train[, cols_used_imp, drop = FALSE],
+          ds_train[, k],
+          ...
+        )
+        ds[i, k] <- predict(model_fit, ds_mis, ...)
+        M[i, k] <- FALSE
+      }
     }
   }
 
