@@ -10,10 +10,13 @@ impute_iterative(
   max_iter = 10,
   stop_fun = NULL,
   initial_imputation_fun = NULL,
-  cols_used_for_imputation = "all_no_update",
+  cols_used_for_imputation = "all",
   cols_order = seq_len(ncol(ds)),
-  rows_used_for_imputation = "all_no_update",
+  rows_used_for_imputation = "all",
   rows_order = seq_len(nrow(ds)),
+  update_model = "each_column",
+  update_ds_model = "each_column",
+  stop_fun_args = NULL,
   M = is.na(ds),
   show_warning_incomplete_imputation = TRUE,
   ...
@@ -35,27 +38,26 @@ the missing values. If \code{NULL}, no initial imputation is done. Some common
 choices like mean imputation are implemented in the package missMethods.}
 
 \item{cols_used_for_imputation}{Which columns should be used to impute other
-columns? Possible choices: "only_complete", "already_imputed", "all", "all_no_update"}
+columns? Possible choices: "only_complete", "already_imputed", "all"}
 
 \item{cols_order}{ordering of the columns for imputation. This can be a vector with
 indices or an \code{order_option} from \code{\link[=order_cols]{order_cols()}}.}
 
 \item{rows_used_for_imputation}{Which rows should be used to impute other
-rows? Possible choices: "only_complete", "partly_complete",
-"already_imputed", "all_except_i", "all_except_i_no_update", "all",
-"all_no_update"}
+rows? Possible choices: "only_complete", "partly_complete", "complete_in_k",
+"already_imputed", "all_except_i", "all"}
 
 \item{rows_order}{Ordering of the rows for imputation. This can be a vector with
 indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
+
+\item{stop_fun_args}{Further arguments passed on to \code{stop_fun}.}
 
 \item{M}{missing data indicator matrix}
 
 \item{show_warning_incomplete_imputation}{Should a warning be given, if the
 returned data set still contains \code{NA}?}
 
-\item{...}{Further arguments passed on to \code{initial_imputation_fun},
-\code{stop_fun} and \code{\link[parsnip:reexports]{parsnip::fit_xy()}}, \code{\link[stats:predict]{stats::predict()}} used with the
-\code{model_spec_parsnip}.}
+\item{...}{Further arguments passed on to \code{\link[stats:predict]{stats::predict()}}.}
 }
 \value{
 an imputed data set.
@@ -66,12 +68,12 @@ Iterative imputation of a data set
 \section{stop_fun}{
  The \code{stop_fun} should take the arguments \code{ds} (the data
 set imputed in the current iteration), \code{ds_old} (the data set imputed in
-the last iteration) and a list (with named elements \code{M} \code{nr_iterations},
-\code{max_iter}) in this order. Further arguments can be passed on via \code{...}. The
-\code{stop_fun} must return \code{FALSE} to allow for a next iteration. If \code{stop_fun}
-returns not \code{FALSE} the iteration is stopped and the return value of
-\code{stop_fun} is returned as result of \code{impute_iterative()}. Therefore, this
-return value should normally include the imputed data set \code{ds} or \code{ds_old}.
+the last iteration), a list (with named elements \code{M} \code{nr_iterations},
+\code{max_iter}) and \code{stop_fun_args} in this order. The \code{stop_fun} must return
+\code{FALSE} to allow for a next iteration. If \code{stop_fun} returns not \code{FALSE}
+the iteration is stopped and the return value of \code{stop_fun} is returned as
+result of \code{impute_iterative()}. Therefore, this return value should
+normally include the imputed data set \code{ds} or \code{ds_old}.
 }
 
 \examples{

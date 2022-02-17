@@ -10,17 +10,17 @@
 #' @param initial_imputation_fun This function will do the initial imputation of
 #'   the missing values. If `NULL`, no initial imputation is done. Some common
 #'   choices like mean imputation are implemented in the package missMethods.
-#' @param ... Further arguments passed on to
-#'   `stop_fun` and [stats::predict()].
+#' @param stop_fun_args Further arguments passed on to `stop_fun`.
+#' @param ... Further arguments passed on to [stats::predict()].
 #'
 #' @section stop_fun: The `stop_fun` should take the arguments `ds` (the data
 #'   set imputed in the current iteration), `ds_old` (the data set imputed in
-#'   the last iteration) and a list (with named elements `M` `nr_iterations`,
-#'   `max_iter`) in this order. Further arguments can be passed on via `...`. The
-#'   `stop_fun` must return `FALSE` to allow for a next iteration. If `stop_fun`
-#'   returns not `FALSE` the iteration is stopped and the return value of
-#'   `stop_fun` is returned as result of `impute_iterative()`. Therefore, this
-#'   return value should normally include the imputed data set `ds` or `ds_old`.
+#'   the last iteration), a list (with named elements `M` `nr_iterations`,
+#'   `max_iter`) and `stop_fun_args` in this order. The `stop_fun` must return
+#'   `FALSE` to allow for a next iteration. If `stop_fun` returns not `FALSE`
+#'   the iteration is stopped and the return value of `stop_fun` is returned as
+#'   result of `impute_iterative()`. Therefore, this return value should
+#'   normally include the imputed data set `ds` or `ds_old`.
 #'
 #' @return an imputed data set.
 #' @export
@@ -38,6 +38,7 @@ impute_iterative <- function(ds,
                              rows_order = seq_len(nrow(ds)),
                              update_model = "each_column",
                              update_ds_model = "each_column",
+                             stop_fun_args = NULL,
                              M = is.na(ds),
                              show_warning_incomplete_imputation = TRUE,
                              ...) {
@@ -68,7 +69,8 @@ impute_iterative <- function(ds,
     if (!is.null(stop_fun)) {
       res_stop_fun <- stop_fun(
         ds, ds_old,
-        list(M = M, nr_iterations = nr_iterations, max_iter = max_iter), ...
+        list(M = M, nr_iterations = nr_iterations, max_iter = max_iter),
+        stop_fun_args
         )
       if (!isTRUE(all.equal(FALSE, res_stop_fun))) {
         return(res_stop_fun)
