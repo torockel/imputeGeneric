@@ -16,6 +16,12 @@
 #'   "already_imputed", "all_except_i", "all"
 #' @param rows_order Ordering of the rows for imputation. This can be a vector with
 #'   indices or an `order_option` from [order_rows()].
+#' @param update_model How often should the model for imputation be updated?
+#'   Possible choices are: "everytime" (after every imputed value) and
+#'   "each_column" (only one update per column).
+#' @param update_ds_model How often should the data set for the inner model be
+#'   updated? Possible choices are: "everytime" (after every imputed value),
+#'   "each_column" (only one update per column) and "every_iteration".
 #' @param M missing data indicator matrix
 #' @param show_warning_incomplete_imputation Should a warning be given, if the
 #'   returned data set still contains `NA`?

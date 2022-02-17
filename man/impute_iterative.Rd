@@ -50,6 +50,14 @@ rows? Possible choices: "only_complete", "partly_complete", "complete_in_k",
 \item{rows_order}{Ordering of the rows for imputation. This can be a vector with
 indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
 
+\item{update_model}{How often should the model for imputation be updated?
+Possible choices are: "everytime" (after every imputed value) and
+"each_column" (only one update per column).}
+
+\item{update_ds_model}{How often should the data set for the inner model be
+updated? Possible choices are: "everytime" (after every imputed value),
+"each_column" (only one update per column) and "every_iteration".}
+
 \item{stop_fun_args}{Further arguments passed on to \code{stop_fun}.}
 
 \item{M}{missing data indicator matrix}

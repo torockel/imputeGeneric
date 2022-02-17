@@ -11,6 +11,8 @@ impute_supervised(
   cols_order = seq_len(ncol(ds)),
   rows_used_for_imputation = "only_complete",
   rows_order = seq_len(nrow(ds)),
+  update_model = "each_column",
+  update_ds_model = "each_column",
   M = is.na(ds),
   show_warning_incomplete_imputation = TRUE,
   ...
@@ -23,25 +25,32 @@ impute_supervised(
 via the \code{parsnip} package.}
 
 \item{cols_used_for_imputation}{Which columns should be used to impute other
-columns? Possible choices: "only_complete", "already_imputed", "all", "all_no_update"}
+columns? Possible choices: "only_complete", "already_imputed", "all"}
 
 \item{cols_order}{ordering of the columns for imputation. This can be a vector with
 indices or an \code{order_option} from \code{\link[=order_cols]{order_cols()}}.}
 
 \item{rows_used_for_imputation}{Which rows should be used to impute other
-rows? Possible choices: "only_complete", "partly_complete",
-"already_imputed", "all_except_i", "all_except_i_no_update", "all",
-"all_no_update"}
+rows? Possible choices: "only_complete", "partly_complete", "complete_in_k",
+"already_imputed", "all_except_i", "all"}
 
 \item{rows_order}{Ordering of the rows for imputation. This can be a vector with
 indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
+
+\item{update_model}{How often should the model for imputation be updated?
+Possible choices are: "everytime" (after every imputed value) and
+"each_column" (only one update per column).}
+
+\item{update_ds_model}{How often should the data set for the inner model be
+updated? Possible choices are: "everytime" (after every imputed value),
+"each_column" (only one update per column) and "every_iteration".}
 
 \item{M}{missing data indicator matrix}
 
 \item{show_warning_incomplete_imputation}{Should a warning be given, if the
 returned data set still contains \code{NA}?}
 
-\item{...}{arguments passed on to \code{\link[parsnip:reexports]{parsnip::fit_xy()}} and \code{\link[stats:predict]{stats::predict()}}}
+\item{...}{arguments passed on to \code{\link[stats:predict]{stats::predict()}}}
 }
 \value{
 The imputed data set.
