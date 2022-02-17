@@ -86,4 +86,6 @@ normally include the imputed data set \code{ds} or \code{ds_old}.
 
 \examples{
 # ToDo
+# simple example
+# example using stop_ds_difference()
 }

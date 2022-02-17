@@ -8,21 +8,21 @@ test_that("stop_ds_difference() works returns number of iterations", {
   )
 })
 
-test_that("stop_ds_difference() stop_p works", {
+test_that("stop_ds_difference() stop_args$p works", {
   df_XYZ_10_2 <- df_XYZ_10
   df_XYZ_10_2[, 1] <-  df_XYZ_10_2[, 1] + 2
   expect_false(stop_ds_difference(
-    df_XYZ_10, df_XYZ_10_2, info_list, stop_eps = 19, stop_p = 1
+    df_XYZ_10, df_XYZ_10_2, info_list, list(eps = 19, p = 1, na_rm = TRUE, sum_diffs = TRUE)
   ))
   expect_false(stop_ds_difference(
-    df_XYZ_10, df_XYZ_10_2, info_list, stop_p = 2,
-    stop_eps = sqrt(40) - sqrt(.Machine$double.eps)
+    df_XYZ_10, df_XYZ_10_2, info_list,
+    list(p = 2, eps = sqrt(40) - sqrt(.Machine$double.eps), na_rm = TRUE, sum_diffs = TRUE)
     ))
   expect_equal(
     df_XYZ_10_stop,
     stop_ds_difference(
-      df_XYZ_10, df_XYZ_10_2, info_list, stop_p = 2,
-      stop_eps = sqrt(40) + sqrt(.Machine$double.eps)
+      df_XYZ_10, df_XYZ_10_2, info_list,
+      list(p = 2, eps = sqrt(40) + sqrt(.Machine$double.eps), na_rm = TRUE, sum_diffs = TRUE)
     )
   )
 })
@@ -32,22 +32,29 @@ test_that("stop_ds_difference() switch sum/mean", {
   df_XYZ_10_2[2,2] <- df_XYZ_10_2[2,2] + 1
 
   # sum of differences is 1 >= 0.5
-  expect_false(stop_ds_difference(df_XYZ_10, df_XYZ_10_2, info_list, stop_eps = 0.5))
+  expect_false(stop_ds_difference(
+    df_XYZ_10, df_XYZ_10_2, info_list,
+    list(eps = 0.5, p = 1, sum_diffs = TRUE, na_rm = TRUE)
+    ))
   # but mean is < 0.5
   expect_equal(
     df_XYZ_10_stop,
-    stop_ds_difference(df_XYZ_10, df_XYZ_10_2, info_list, stop_eps = 0.5, stop_sum_diffs = FALSE)
-  )
+    stop_ds_difference(df_XYZ_10, df_XYZ_10_2, info_list,
+                       list(eps = 0.5, sum_diffs = FALSE, p = 1, na_rm = TRUE)
+  ))
 })
 
-test_that("stop_ds_difference() stop_na_rm works", {
+test_that("stop_ds_difference() stop_args$na_rm works", {
   expect_equal(
     df_XYZ_10_stop,
-    stop_ds_difference(df_XYZ_10, df_XYZ_10_mis, info_list, stop_na_rm = TRUE)
+    stop_ds_difference(df_XYZ_10, df_XYZ_10_mis, info_list)
   )
   expect_error(
-    stop_ds_difference(df_XYZ_10, df_XYZ_10_mis, info_list, stop_na_rm = FALSE),
-    "You need stop_na_rm = TRUE, if ds or ds_old contains missing values."
+    stop_ds_difference(
+      df_XYZ_10, df_XYZ_10_mis, info_list,
+      list(eps = 1e-6, p = 1, sum_diffs = TRUE, na_rm = FALSE)
+      ),
+    "You need stop_args[$]na_rm = TRUE, if ds or ds_old contains missing values."
   )
 })
 

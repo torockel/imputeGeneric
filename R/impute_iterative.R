@@ -27,6 +27,8 @@
 #'
 #' @examples
 #' # ToDo
+#' # simple example
+#' # example using stop_ds_difference()
 impute_iterative <- function(ds,
                              model_spec_parsnip = linear_reg(),
                              max_iter = 10,
