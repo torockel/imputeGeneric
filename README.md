@@ -4,6 +4,8 @@
 # imputeGeneric
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/torockel/imputeGeneric/workflows/R-CMD-check/badge.svg)](https://github.com/torockel/imputeGeneric/actions)
 <!-- badges: end -->
 
 The goal of imputeGeneric is to ease the implementation of imputation
