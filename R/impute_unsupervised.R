@@ -48,7 +48,8 @@
 #' `update_model = "every_iteration"` only one model is fitted and the argument
 #' `update_ds_model` is ignored. Both of these cases can be considerably faster
 #' than `update_model = "everytime"` especially for data sets with many rows
-#' with missing values.
+#' with missing values. However, some methods (like nearest neighbors) need
+#' `update_model = "everytime"`.
 #'
 #'
 #' @return The imputed data set.
@@ -75,22 +76,22 @@ impute_unsupervised <- function(ds,
   rows_incomplete <- which(apply(M[rows_order, ], 1, any))
 
   if (update_model == "every_iteration" || rows_used_for_imputation == "only_complete") {
-    rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M)
-    model_imp <- model_fun(ds[rows_used_imp, ], M, NULL, model_args)
+    rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, cols_used_imp = seq_len(ncol(ds)))
+    model_imp <- model_fun(ds[rows_used_imp, ], M, NULL, model_arg)
     for(i in rows_incomplete) {
       ds[i, M[i, ]] <- predict_fun(model_imp, ds, M, i, ...)
     }
   } else {
     for(i in rows_incomplete) {
       # Get row indices
-      rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, i = i)
+      rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, cols_used_imp = seq_len(ncol(ds)), i = i)
 
       if (update_ds_model == "everytime") {
         ds_used <- ds
       } else {
         ds_used <- ds_old
       }
-      model_imp <- model_fun(ds_used[rows_used_imp, ], M, i, ...)
+      model_imp <- model_fun(ds_used[rows_used_imp, ], M, i, model_arg)
 
       ds[i, M[i, ]] <- predict_fun(model_imp, ds_used, M, i, ...)
       M[i, M[i, ]] <- FALSE

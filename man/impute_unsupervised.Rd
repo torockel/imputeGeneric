@@ -80,7 +80,8 @@ and the arguments \code{update_model} and \code{update_ds_model} are ignored. If
 \code{update_model = "every_iteration"} only one model is fitted and the argument
 \code{update_ds_model} is ignored. Both of these cases can be considerably faster
 than \code{update_model = "everytime"} especially for data sets with many rows
-with missing values.
+with missing values. However, some methods (like nearest neighbors) need
+\code{update_model = "everytime"}.
 }
 \seealso{
 \code{\link[=model_donor]{model_donor()}} and \code{\link[=predict_donor]{predict_donor()}} for a pair of predefined
