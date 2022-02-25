@@ -75,12 +75,12 @@ also build a new parsnip model and use it inside of \code{impute_supervised()},
 see \url{https://www.tidymodels.org/learn/develop/models} for more information
 on building a parsnip model).
 
-The options "all" and "all_no_update" for \code{cols_used_for_imputation} and
-"all_except_i", "all_except_i_no_update", "all", "all_no_update" for
-\code{rows_used_for_imputation} should only be used, if \code{ds} is complete or the
-model (\code{model_spec_parsnip}) can handle the missing data.
-If a "_no_update" option is chosen, it will override the other options.
-Therefore, the results of e.g. \code{cols_used_for_imputation} = "all_no_update"
-combined with \code{rows_used_for_imputation} = "all" or
-\code{rows_used_for_imputation} = "all_no_update" are the same.
+The options "all" for \code{cols_used_for_imputation} and
+"all_except_i", "all"  for \code{rows_used_for_imputation} should only be used,
+if \code{ds} is complete or the model (\code{model_spec_parsnip}) can handle missing
+data.
+
+The choice \code{update_model = "each_column"} can be much faster than
+\code{update_model = "everytime"}, especially, if the data set has many
+missing values in some columns.
 }

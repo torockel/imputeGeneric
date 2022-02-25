@@ -42,14 +42,14 @@
 #' see <https://www.tidymodels.org/learn/develop/models> for more information
 #' on building a parsnip model).
 #'
-#' The options "all" and "all_no_update" for `cols_used_for_imputation` and
-#' "all_except_i", "all_except_i_no_update", "all", "all_no_update" for
-#' `rows_used_for_imputation` should only be used, if `ds` is complete or the
-#'  model (`model_spec_parsnip`) can handle the missing data.
-#' If a "_no_update" option is chosen, it will override the other options.
-#' Therefore, the results of e.g. `cols_used_for_imputation` = "all_no_update"
-#' combined with `rows_used_for_imputation` = "all" or
-#' `rows_used_for_imputation` = "all_no_update" are the same.
+#' The options "all" for `cols_used_for_imputation` and
+#' "all_except_i", "all"  for `rows_used_for_imputation` should only be used,
+#' if `ds` is complete or the model (`model_spec_parsnip`) can handle missing
+#' data.
+#'
+#' The choice `update_model = "each_column"` can be much faster than
+#' `update_model = "everytime"`, especially, if the data set has many
+#' missing values in some columns.
 #'
 #' @return The imputed data set.
 #' @export
