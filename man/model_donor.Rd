@@ -4,20 +4,24 @@
 \alias{model_donor}
 \title{Model for donor-based imputation}
 \usage{
-model_donor(ds, M, i, donor_selection = "complete_rows", donor_k = 10)
+model_donor(ds, M, i = NULL, model_arg = NULL)
 }
 \arguments{
 \item{ds}{the data set to be imputed, must be a data frame with column names}
 
 \item{M}{missing data indicator matrix}
 
-\item{i}{row of i}
+\item{i}{index for row of \code{ds} or \code{NULL}}
 
-\item{donor_selection}{How to select the donors? Possible choices are
-\code{complete_rows}, \code{partly_complete_rows}, \code{knn_complete_rows},
-\code{knn_partly_complete_rows}}
-
-\item{donor_k}{number of selected closest donor, only used for knn \code{donor_selection}s}
+\item{model_arg}{a list with two named elements (missing elements will be
+replaced by default values):
+\itemize{
+\item \code{selection} How to select the donors? Possible choices are:
+\code{complete_rows} (default), \code{partly_complete_rows}, \code{knn_complete_rows},
+\code{knn_partly_complete_rows}
+\item \code{k} number of selected closest donor (default: 10), only used for knn
+\code{selection}s
+}}
 }
 \value{
 A "model" for \code{\link[=predict_donor]{predict_donor()}} which is merely a data frame.

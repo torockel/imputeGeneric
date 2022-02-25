@@ -13,7 +13,7 @@ predict_donor(ds_donors, ds, M, i, donor_aggregation = "choose_random")
 
 \item{M}{missing data indicator matrix}
 
-\item{i}{row of i}
+\item{i}{index of row of \code{ds} which should be imputed}
 
 \item{donor_aggregation}{type of donor aggregation. Can be one of
 'choose_random' and 'average'}
