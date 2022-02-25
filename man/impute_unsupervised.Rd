@@ -8,8 +8,11 @@ impute_unsupervised(
   ds,
   model_fun,
   predict_fun,
-  rows_used_for_imputation = "all_no_update",
+  rows_used_for_imputation = "only_complete",
   rows_order = seq_len(nrow(ds)),
+  update_model = "every_iteration",
+  update_ds_model = "every_iteration",
+  model_arg = NULL,
   M = is.na(ds),
   ...
 )
@@ -27,15 +30,26 @@ generated model (\code{model_imp}) to predict the missing values of a row. It
 should take the arguments \code{model_imp}, \code{ds_used}, \code{M} and \code{i}.}
 
 \item{rows_used_for_imputation}{Which rows should be used to impute other
-rows? Possible choices: "only_complete", "already_imputed",
-"all_except_i", "all_except_i_no_update", "all", "all_no_update"}
+rows? Possible choices:
+"only_complete", "already_imputed", "all_except_i", "all"}
 
 \item{rows_order}{Ordering of the rows for imputation. This can be a vector with
 indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
 
+\item{update_model}{How often should the model for imputation be updated?
+Possible choices are: "everytime" (after every imputed value) and
+"every_iteration" (only one model is created and used for all missing values).}
+
+\item{update_ds_model}{How often should the data set for the inner model be
+updated? Possible choices are: "everytime" (after every imputed value),
+and "every_iteration".}
+
+\item{model_arg}{Further arguments for \code{model_fun}. This can be a list, if it
+is more than one argument.}
+
 \item{M}{missing data indicator matrix}
 
-\item{...}{Further arguments given to \code{model_fun} and \code{predict_fun}.}
+\item{...}{Further arguments given to \code{predict_fun}.}
 }
 \value{
 The imputed data set.
@@ -53,11 +67,20 @@ the imputation. If \code{ds} is pre-imputed, the missing data indicator matrix
 can be supplied via \code{M}.
 
 The inner method used to impute the data set can be defined with \code{model_fun}.
-This \code{model_fun} must take a data set, the missing data indicator matrix \code{M}
-and the index \code{i} of the row which should be imputed right now. It must
-return a model \code{model_imp} which is given to \code{predict_fun} to generate
-imputation values for the missing values in row \code{i}. The \code{model_fun} and
-\code{predict_fun} can be self-written or a predefined one (see below) is used.
+This \code{model_fun} must take a data set, the missing data indicator matrix \code{M},
+the index \code{i} of the row which should be imputed right now (which is \code{NULL},
+if the model is updated only once per iteration or only uses complete rows)
+and \code{model_arg} in this order. It must return a model \code{model_imp} which is
+given to \code{predict_fun} to generate imputation values for the missing values
+in a row \code{i}. The \code{model_fun} and \code{predict_fun} can be self-written or a
+predefined one (see below) can be used.
+
+If \code{rows_used_for_imputation = "only_complete"} only one model is fitted
+and the arguments \code{update_model} and \code{update_ds_model} are ignored. If
+\code{update_model = "every_iteration"} only one model is fitted and the argument
+\code{update_ds_model} is ignored. Both of these cases can be considerably faster
+than \code{update_model = "everytime"} especially for data sets with many rows
+with missing values.
 }
 \seealso{
 \code{\link[=model_donor]{model_donor()}} and \code{\link[=predict_donor]{predict_donor()}} for a pair of predefined

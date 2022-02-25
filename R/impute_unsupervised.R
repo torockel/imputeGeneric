@@ -13,11 +13,19 @@
 #'  generated model (`model_imp`) to predict the missing values of a row. It
 #'  should take the arguments `model_imp`, `ds_used`, `M` and `i`.
 #' @param rows_used_for_imputation Which rows should be used to impute other
-#'   rows? Possible choices: "only_complete", "already_imputed",
-#'   "all_except_i", "all_except_i_no_update", "all", "all_no_update"
+#'   rows? Possible choices:
+#'   "only_complete", "already_imputed", "all_except_i", "all"
 #' @param rows_order Ordering of the rows for imputation. This can be a vector with
 #'   indices or an `order_option` from [order_rows()].
-#' @param ... Further arguments given to `model_fun` and `predict_fun`.
+#' @param update_model How often should the model for imputation be updated?
+#'   Possible choices are: "everytime" (after every imputed value) and
+#'   "every_iteration" (only one model is created and used for all missing values).
+#' @param update_ds_model How often should the data set for the inner model be
+#'   updated? Possible choices are: "everytime" (after every imputed value),
+#'   and "every_iteration".
+#' @param model_arg Further arguments for `model_fun`. This can be a list, if it
+#'   is more than one argument.
+#' @param ... Further arguments given to `predict_fun`.
 #'
 #' @details
 #' This function imputes the rows of the data set `ds` row by
@@ -27,11 +35,20 @@
 #' can be supplied via `M`.
 #'
 #' The inner method used to impute the data set can be defined with `model_fun`.
-#' This `model_fun` must take a data set, the missing data indicator matrix `M`
-#' and the index `i` of the row which should be imputed right now. It must
-#' return a model `model_imp` which is given to `predict_fun` to generate
-#' imputation values for the missing values in row `i`. The `model_fun` and
-#' `predict_fun` can be self-written or a predefined one (see below) is used.
+#' This `model_fun` must take a data set, the missing data indicator matrix `M`,
+#' the index `i` of the row which should be imputed right now (which is `NULL`,
+#' if the model is updated only once per iteration or only uses complete rows)
+#' and `model_arg` in this order. It must return a model `model_imp` which is
+#' given to `predict_fun` to generate imputation values for the missing values
+#' in a row `i`. The `model_fun` and `predict_fun` can be self-written or a
+#' predefined one (see below) can be used.
+#'
+#' If `rows_used_for_imputation = "only_complete"` only one model is fitted
+#' and the arguments `update_model` and `update_ds_model` are ignored. If
+#' `update_model = "every_iteration"` only one model is fitted and the argument
+#' `update_ds_model` is ignored. Both of these cases can be considerably faster
+#' than `update_model = "everytime"` especially for data sets with many rows
+#' with missing values.
 #'
 #'
 #' @return The imputed data set.
@@ -40,43 +57,42 @@
 #' @export
 impute_unsupervised <- function(ds,
                                 model_fun, predict_fun,
-                                rows_used_for_imputation = "all_no_update",
+                                rows_used_for_imputation = "only_complete",
                                 rows_order = seq_len(nrow(ds)),
+                                update_model = "every_iteration",
+                                update_ds_model = "every_iteration",
+                                model_arg = NULL,
                                 M = is.na(ds), ...) {
   ds_old <- ds
   M_start <- M
   rows_order <- ckeck_and_set_rows_order(rows_order, ds, M)
+  stopifnot(
+    "invalid choice for rows_used_for_imputation" =
+      rows_used_for_imputation %in% c("only_complete", "already_imputed", "all_except_i", "all")
+    )
+  update_model <- match.arg(update_model, c("everytime", "every_iteration"))
+  update_ds_model <- match.arg(update_ds_model, c("everytime", "every_iteration"))
+  rows_incomplete <- which(apply(M[rows_order, ], 1, any))
 
-  for(i in rows_order) {
-    if (!any(M[i, ])){
-      break
+  if (update_model == "every_iteration" || rows_used_for_imputation == "only_complete") {
+    rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M)
+    model_imp <- model_fun(ds[rows_used_imp, ], M, NULL, model_args)
+    for(i in rows_incomplete) {
+      ds[i, M[i, ]] <- predict_fun(model_imp, ds, M, i, ...)
     }
+  } else {
+    for(i in rows_incomplete) {
+      # Get row indices
+      rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, i = i)
 
-    # Get row indices
-    if (rows_used_for_imputation == "only_complete") {
-      rows_used_imp <- !apply(M_start, 1, any)
-    } else if (rows_used_for_imputation == "already_imputed") {
-      rows_used_imp <- !apply(M, 1, any)
-    } else if (rows_used_for_imputation %in% c("all_except_i", "all_except_i_no_update")) {
-      rows_used_imp <- seq_len(nrow(ds))[-i]
-    } else if (rows_used_for_imputation %in% c("all", "all_no_update")) {
-      rows_used_imp <- seq_len(nrow(ds))
-    } else {
-      stop(paste0("'", rows_used_for_imputation, "' is not a valid option for rows_used_for_imputation"))
-    }
+      if (update_ds_model == "everytime") {
+        ds_used <- ds
+      } else {
+        ds_used <- ds_old
+      }
+      model_imp <- model_fun(ds_used[rows_used_imp, ], M, i, ...)
 
-    if (rows_used_for_imputation %in% c("only_complete", "already_imputed", "all_except_i", "all")) {
-      ds_used <- ds[rows_used_imp, ]
-    } else if (rows_used_for_imputation %in% c("all_except_i_no_update", "all_no_update")) {
-      ds_used <- ds_old[rows_used_imp, ]
-    } else {
-      stop(paste0("'", rows_used_for_imputation, "' is not a valid option for rows_used_for_imputation"))
-    }
-
-    model_imp <- model_fun(ds_used, M, i, ...)
-    ds[i, M[i, ]] <- predict_fun(model_imp, ds_used, M, i, ...)
-
-    if (rows_used_for_imputation == "already_imputed") {
+      ds[i, M[i, ]] <- predict_fun(model_imp, ds_used, M, i, ...)
       M[i, M[i, ]] <- FALSE
     }
   }
