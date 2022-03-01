@@ -346,3 +346,17 @@ test_that("update model everytime and model ds every_iteration  works", {
     )
   )))
 })
+
+# Test for update_model = every_iteration -------------------------------------
+
+test_that("update_model every_iteration works", {
+  expect_equal(
+    impute_supervised(
+      df_XYZ_10_mis,
+      update_model = "every_iteration"
+    ),
+    impute_supervised(
+      df_XYZ_10_mis, update_model = "each_column"
+    )
+  )
+})

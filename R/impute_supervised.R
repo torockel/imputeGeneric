@@ -17,8 +17,9 @@
 #' @param rows_order Ordering of the rows for imputation. This can be a vector with
 #'   indices or an `order_option` from [order_rows()].
 #' @param update_model How often should the model for imputation be updated?
-#'   Possible choices are: "everytime" (after every imputed value) and
-#'   "each_column" (only one update per column).
+#'   Possible choices are: "everytime" (after every imputed value),
+#'   "each_column" (only one update per column) and "every_iteration" (an alias
+#'   for "each_column").
 #' @param update_ds_model How often should the data set for the inner model be
 #'   updated? Possible choices are: "everytime" (after every imputed value),
 #'   "each_column" (only one update per column) and "every_iteration".
@@ -82,7 +83,8 @@ impute_supervised <- function(ds,
 
   rows_order <- ckeck_and_set_rows_order(rows_order, ds, M)
 
-  update_model <- match.arg(update_model, c("everytime", "each_column"))
+  update_model <- match.arg(update_model, c("everytime", "each_column", "every_iteration"))
+  update_model <- ifelse(update_model == "every_iteration", "each_column", update_model)
   update_ds_model <- match.arg(update_ds_model, c("everytime", "each_column", "every_iteration"))
   check_update_combinations(update_model, update_ds_model, rows_used_for_imputation)
 
