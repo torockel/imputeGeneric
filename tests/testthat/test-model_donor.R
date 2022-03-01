@@ -11,7 +11,7 @@ test_that("model_donor throw an error for i = NULL and !=complete_rows", {
       df_XYZ_10_mis, is.na(df_XYZ_10_mis), NULL,
       list(selection = "partly_complete_rows")
     ),
-    "only 'donor_selection = \"complete_rows\"' is possible for this case"
+    "only donor selection \"complete_rows\"' is possible for this case"
   )
 })
 

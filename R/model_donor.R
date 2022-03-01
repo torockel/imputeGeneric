@@ -35,32 +35,33 @@
 #' model_donor(ds_mis, i = 5,
 #'             model_arg = list(selection = "knn_partly_complete_rows", k = 2))
 model_donor <- function(ds, M = is.na(ds), i = NULL, model_arg = NULL) {
-  if (is.null(model_arg)) {
-    model_arg <- list()
+  stopifnot(
+    "model_arg must be a list or NULL" =
+      is.list(model_arg) || is.null(model_arg)
+  )
+  model_arg <- set_defaults_for_missing(
+    model_arg, list(selection = "complete_rows", k = 10)
+  )
+  if (is.null(i) && model_arg$selection != "complete_rows") {
+    stop("only donor selection \"complete_rows\"' is possible for this case")
   }
-  stopifnot("model_arg must be a list or NULL" = is.list(model_arg))
-  donor_selection <- ifelse(is.null(model_arg$selection), "complete_rows", model_arg$selection)
-  donor_k <- ifelse(is.null(model_arg$k), 10, model_arg$k)
-  if (is.null(i) && donor_selection != "complete_rows") {
-    stop("only 'donor_selection = \"complete_rows\"' is possible for this case")
-  }
-  if (donor_selection %in% c("complete_rows", "knn_complete_rows")) {
+  if (model_arg$selection %in% c("complete_rows", "knn_complete_rows")) {
     suitable_rows <- complete.cases(ds)
-  } else if (donor_selection %in%
+  } else if (model_arg$selection %in%
              c("partly_complete_rows", "knn_partly_complete_rows")) {
     suitable_rows <- apply(M, 1, function(x) !any(M[i, ] & x))
   } else {
     stop(paste0(
-      "'", donor_selection, "' is not a valid option for donor_selection")
+      "'", model_arg$selection, "' is not a valid option for donor selection")
     )
   }
-  if (donor_selection %in% c("knn_complete_rows", "knn_partly_complete_rows")) {
+  if (model_arg$selection %in% c("knn_complete_rows", "knn_partly_complete_rows")) {
     suitable_rows_ind <- which(suitable_rows)
-    best_k <- gower::gower_topn(ds[i, ], ds[suitable_rows, ], n = donor_k)
+    best_k <- gower::gower_topn(ds[i, ], ds[suitable_rows, ], n = model_arg$k)
     best_k <- best_k$index[, 1]
     suitable_rows <- suitable_rows_ind[best_k]
   }
-  return(structure(ds[suitable_rows, ], donor_selection = donor_selection))
+  return(structure(ds[suitable_rows, ], donor_selection = model_arg$selection))
 }
 
 #' Prediction for donor-based imputation
