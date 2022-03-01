@@ -8,7 +8,8 @@ stop_ds_difference(
   ds,
   ds_old,
   info_list,
-  stop_args = list(eps = 1e-06, p = 1, sum_diffs = TRUE, na_rm = TRUE)
+  stop_args = list(eps = 1e-06, p = 1, sum_diffs = TRUE, na_rm = TRUE),
+  res_stop_fun = NULL
 )
 }
 \arguments{
@@ -33,6 +34,9 @@ root of this sum is compared with \code{stop_eps}.
 sum/average? If \code{na_rm = FALSE} and there are \code{NA}s, the function
 returns \code{FALSE}.
 }}
+
+\item{res_stop_fun}{Only needed to be a valid stop function. Internally,
+this argument is ignored at the moment.}
 }
 \value{
 \code{list(stop_iter = FALSE)}, if the difference is too big. Otherwise

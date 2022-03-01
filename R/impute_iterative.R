@@ -36,17 +36,28 @@
 #' @param ... Further arguments passed on to [stats::predict()] or
 #'   `predict_fun_unsupervised`.
 #'
-#' @section stop_fun: The `stop_fun` should take the arguments `ds` (the data
-#'   set imputed in the current iteration), `ds_old` (the data set imputed in
-#'   the last iteration), a list (with named elements `M`, `nr_iterations`,
-#'   `max_iter`) and `stop_fun_args` in this order. The `stop_fun` must return a
-#'   list which contains the named element `stop_iter = FALSE` to allow for a
-#'   next iteration. The simple return `list(stop_iter = FALSE)` will allow the
-#'   iteration to continue. If `stop_fun` does not return a list or the list
-#'   does not contain  `stop_iter = FALSE` the iteration is stopped and the
-#'   return value of `stop_fun` is returned as result of `impute_iterative()`.
-#'   Therefore, this return value should normally include the imputed data set
-#'   `ds` or `ds_old`.
+#' @section stop_fun: The `stop_fun` should take the arguments
+#'   * `ds` (the data set imputed in the current iteration)
+#'   * `ds_old` (the data set imputed in the last iteration)
+#'   *  a list (with named elements `M`, `nr_iterations`, `max_iter`)
+#'   * `stop_fun_args`
+#'   * `res_stop_fun` (the return value of `stop_fun` from the last iteration.
+#'      Initial value for the first iteration: `list(stop_iter = FALSE)`)
+#'   in this order.
+#'
+#'   To allow for a next iteration, the `stop_fun` must return a list which
+#'   contains the named element `stop_iter = FALSE`. The simple return
+#'   `list(stop_iter = FALSE)` will allow the iteration to continue. However,
+#'   the list can include more information which are handed over to `stop_fun`
+#'   in the next iteration. For example, the return value
+#'   `list(stop_iter = FALSE, last_eps = 0.3)` would also lead to another
+#'   iteration. If `stop_fun` does not return a list or the list does not
+#'   contain  `stop_iter = FALSE` the iteration is stopped and the return value
+#'   of `stop_fun` is returned as result of `impute_iterative()`. Therefore,
+#'   this return value should normally include the imputed data set `ds` or
+#'   `ds_old`.
+#'
+#'   An example for a `stop_fun` is [stop_ds_difference()].
 #'
 #' @return an imputed data set (or a return value of `stop_fun`)
 #' @export
@@ -107,6 +118,7 @@ impute_iterative <- function(ds,
   }
 
   nr_iterations <- 1
+  res_stop_fun <- do_not_stop_iter()
   while (nr_iterations <= max_iter) {
     ds_old <- ds
     if (!is.null(model_spec_parsnip) &&
@@ -150,7 +162,7 @@ impute_iterative <- function(ds,
       res_stop_fun <- stop_fun(
         ds, ds_old,
         list(M = M, nr_iterations = nr_iterations, max_iter = max_iter),
-        stop_fun_args
+        stop_fun_args, res_stop_fun
       )
       if (!(is.list(res_stop_fun) && identical(res_stop_fun$stop_iter, FALSE))) {
         return(res_stop_fun)

@@ -20,6 +20,8 @@
 #'   * `na_rm` Should `NA`-values be removed (default) when calculating the
 #'      sum/average? If `na_rm = FALSE` and there are `NA`s, the function
 #'      returns `FALSE`.
+#' @param res_stop_fun Only needed to be a valid stop function. Internally,
+#'   this argument is ignored at the moment.
 #'
 #' @return `list(stop_iter = FALSE)`, if the difference is too big. Otherwise
 #'   `ds` with number of iterations (`nr_iterations`) as attribute.
@@ -37,7 +39,7 @@
 stop_ds_difference <- function(ds, ds_old, info_list, stop_args = list(
                                  eps = 1e-6, p = 1, sum_diffs = TRUE,
                                  na_rm = TRUE
-                               )) {
+                               ), res_stop_fun = NULL) {
   stop_args <- set_defaults_for_missing(
     stop_args, list(eps = 1e-6, p = 1, sum_diffs = TRUE, na_rm = TRUE)
   )

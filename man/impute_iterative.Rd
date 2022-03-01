@@ -96,17 +96,30 @@ function are only meaningful for \code{\link[=impute_supervised]{impute_supervis
 \code{\link[=impute_unsupervised]{impute_unsupervised()}}.
 }
 \section{stop_fun}{
- The \code{stop_fun} should take the arguments \code{ds} (the data
-set imputed in the current iteration), \code{ds_old} (the data set imputed in
-the last iteration), a list (with named elements \code{M}, \code{nr_iterations},
-\code{max_iter}) and \code{stop_fun_args} in this order. The \code{stop_fun} must return a
-list which contains the named element \code{stop_iter = FALSE} to allow for a
-next iteration. The simple return \code{list(stop_iter = FALSE)} will allow the
-iteration to continue. If \code{stop_fun} does not return a list or the list
-does not contain  \code{stop_iter = FALSE} the iteration is stopped and the
-return value of \code{stop_fun} is returned as result of \code{impute_iterative()}.
-Therefore, this return value should normally include the imputed data set
-\code{ds} or \code{ds_old}.
+ The \code{stop_fun} should take the arguments
+\itemize{
+\item \code{ds} (the data set imputed in the current iteration)
+\item \code{ds_old} (the data set imputed in the last iteration)
+\item a list (with named elements \code{M}, \code{nr_iterations}, \code{max_iter})
+\item \code{stop_fun_args}
+\item \code{res_stop_fun} (the return value of \code{stop_fun} from the last iteration.
+Initial value for the first iteration: \code{list(stop_iter = FALSE)})
+in this order.
+}
+
+To allow for a next iteration, the \code{stop_fun} must return a list which
+contains the named element \code{stop_iter = FALSE}. The simple return
+\code{list(stop_iter = FALSE)} will allow the iteration to continue. However,
+the list can include more information which are handed over to \code{stop_fun}
+in the next iteration. For example, the return value
+\code{list(stop_iter = FALSE, last_eps = 0.3)} would also lead to another
+iteration. If \code{stop_fun} does not return a list or the list does not
+contain  \code{stop_iter = FALSE} the iteration is stopped and the return value
+of \code{stop_fun} is returned as result of \code{impute_iterative()}. Therefore,
+this return value should normally include the imputed data set \code{ds} or
+\code{ds_old}.
+
+An example for a \code{stop_fun} is \code{\link[=stop_ds_difference]{stop_ds_difference()}}.
 }
 
 \examples{
