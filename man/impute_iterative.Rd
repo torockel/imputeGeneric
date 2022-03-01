@@ -7,6 +7,8 @@
 impute_iterative(
   ds,
   model_spec_parsnip = linear_reg(),
+  model_fun_unsupervised = NULL,
+  predict_fun_unsupervised = NULL,
   max_iter = 10,
   stop_fun = NULL,
   initial_imputation_fun = NULL,
@@ -14,10 +16,11 @@ impute_iterative(
   cols_order = seq_len(ncol(ds)),
   rows_used_for_imputation = "all",
   rows_order = seq_len(nrow(ds)),
-  update_model = "each_column",
-  update_ds_model = "each_column",
+  update_model = "every_iteration",
+  update_ds_model = "every_iteration",
   stop_fun_args = NULL,
   M = is.na(ds),
+  model_arg = NULL,
   show_warning_incomplete_imputation = TRUE,
   ...
 )
@@ -25,8 +28,14 @@ impute_iterative(
 \arguments{
 \item{ds}{the data set to be imputed, must be a data frame with column names}
 
-\item{model_spec_parsnip}{The model type used for imputation. It is defined
-via the \code{parsnip} package.}
+\item{model_spec_parsnip}{The model type used for supervised imputation (see
+(\code{\link[=impute_supervised]{impute_supervised()}} for details).}
+
+\item{model_fun_unsupervised}{An unsupervised model function (see
+\code{\link[=impute_unsupervised]{impute_unsupervised()}} for details).}
+
+\item{predict_fun_unsupervised}{A predict function for unsupervised
+imputation (see \code{\link[=impute_unsupervised]{impute_unsupervised()}} for details).}
 
 \item{max_iter}{maximum number of iterations}
 
@@ -50,29 +59,41 @@ rows? Possible choices: "only_complete", "partly_complete", "complete_in_k",
 \item{rows_order}{Ordering of the rows for imputation. This can be a vector with
 indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
 
-\item{update_model}{How often should the model for imputation be updated?
-Possible choices are: "everytime" (after every imputed value),
-"each_column" (only one update per column) and "every_iteration" (an alias
-for "each_column").}
+\item{update_model}{How often should the model for imputation be updated?}
 
 \item{update_ds_model}{How often should the data set for the inner model be
-updated? Possible choices are: "everytime" (after every imputed value),
-"each_column" (only one update per column) and "every_iteration".}
+updated?}
 
 \item{stop_fun_args}{Further arguments passed on to \code{stop_fun}.}
 
 \item{M}{missing data indicator matrix}
 
+\item{model_arg}{Further arguments for \code{model_fun_unsupervised} (see
+\code{\link[=impute_unsupervised]{impute_unsupervised()}} for details).}
+
 \item{show_warning_incomplete_imputation}{Should a warning be given, if the
 returned data set still contains \code{NA}?}
 
-\item{...}{Further arguments passed on to \code{\link[stats:predict]{stats::predict()}}.}
+\item{...}{Further arguments passed on to \code{\link[stats:predict]{stats::predict()}} or
+\code{predict_fun_unsupervised}.}
 }
 \value{
 an imputed data set.
 }
 \description{
 Iterative imputation of a data set
+}
+\details{
+This function impute a data set in an iterative way. Internally, either
+\code{\link[=impute_supervised]{impute_supervised()}} or \code{\link[=impute_unsupervised]{impute_unsupervised()}} is used, depending on the
+values of \code{model_spec_parsnip}, \code{model_fun_unsupervised} and
+\code{predict_fun_unsupervised}. If you want to use a supervised inner method,
+\code{model_spec_parsnip} must be specified and \code{model_fun_unsupervised} and
+\code{predict_fun_unsupervised} must both be \code{NULL}. For an unsupervised inner
+method \code{model_fun_unsupervised} and \code{predict_fun_unsupervised} must be
+specified and \code{model_spec_parsnip} must be \code{NULL}. Some arguments of this
+function are only meaningful for \code{\link[=impute_supervised]{impute_supervised()}} or
+\code{\link[=impute_unsupervised]{impute_unsupervised()}}.
 }
 \section{stop_fun}{
  The \code{stop_fun} should take the arguments \code{ds} (the data
@@ -89,4 +110,11 @@ normally include the imputed data set \code{ds} or \code{ds_old}.
 # ToDo
 # simple example
 # example using stop_ds_difference()
+}
+\seealso{
+\itemize{
+\item \code{\link[=impute_supervised]{impute_supervised()}} and \code{\link[=impute_unsupervised]{impute_unsupervised()}} as the workhorses for the
+imputation.
+\item \code{\link[=stop_ds_difference]{stop_ds_difference()}} as an example of a stop function.
+}
 }

@@ -2,16 +2,39 @@
 #'
 #' Iterative imputation of a data set
 #'
+#' This function impute a data set in an iterative way. Internally, either
+#' [impute_supervised()] or [impute_unsupervised()] is used, depending on the
+#' values of `model_spec_parsnip`, `model_fun_unsupervised` and
+#' `predict_fun_unsupervised`. If you want to use a supervised inner method,
+#' `model_spec_parsnip` must be specified and `model_fun_unsupervised` and
+#' `predict_fun_unsupervised` must both be `NULL`. For an unsupervised inner
+#' method `model_fun_unsupervised` and `predict_fun_unsupervised` must be
+#' specified and `model_spec_parsnip` must be `NULL`. Some arguments of this
+#' function are only meaningful for [impute_supervised()] or
+#' [impute_unsupervised()].
+#'
 #'
 #' @inheritParams impute_supervised
+#' @param model_spec_parsnip The model type used for supervised imputation (see
+#'   ([impute_supervised()] for details).
+#' @param model_fun_unsupervised An unsupervised model function (see
+#'   [impute_unsupervised()] for details).
+#' @param predict_fun_unsupervised A predict function for unsupervised
+#'   imputation (see [impute_unsupervised()] for details).
 #' @param max_iter maximum number of iterations
 #' @param stop_fun a stopping function (see details below) or `NULL`. If `NULL`,
 #'   iterations are only stopped after `max_iter` is reached.
 #' @param initial_imputation_fun This function will do the initial imputation of
 #'   the missing values. If `NULL`, no initial imputation is done. Some common
 #'   choices like mean imputation are implemented in the package missMethods.
+#' @param update_model How often should the model for imputation be updated?
+#' @param update_ds_model How often should the data set for the inner model be
+#'   updated?
 #' @param stop_fun_args Further arguments passed on to `stop_fun`.
-#' @param ... Further arguments passed on to [stats::predict()].
+#' @param model_arg Further arguments for `model_fun_unsupervised` (see
+#'   [impute_unsupervised()] for details).
+#' @param ... Further arguments passed on to [stats::predict()] or
+#'   `predict_fun_unsupervised`.
 #'
 #' @section stop_fun: The `stop_fun` should take the arguments `ds` (the data
 #'   set imputed in the current iteration), `ds_old` (the data set imputed in
@@ -24,6 +47,10 @@
 #'
 #' @return an imputed data set.
 #' @export
+#' @seealso
+#'   * [impute_supervised()] and [impute_unsupervised()] as the workhorses for the
+#'     imputation.
+#'   * [stop_ds_difference()] as an example of a stop function.
 #'
 #' @examples
 #' # ToDo
@@ -31,6 +58,8 @@
 #' # example using stop_ds_difference()
 impute_iterative <- function(ds,
                              model_spec_parsnip = linear_reg(),
+                             model_fun_unsupervised = NULL,
+                             predict_fun_unsupervised = NULL,
                              max_iter = 10,
                              stop_fun = NULL,
                              initial_imputation_fun = NULL,
@@ -42,6 +71,7 @@ impute_iterative <- function(ds,
                              update_ds_model = "every_iteration",
                              stop_fun_args = NULL,
                              M = is.na(ds),
+                             model_arg = NULL,
                              show_warning_incomplete_imputation = TRUE,
                              ...) {
 
@@ -55,18 +85,35 @@ impute_iterative <- function(ds,
   nr_iterations <- 1
   while(nr_iterations <= max_iter) {
     ds_old <- ds
-    ds <- impute_supervised(
-      ds, model_spec_parsnip = model_spec_parsnip,
-      cols_used_for_imputation = cols_used_for_imputation,
-      cols_order = cols_order,
-      rows_used_for_imputation = rows_used_for_imputation,
-      rows_order = rows_order,
-      update_model = update_model,
-      update_ds_model = update_ds_model,
-      M = M,
-      show_warning_incomplete_imputation = FALSE, # checked only once at the end
-      ...
-    )
+    if (!is.null(model_spec_parsnip) && is.null(model_fun_unsupervised) && is.null(predict_fun_unsupervised)) {
+      ds <- impute_supervised(
+        ds, model_spec_parsnip = model_spec_parsnip,
+        cols_used_for_imputation = cols_used_for_imputation,
+        cols_order = cols_order,
+        rows_used_for_imputation = rows_used_for_imputation,
+        rows_order = rows_order,
+        update_model = update_model,
+        update_ds_model = update_ds_model,
+        M = M,
+        show_warning_incomplete_imputation = FALSE, # checked only once at the end
+        ...
+      )
+    } else if (is.null(model_spec_parsnip) && !is.null(model_fun_unsupervised) && !is.null(predict_fun_unsupervised)) {
+      ds <- impute_unsupervised(
+        ds,
+        model_fun = model_fun_unsupervised,
+        predict_fun = predict_fun_unsupervised,
+        rows_used_for_imputation = rows_used_for_imputation,
+        rows_order = rows_order,
+        update_model = update_model,
+        update_ds_model = update_ds_model,
+        model_arg = model_arg,
+        M = M, ...
+      )
+    } else {
+      stop("Either use `model_spec_parsnip` or `model_fun_unsupervised` and `predict_fun_unsupervised`. The other(s) must be NULL.")
+    }
+
     nr_iterations <- nr_iterations + 1
     if (!is.null(stop_fun)) {
       res_stop_fun <- stop_fun(

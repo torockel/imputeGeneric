@@ -55,3 +55,26 @@ test_that("initial_imputation_fun and max_iter = 2 works", {
     )
   )
 })
+
+test_that("supervised and unsupervised at once throwns an error", {
+  expect_error(
+    impute_iterative(
+      df_XYZ_10_mis,
+      model_spec_parsnip = linear_reg(),
+      model_fun_unsupervised = model_donor,
+      predict_fun_unsupervised = predict_donor
+    ),
+    "Either use `model_spec_parsnip` or `model_fun_unsupervised` and `predict_fun_unsupervised`."
+  )
+})
+
+test_that("unsupervised imputation works", {
+  ds_imp <- impute_iterative(
+    df_XYZ_10_mis,
+    model_spec_parsnip = NULL,
+    model_fun_unsupervised = model_donor,
+    predict_fun_unsupervised = predict_donor)
+  expect_false(anyNA(ds_imp))
+  expect_true(all(ds_imp$X %in% na.omit(df_XYZ_10_mis$X)))
+  expect_true(all(ds_imp$Y %in% na.omit(df_XYZ_10_mis$Y)))
+})
