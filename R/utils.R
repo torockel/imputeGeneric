@@ -14,8 +14,8 @@ warn_incomplete <- function(show_warning, ds) {
   }
 }
 
-get_row_indices <- function(rows_used_for_imputation, M_start = NULL, M = NULL, k = NULL,
-                            cols_used_imp = NULL, i = NULL) {
+get_row_indices <- function(rows_used_for_imputation, M_start = NULL, M = NULL,
+                            k = NULL, cols_used_imp = NULL, i = NULL) {
   if (rows_used_for_imputation == "only_complete") {
     rows_used_imp <- !apply(M_start, 1, any)
   } else if (rows_used_for_imputation == "partly_complete") {
@@ -56,7 +56,8 @@ get_col_indices <- function(cols_used_for_imputation, M_start, M, k = NULL) {
   cols_used_imp
 }
 
-check_update_combinations <- function(update_model, update_ds_model, rows_used_for_imputation) {
+check_update_combinations <- function(update_model, update_ds_model,
+                                      rows_used_for_imputation) {
   if (update_model == "each_column" &&
     rows_used_for_imputation == "all_except_i") {
     warning(paste(

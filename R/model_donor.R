@@ -63,7 +63,8 @@ model_donor <- function(ds, M = is.na(ds), i = NULL, model_arg = NULL) {
       "'", model_arg$selection, "' is not a valid option for donor selection"
     ))
   }
-  if (model_arg$selection %in% c("knn_complete_rows", "knn_partly_complete_rows")) {
+  if (model_arg$selection %in%
+    c("knn_complete_rows", "knn_partly_complete_rows")) {
     suitable_rows_ind <- which(suitable_rows)
     best_k <- gower::gower_topn(ds[i, ], ds[suitable_rows, ], n = model_arg$k)
     best_k <- best_k$index[, 1]
@@ -102,7 +103,8 @@ model_donor <- function(ds, M = is.na(ds), i = NULL, model_arg = NULL) {
 #' )
 #' ds_donors
 #' predict_donor(ds_donors, ds_mis, i = 5, donor_aggregation = "average")
-predict_donor <- function(ds_donors, ds, M = is.na(ds), i, donor_aggregation = "choose_random") {
+predict_donor <- function(ds_donors, ds, M = is.na(ds), i,
+                          donor_aggregation = "choose_random") {
   if (donor_aggregation == "choose_random") {
     return(ds_donors[sample.int(nrow(ds_donors), 1), M[i, ]])
   } else if (donor_aggregation == "average") {
