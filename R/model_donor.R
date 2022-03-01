@@ -18,7 +18,7 @@
 #' @seealso [predict_donor()]
 #' @importFrom gower gower_topn
 #' @importFrom stats complete.cases
-model_donor <- function(ds, M, i = NULL, model_arg = NULL) {
+model_donor <- function(ds, M = is.na(ds), i = NULL, model_arg = NULL) {
   if (is.null(model_arg)) {
     model_arg <- list()
   }
@@ -56,7 +56,7 @@ model_donor <- function(ds, M, i = NULL, model_arg = NULL) {
 #' @return The imputation values for row `i`.
 #' @seealso [model_donor()]
 #' @export
-predict_donor <- function(ds_donors, ds, M, i, donor_aggregation = "choose_random") {
+predict_donor <- function(ds_donors, ds, M = is.na(ds), i, donor_aggregation = "choose_random") {
   if (donor_aggregation == "choose_random") {
     return(ds_donors[sample.int(nrow(ds_donors), 1), M[i, ]])
   } else if (donor_aggregation == "average") {

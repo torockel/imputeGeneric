@@ -4,7 +4,7 @@
 \alias{model_donor}
 \title{Model for donor-based imputation}
 \usage{
-model_donor(ds, M, i = NULL, model_arg = NULL)
+model_donor(ds, M = is.na(ds), i = NULL, model_arg = NULL)
 }
 \arguments{
 \item{ds}{The data set to be imputed. Must be a data frame with column names.}
