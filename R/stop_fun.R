@@ -8,14 +8,16 @@
 #' @param ds_old A numeric data set
 #' @param info_list `info_list` used inside of [impute_iterative()]. Only the list
 #'   element `nr_iterations` is used/needed.
-#' @param stop_args A list with following named components:
-#'   * `eps` Threshold value for the difference.
+#' @param stop_args A list with following named components (missing elements will be
+#'   replaced by default ones):
+#'   * `eps` Threshold value for the difference (default = 1e-6).
 #'   * `p` Exponent used for the calculation of differences similar to
-#'     Minkowski distance. For `p = 1` the absolute differences are used. For
-#'     `p = 2` The quadratic differences are summed and the square root of
-#'     this sum is compared with `stop_eps`.
-#'   * `sum_diffs` Should differences be summed or averaged (`sum_diffs = FALSE`)?
-#'   * `na_rm` Should `NA`-values be removed when calculating the sum/average?
+#'     Minkowski distance. For `p = 1` (default) the absolute differences are
+#'     used. For `p = 2` The quadratic differences are summed and the square
+#'     root of this sum is compared with `stop_eps`.
+#'   * `sum_diffs` Should differences be summed (default) or averaged
+#'     (`sum_diffs = FALSE`)?
+#'   * `na_rm` Should `NA`-values be removed (default) when calculating the sum/average?
 #'     If `na_rm = FALSE` and there are `NA`s, the function returns `FALSE`.
 #'
 #' @return `FALSE`, if the difference is too big. Otherwise `ds` with number of
@@ -27,9 +29,8 @@
 stop_ds_difference <- function(ds, ds_old, info_list, stop_args = list(
   eps = 1e-6, p = 1, sum_diffs = TRUE, na_rm = TRUE
   )) {
-  if (is.null(stop_args)) {
-    stop_args <- list(eps = 1e-6, p = 1, sum_diffs = TRUE, na_rm = TRUE)
-  }
+  stop_args <- set_defaults_for_missing(stop_args, list(eps = 1e-6, p = 1, sum_diffs = TRUE, na_rm = TRUE))
+
   differences <- abs(ds - ds_old)^stop_args$p
   if (!stop_args$na_rm && anyNA(differences)) {
     return(FALSE)

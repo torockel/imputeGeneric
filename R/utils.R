@@ -52,3 +52,16 @@ check_update_combinations <- function(update_model, update_ds_model, rows_used_f
     assign("update_model", "everytime", pos = parent.frame(1))
   }
 }
+
+set_defaults_for_missing <- function(arg_list, default_args) {
+  if (is.null(arg_list)) {
+    return(default_args)
+  }
+  arg_names <- names(default_args)
+  for(arg_name in arg_names) {
+    if(is.null(arg_list[[arg_name]])) {
+      arg_list[[arg_name]] <- default_args[[arg_name]]
+    }
+  }
+  arg_list
+}

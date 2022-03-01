@@ -145,3 +145,15 @@ test_that("check_update_combinations() works", {
     list("everytime", "asdf", "all_except_i")
   )
 })
+
+# set_defaults_for_missing() --------------------------------------------------
+test_that("set_defaults_for_missing() works", {
+  expect_equal(
+    set_defaults_for_missing(list(a = 1, b = 5), list(a = 3, b = 2, c = 9)),
+    list(a = 1, b = 5, c = 9)
+  )
+  expect_equal(
+    set_defaults_for_missing(NULL, list(b = 3, d = 2)),
+    list(b = 3, d = 2)
+  )
+})
