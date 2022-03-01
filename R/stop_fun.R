@@ -2,7 +2,7 @@
 #'
 #' This function is intended to be used as `stop_fun` inside of
 #' [impute_iterative()]. It compares the difference of two (numeric) data sets
-#' and return `ds`, if difference is small enough (less then `stop_args$eps`).
+#' and return `ds`, if difference is small enough (less than `stop_args$eps`).
 #'
 #' @param ds a numeric data set
 #' @param ds_old a numeric data set
@@ -16,6 +16,7 @@
 #'     this sum is compared with `stop_eps`.
 #'   * `sum_diffs` Should differences be summed or averaged (`sum_diffs = FALSE`)?
 #'   * `na_rm` Should `NA`-values be removed when calculating the sum/average?
+#'     If `na_rm = FALSE` and there are `NA`s, the function returns `FALSE``.`
 #'
 #' @return `FALSE`, if difference is too big. Otherwise `ds` with number of
 #'   iterations (`nr_iterations`) as attribute.
@@ -31,7 +32,7 @@ stop_ds_difference <- function(ds, ds_old, info_list, stop_args = list(
   }
   differences <- abs(ds - ds_old)^stop_args$p
   if (!stop_args$na_rm && anyNA(differences)) {
-    stop("You need stop_args$na_rm = TRUE, if ds or ds_old contains missing values.")
+    return(FALSE)
   }
   if (stop_args$sum_diffs) {
     difference <- sum(differences, na.rm = stop_args$na_rm)

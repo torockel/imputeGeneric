@@ -28,6 +28,7 @@ Minkowski distance. For \code{p = 1} the absolute differences are used. For
 this sum is compared with \code{stop_eps}.
 \item \code{sum_diffs} Should differences be summed or averaged (\code{sum_diffs = FALSE})?
 \item \code{na_rm} Should \code{NA}-values be removed when calculating the sum/average?
+If \code{na_rm = FALSE} and there are \code{NA}s, the function returns \verb{FALSE``.}
 }}
 }
 \value{
@@ -37,7 +38,7 @@ iterations (\code{nr_iterations}) as attribute.
 \description{
 This function is intended to be used as \code{stop_fun} inside of
 \code{\link[=impute_iterative]{impute_iterative()}}. It compares the difference of two (numeric) data sets
-and return \code{ds}, if difference is small enough (less then \code{stop_args$eps}).
+and return \code{ds}, if difference is small enough (less than \code{stop_args$eps}).
 }
 \examples{
 # See impute_iterative()

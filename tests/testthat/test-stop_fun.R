@@ -49,12 +49,12 @@ test_that("stop_ds_difference() stop_args$na_rm works", {
     df_XYZ_10_stop,
     stop_ds_difference(df_XYZ_10, df_XYZ_10_mis, info_list)
   )
-  expect_error(
+  expect_equal(
     stop_ds_difference(
       df_XYZ_10, df_XYZ_10_mis, info_list,
       list(eps = 1e-6, p = 1, sum_diffs = TRUE, na_rm = FALSE)
       ),
-    "You need stop_args[$]na_rm = TRUE, if ds or ds_old contains missing values."
+    FALSE
   )
 })
 
