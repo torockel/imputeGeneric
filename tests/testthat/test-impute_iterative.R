@@ -84,3 +84,15 @@ test_that("unsupervised imputation works", {
   expect_true(all(ds_imp$X %in% na.omit(df_XYZ_10_mis$X)))
   expect_true(all(ds_imp$Y %in% na.omit(df_XYZ_10_mis$Y)))
 })
+
+test_that("impute_iterative() works out of the box,
+          if there are enough complete rows/cols", {
+  set.seed(123)
+  n <- 50
+  ds_mis <- data.frame(X = rnorm(n), Y = rnorm(n), Z = rnorm(n))
+  ds_mis$Z[sample.int(n, 15)] <- NA
+  ds_mis$Y[sample.int(n, 10)] <- NA
+  # impute data set
+  ds_imp3 <- impute_iterative(ds_mis, max_iter = 1)
+  expect_false(anyNA(ds_imp3))
+ })
