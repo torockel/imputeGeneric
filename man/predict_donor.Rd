@@ -28,7 +28,8 @@ predict_donor(
 The imputation values for row \code{i}.
 }
 \description{
-This function is intended to be used inside of \code{\link[=impute_unsupervised]{impute_unsupervised()}} as \code{predict_fun}.
+This function is intended to be used inside of \code{\link[=impute_unsupervised]{impute_unsupervised()}} as
+\code{predict_fun}.
 }
 \examples{
 set.seed(123)

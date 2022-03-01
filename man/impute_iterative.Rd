@@ -118,7 +118,8 @@ ds_mis <- missMethods::delete_MCAR(
   data.frame(X = rnorm(20), Y = rnorm(20)), 0.2
 )
 impute_iterative(
-  ds_mis, max_iter = 2, initial_imputation_fun = missMethods::impute_mean
+  ds_mis,
+  max_iter = 2, initial_imputation_fun = missMethods::impute_mean
 )
 # example using stop_ds_difference() as stop_fun
 ds_mis <- missMethods::delete_MCAR(

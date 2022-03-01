@@ -38,11 +38,22 @@ ds_mis[4:6, 2] <- NA
 # default returns only complete rows
 model_donor(ds_mis)
 # with partly_complete and knn returned objects depends on i
-model_donor(ds_mis, i = 2, model_arg = list(selection = "partly_complete_rows"))
-model_donor(ds_mis, i = 4, model_arg = list(selection = "partly_complete_rows"))
-model_donor(ds_mis, i = 5, model_arg = list(selection = "partly_complete_rows"))
-model_donor(ds_mis, i = 5,
-            model_arg = list(selection = "knn_partly_complete_rows", k = 2))
+model_donor(ds_mis,
+  i = 2,
+  model_arg = list(selection = "partly_complete_rows")
+)
+model_donor(ds_mis,
+  i = 4,
+  model_arg = list(selection = "partly_complete_rows")
+)
+model_donor(ds_mis,
+  i = 5,
+  model_arg = list(selection = "partly_complete_rows")
+)
+model_donor(ds_mis,
+  i = 5,
+  model_arg = list(selection = "knn_partly_complete_rows", k = 2)
+)
 }
 \seealso{
 \code{\link[=predict_donor]{predict_donor()}}

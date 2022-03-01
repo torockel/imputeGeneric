@@ -1,6 +1,6 @@
 ckeck_and_set_rows_order <- function(rows_order, ds, M) {
   if (is.character(rows_order) && length(rows_order) == 1 &&
-      !(rows_order %in% rownames(ds))) {
+    !(rows_order %in% rownames(ds))) {
     rows_order <- order_rows(ds, order_option = rows_order, M = M)
   }
   rows_order
@@ -14,9 +14,8 @@ warn_incomplete <- function(show_warning, ds) {
   }
 }
 
-get_row_indices <- function(
-  rows_used_for_imputation, M_start = NULL, M = NULL, k = NULL,
-  cols_used_imp = NULL, i = NULL) {
+get_row_indices <- function(rows_used_for_imputation, M_start = NULL, M = NULL, k = NULL,
+                            cols_used_imp = NULL, i = NULL) {
   if (rows_used_for_imputation == "only_complete") {
     rows_used_imp <- !apply(M_start, 1, any)
   } else if (rows_used_for_imputation == "partly_complete") {
@@ -32,8 +31,8 @@ get_row_indices <- function(
   } else {
     stop(paste0(
       "'", rows_used_for_imputation,
-      "' is not a valid option for rows_used_for_imputation")
-    )
+      "' is not a valid option for rows_used_for_imputation"
+    ))
   }
   if (is.logical(rows_used_imp)) {
     rows_used_imp <- which(rows_used_imp)
@@ -57,10 +56,9 @@ get_col_indices <- function(cols_used_for_imputation, M_start, M, k = NULL) {
   cols_used_imp
 }
 
-check_update_combinations <- function(
-  update_model, update_ds_model, rows_used_for_imputation) {
+check_update_combinations <- function(update_model, update_ds_model, rows_used_for_imputation) {
   if (update_model == "each_column" &&
-      rows_used_for_imputation == "all_except_i") {
+    rows_used_for_imputation == "all_except_i") {
     warning(paste(
       "update_model is set to everytime because a new model is constructed",
       "for every row"

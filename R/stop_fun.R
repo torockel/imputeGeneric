@@ -51,7 +51,7 @@ stop_ds_difference <- function(ds, ds_old, info_list, stop_args = list(
   } else {
     difference <- mean(unlist(differences), na.rm = stop_args$na_rm)
   }
-  difference <- difference ^ (1 / stop_args$p)
+  difference <- difference^(1 / stop_args$p)
   if (difference < stop_args$eps) {
     return(structure(ds, nr_iterations = info_list$nr_iterations))
   }

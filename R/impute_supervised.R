@@ -83,7 +83,7 @@ impute_supervised <- function(ds,
   }
 
   if (is.character(cols_order) && length(cols_order) == 1 &&
-      !(cols_order %in% colnames(ds))) {
+    !(cols_order %in% colnames(ds))) {
     cols_order <- order_cols(ds, order_option = cols_order, M = M)
   }
 
@@ -91,7 +91,7 @@ impute_supervised <- function(ds,
 
   update_model <- match.arg(
     update_model, c("everytime", "each_column", "every_iteration")
-    )
+  )
   update_model <- ifelse(
     update_model == "every_iteration", "each_column", update_model
   )

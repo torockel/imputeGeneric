@@ -26,14 +26,22 @@
 #' # default returns only complete rows
 #' model_donor(ds_mis)
 #' # with partly_complete and knn returned objects depends on i
-#' model_donor(ds_mis, i = 2,
-#'             model_arg = list(selection = "partly_complete_rows"))
-#' model_donor(ds_mis, i = 4,
-#'             model_arg = list(selection = "partly_complete_rows"))
-#' model_donor(ds_mis, i = 5,
-#'             model_arg = list(selection = "partly_complete_rows"))
-#' model_donor(ds_mis, i = 5,
-#'             model_arg = list(selection = "knn_partly_complete_rows", k = 2))
+#' model_donor(ds_mis,
+#'   i = 2,
+#'   model_arg = list(selection = "partly_complete_rows")
+#' )
+#' model_donor(ds_mis,
+#'   i = 4,
+#'   model_arg = list(selection = "partly_complete_rows")
+#' )
+#' model_donor(ds_mis,
+#'   i = 5,
+#'   model_arg = list(selection = "partly_complete_rows")
+#' )
+#' model_donor(ds_mis,
+#'   i = 5,
+#'   model_arg = list(selection = "knn_partly_complete_rows", k = 2)
+#' )
 model_donor <- function(ds, M = is.na(ds), i = NULL, model_arg = NULL) {
   stopifnot(
     "model_arg must be a list or NULL" =
@@ -48,12 +56,12 @@ model_donor <- function(ds, M = is.na(ds), i = NULL, model_arg = NULL) {
   if (model_arg$selection %in% c("complete_rows", "knn_complete_rows")) {
     suitable_rows <- complete.cases(ds)
   } else if (model_arg$selection %in%
-             c("partly_complete_rows", "knn_partly_complete_rows")) {
+    c("partly_complete_rows", "knn_partly_complete_rows")) {
     suitable_rows <- apply(M, 1, function(x) !any(M[i, ] & x))
   } else {
     stop(paste0(
-      "'", model_arg$selection, "' is not a valid option for donor selection")
-    )
+      "'", model_arg$selection, "' is not a valid option for donor selection"
+    ))
   }
   if (model_arg$selection %in% c("knn_complete_rows", "knn_partly_complete_rows")) {
     suitable_rows_ind <- which(suitable_rows)
@@ -94,9 +102,7 @@ model_donor <- function(ds, M = is.na(ds), i = NULL, model_arg = NULL) {
 #' )
 #' ds_donors
 #' predict_donor(ds_donors, ds_mis, i = 5, donor_aggregation = "average")
-predict_donor <- function(
-  ds_donors, ds, M = is.na(ds), i, donor_aggregation = "choose_random"
-  ) {
+predict_donor <- function(ds_donors, ds, M = is.na(ds), i, donor_aggregation = "choose_random") {
   if (donor_aggregation == "choose_random") {
     return(ds_donors[sample.int(nrow(ds_donors), 1), M[i, ]])
   } else if (donor_aggregation == "average") {

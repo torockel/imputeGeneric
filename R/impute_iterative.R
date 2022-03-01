@@ -64,7 +64,8 @@
 #'   data.frame(X = rnorm(20), Y = rnorm(20)), 0.2
 #' )
 #' impute_iterative(
-#'   ds_mis, max_iter = 2, initial_imputation_fun = missMethods::impute_mean
+#'   ds_mis,
+#'   max_iter = 2, initial_imputation_fun = missMethods::impute_mean
 #' )
 #' # example using stop_ds_difference() as stop_fun
 #' ds_mis <- missMethods::delete_MCAR(
@@ -106,7 +107,7 @@ impute_iterative <- function(ds,
   while (nr_iterations <= max_iter) {
     ds_old <- ds
     if (!is.null(model_spec_parsnip) &&
-        is.null(model_fun_unsupervised) && is.null(predict_fun_unsupervised)) {
+      is.null(model_fun_unsupervised) && is.null(predict_fun_unsupervised)) {
       ds <- impute_supervised(
         ds,
         model_spec_parsnip = model_spec_parsnip,
@@ -121,8 +122,8 @@ impute_iterative <- function(ds,
         ...
       )
     } else if (is.null(model_spec_parsnip) &&
-               !is.null(model_fun_unsupervised) &&
-               !is.null(predict_fun_unsupervised)) {
+      !is.null(model_fun_unsupervised) &&
+      !is.null(predict_fun_unsupervised)) {
       ds <- impute_unsupervised(
         ds,
         model_fun = model_fun_unsupervised,

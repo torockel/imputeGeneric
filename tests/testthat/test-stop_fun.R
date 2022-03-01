@@ -17,15 +17,19 @@ test_that("stop_ds_difference() stop_args$p works", {
   ))
   expect_false(stop_ds_difference(
     df_XYZ_10, df_XYZ_10_2, info_list,
-    list(p = 2, eps = sqrt(40) - sqrt(.Machine$double.eps), na_rm = TRUE,
-         sum_diffs = TRUE)
+    list(
+      p = 2, eps = sqrt(40) - sqrt(.Machine$double.eps), na_rm = TRUE,
+      sum_diffs = TRUE
+    )
   ))
   expect_equal(
     df_XYZ_10_stop,
     stop_ds_difference(
       df_XYZ_10, df_XYZ_10_2, info_list,
-      list(p = 2, eps = sqrt(40) + sqrt(.Machine$double.eps), na_rm = TRUE,
-           sum_diffs = TRUE)
+      list(
+        p = 2, eps = sqrt(40) + sqrt(.Machine$double.eps), na_rm = TRUE,
+        sum_diffs = TRUE
+      )
     )
   )
 })

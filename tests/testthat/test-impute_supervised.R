@@ -15,9 +15,10 @@ test_that("no data frame or no colnames throws an error", {
 test_that("incomplete ds after imputation gives a warning", {
   expect_warning(
     impute_supervised(
-      df_XYZ_10_mis, rows_used_for_imputation = "all",
+      df_XYZ_10_mis,
+      rows_used_for_imputation = "all",
       cols_used_for_imputation = "all"
-      ),
+    ),
     "Imputation is not complete. There are still missing values in `ds`."
   )
 })
@@ -39,9 +40,10 @@ test_that("wrong option for cols_used_for_imputation throws an error", {
 test_that("check_update_combinations() is called by impute_supervised()", {
   expect_warning(
     impute_supervised(
-      df_XYZ_10, rows_used_for_imputation = "all_except_i",
+      df_XYZ_10,
+      rows_used_for_imputation = "all_except_i",
       update_model = "each_column"
-      ),
+    ),
     "update_model is set to everytime because a new model is constructed"
   )
 })
@@ -293,7 +295,8 @@ test_that("all columns and (complete and partly_complete)
 test_that("update model everytime and model ds each_column throws an error", {
   expect_error(
     impute_supervised(
-      df_XYZ_10_mis, update_model = "everytime",
+      df_XYZ_10_mis,
+      update_model = "everytime",
       update_ds_model = "each_column"
     ),
     "Combination of update model and data set is not implemented."

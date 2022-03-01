@@ -16,11 +16,11 @@ stop_ds_difference(
 
 \item{ds_old}{A numeric data set}
 
-\item{info_list}{\code{info_list} used inside of \code{\link[=impute_iterative]{impute_iterative()}}. Only the list
-element \code{nr_iterations} is used/needed.}
+\item{info_list}{\code{info_list} used inside of \code{\link[=impute_iterative]{impute_iterative()}}. Only the
+list element \code{nr_iterations} is used/needed.}
 
-\item{stop_args}{A list with following named components (missing elements will be
-replaced by default ones):
+\item{stop_args}{A list with following named components (missing elements
+will be replaced by default ones):
 \itemize{
 \item \code{eps} Threshold value for the difference (default = 1e-6).
 \item \code{p} Exponent used for the calculation of differences similar to
@@ -29,8 +29,9 @@ used. For \code{p = 2} The quadratic differences are summed and the square
 root of this sum is compared with \code{stop_eps}.
 \item \code{sum_diffs} Should differences be summed (default) or averaged
 (\code{sum_diffs = FALSE})?
-\item \code{na_rm} Should \code{NA}-values be removed (default) when calculating the sum/average?
-If \code{na_rm = FALSE} and there are \code{NA}s, the function returns \code{FALSE}.
+\item \code{na_rm} Should \code{NA}-values be removed (default) when calculating the
+sum/average? If \code{na_rm = FALSE} and there are \code{NA}s, the function
+returns \code{FALSE}.
 }}
 }
 \value{
