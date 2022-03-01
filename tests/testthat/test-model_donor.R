@@ -16,7 +16,7 @@ test_that("model_donor() works with model_arg = NULL", {
   expect_equal(
     model_donor(df_XYZ_10_mis, is.na(df_XYZ_10_mis), NULL, NULL),
     structure(df_XYZ_10_mis[stats::complete.cases(df_XYZ_10_mis), ],
-              donor_selection = "complete_rows"
+      donor_selection = "complete_rows"
     )
   )
 })
@@ -26,7 +26,7 @@ test_that("model_donor complete_rows works", {
   hd_model <- model_donor(df_XYZ_10_mis, is.na(df_XYZ_10_mis), 2, list(selection = "complete_rows"))
   expect_true(all(
     rep.int(predict_donor(hd_model, df_XYZ_10_mis, is.na(df_XYZ_10_mis), 2) %in%
-            seq_len(10)[-c(2, 7)], 50)
+      seq_len(10)[-c(2, 7)], 50)
   ))
 })
 

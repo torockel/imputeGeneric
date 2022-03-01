@@ -63,8 +63,10 @@
 #' # example using stop_ds_difference() as stop_fun
 #' ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2)
 #' ds_imp <- impute_iterative(
-#'   ds_mis, initial_imputation_fun = missMethods::impute_mean,
-#'   stop_fun = stop_ds_difference, stop_fun_args = list(eps = 0.5))
+#'   ds_mis,
+#'   initial_imputation_fun = missMethods::impute_mean,
+#'   stop_fun = stop_ds_difference, stop_fun_args = list(eps = 0.5)
+#' )
 #' attr(ds_imp, "nr_iterations")
 impute_iterative <- function(ds,
                              model_spec_parsnip = linear_reg(),
@@ -93,11 +95,12 @@ impute_iterative <- function(ds,
   }
 
   nr_iterations <- 1
-  while(nr_iterations <= max_iter) {
+  while (nr_iterations <= max_iter) {
     ds_old <- ds
     if (!is.null(model_spec_parsnip) && is.null(model_fun_unsupervised) && is.null(predict_fun_unsupervised)) {
       ds <- impute_supervised(
-        ds, model_spec_parsnip = model_spec_parsnip,
+        ds,
+        model_spec_parsnip = model_spec_parsnip,
         cols_used_for_imputation = cols_used_for_imputation,
         cols_order = cols_order,
         rows_used_for_imputation = rows_used_for_imputation,
@@ -130,7 +133,7 @@ impute_iterative <- function(ds,
         ds, ds_old,
         list(M = M, nr_iterations = nr_iterations, max_iter = max_iter),
         stop_fun_args
-        )
+      )
       if (!isTRUE(all.equal(FALSE, res_stop_fun))) {
         return(res_stop_fun)
       }

@@ -59,7 +59,8 @@
 #' impute_unsupervised(ds_mis, model_donor, predict_donor)
 #' # knn imputation with k = 2
 #' impute_unsupervised(ds_mis, model_donor, predict_donor,
-#'                     update_model = "everytime", model_arg = list(k = 2))
+#'   update_model = "everytime", model_arg = list(k = 2)
+#' )
 impute_unsupervised <- function(ds,
                                 model_fun, predict_fun,
                                 rows_used_for_imputation = "only_complete",
@@ -74,7 +75,7 @@ impute_unsupervised <- function(ds,
   stopifnot(
     "invalid choice for rows_used_for_imputation" =
       rows_used_for_imputation %in% c("only_complete", "already_imputed", "all_except_i", "all")
-    )
+  )
   update_model <- match.arg(update_model, c("everytime", "every_iteration"))
   update_ds_model <- match.arg(update_ds_model, c("everytime", "every_iteration"))
   rows_incomplete <- which(apply(M[rows_order, ], 1, any))
@@ -82,11 +83,11 @@ impute_unsupervised <- function(ds,
   if (update_model == "every_iteration") {
     rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, cols_used_imp = seq_len(ncol(ds)))
     model_imp <- model_fun(ds[rows_used_imp, ], M, NULL, model_arg)
-    for(i in rows_incomplete) {
+    for (i in rows_incomplete) {
       ds[i, M[i, ]] <- predict_fun(model_imp, ds, M, i, ...)
     }
   } else {
-    for(i in rows_incomplete) {
+    for (i in rows_incomplete) {
       # Get row indices
       rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, cols_used_imp = seq_len(ncol(ds)), i = i)
 

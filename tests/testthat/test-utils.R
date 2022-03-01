@@ -55,7 +55,7 @@ test_that("get_row_indices() works with only_complete", {
 test_that("get_row_indices() works with partly_complete", {
   expect_equal(
     get_row_indices("partly_complete", M_start = M1, k = 1, cols_used_imp = 2),
-    which(!apply(M1[, c(1,2)], 1, any))
+    which(!apply(M1[, c(1, 2)], 1, any))
   )
   expect_equal(
     get_row_indices("partly_complete", M_start = M1, k = 3, cols_used_imp = 2),
@@ -86,7 +86,7 @@ test_that("get_row_indices() works with complete_in_k", {
 test_that("get_row_indices() works with already_imputed", {
   expect_equal(
     get_row_indices("already_imputed", M = M1, k = 1, cols_used_imp = 2),
-    which(!apply(M1[, c(1,2)], 1, any))
+    which(!apply(M1[, c(1, 2)], 1, any))
   )
   expect_equal(
     get_row_indices("already_imputed", M = M1, k = 3, cols_used_imp = 2),
@@ -134,7 +134,7 @@ test_that("get_row_indices() errors for wrong option", {
 
 # check_update_combinations() -------------------------------------------------
 test_that("check_update_combinations() works", {
-  test_fun <- function(update_model, update_ds_model, rows_used_for_imputation){
+  test_fun <- function(update_model, update_ds_model, rows_used_for_imputation) {
     check_update_combinations(update_model, update_ds_model, rows_used_for_imputation)
     1 + 1
     list(update_model, update_ds_model, rows_used_for_imputation)

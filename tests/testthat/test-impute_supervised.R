@@ -66,7 +66,6 @@ test_that("cols_order is passed to order_cols()", {
       M = is.na(df_XYZ_10_mis)
     )
   )))
-
 })
 
 test_that("rows_order and M is passed to order_rows()", {
@@ -313,7 +312,6 @@ test_that("all_no_update columns and (complete and partly_complete) rows works",
 })
 
 test_that("update model everytime and model ds every_iteration  works", {
-
   ds_imp_test <- df_XYZ_10
   M <- is.na(df_XYZ_10_mis)
   lm_x <- lm(X ~ Z + Y, df_XYZ_10, na.action = na.fail)
@@ -356,7 +354,8 @@ test_that("update_model every_iteration works", {
       update_model = "every_iteration"
     ),
     impute_supervised(
-      df_XYZ_10_mis, update_model = "each_column"
+      df_XYZ_10_mis,
+      update_model = "each_column"
     )
   )
 })

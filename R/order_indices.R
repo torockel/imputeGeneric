@@ -14,7 +14,7 @@ order_indices <- function(ds, order_option, dimension, M = is.na(ds)) {
     lowest_md_first = order(rowSums(M), decreasing = FALSE),
     highest_md_first = order(rowSums(M), decreasing = TRUE),
     increasing_index = seq_len(nrow(M)),
-    decreasing_index = seq(nrow(M), 1, by = - 1),
+    decreasing_index = seq(nrow(M), 1, by = -1),
     "not_implemented"
   )
   if (isTRUE(all.equal(rows_order, "not_implemented"))) {

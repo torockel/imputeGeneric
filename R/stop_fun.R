@@ -34,8 +34,8 @@
 #' )
 #' stop_ds_difference(ds1, ds2, list(nr_iterations = 42))
 stop_ds_difference <- function(ds, ds_old, info_list, stop_args = list(
-  eps = 1e-6, p = 1, sum_diffs = TRUE, na_rm = TRUE
-  )) {
+                                 eps = 1e-6, p = 1, sum_diffs = TRUE, na_rm = TRUE
+                               )) {
   stop_args <- set_defaults_for_missing(stop_args, list(eps = 1e-6, p = 1, sum_diffs = TRUE, na_rm = TRUE))
 
   differences <- abs(ds - ds_old)^stop_args$p

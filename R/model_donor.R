@@ -38,11 +38,11 @@ model_donor <- function(ds, M = is.na(ds), i = NULL, model_arg = NULL) {
   donor_selection <- ifelse(is.null(model_arg$selection), "complete_rows", model_arg$selection)
   donor_k <- ifelse(is.null(model_arg$k), 10, model_arg$k)
   if (is.null(i) && donor_selection != "complete_rows") {
-    stop ("only 'donor_selection = \"complete_rows\"' is possible for this case")
+    stop("only 'donor_selection = \"complete_rows\"' is possible for this case")
   }
   if (donor_selection %in% c("complete_rows", "knn_complete_rows")) {
     suitable_rows <- complete.cases(ds)
-  } else if(donor_selection %in% c("partly_complete_rows", "knn_partly_complete_rows")) {
+  } else if (donor_selection %in% c("partly_complete_rows", "knn_partly_complete_rows")) {
     suitable_rows <- apply(M, 1, function(x) !any(M[i, ] & x))
   } else {
     stop(paste0("'", donor_selection, "' is not a valid option for donor_selection"))
@@ -79,7 +79,8 @@ model_donor <- function(ds, M = is.na(ds), i = NULL, model_arg = NULL) {
 #' predict_donor(ds_donors, ds_mis, i = 4)
 #' # with partly_complete, knn and average of neighbors
 #' ds_donors <- model_donor(
-#'   ds_mis, i = 5, model_arg = list(selection = "knn_partly_complete_rows", k = 2)
+#'   ds_mis,
+#'   i = 5, model_arg = list(selection = "knn_partly_complete_rows", k = 2)
 #' )
 #' ds_donors
 #' predict_donor(ds_donors, ds_mis, i = 5, donor_aggregation = "average")
@@ -87,6 +88,6 @@ predict_donor <- function(ds_donors, ds, M = is.na(ds), i, donor_aggregation = "
   if (donor_aggregation == "choose_random") {
     return(ds_donors[sample.int(nrow(ds_donors), 1), M[i, ]])
   } else if (donor_aggregation == "average") {
-    return(colMeans(ds_donors[ , M[i, ], drop = FALSE]))
+    return(colMeans(ds_donors[, M[i, ], drop = FALSE]))
   }
 }

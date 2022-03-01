@@ -117,8 +117,10 @@ impute_iterative(ds_mis, max_iter = 2, initial_imputation_fun = missMethods::imp
 # example using stop_ds_difference() as stop_fun
 ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2)
 ds_imp <- impute_iterative(
-  ds_mis, initial_imputation_fun = missMethods::impute_mean,
-  stop_fun = stop_ds_difference, stop_fun_args = list(eps = 0.5))
+  ds_mis,
+  initial_imputation_fun = missMethods::impute_mean,
+  stop_fun = stop_ds_difference, stop_fun_args = list(eps = 0.5)
+)
 attr(ds_imp, "nr_iterations")
 }
 \seealso{

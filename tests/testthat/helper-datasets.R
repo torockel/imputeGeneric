@@ -14,16 +14,22 @@ df_XYZ_10_stop <- structure(df_XYZ_10, nr_iterations = info_list$nr_iterations)
 
 
 # MD-Indicator matrices -------------------------------------------------------
-M1 <- matrix(c(TRUE, TRUE, TRUE,
-               TRUE, TRUE, FALSE,
-               TRUE, FALSE, TRUE,
-               TRUE, FALSE, FALSE,
-               FALSE, TRUE, TRUE,
-               FALSE, TRUE, FALSE,
-               FALSE, FALSE, TRUE,
-               FALSE, FALSE, FALSE),
-             ncol = 3, byrow = TRUE)
-M2 <- matrix(c(FALSE, FALSE, TRUE,
-               TRUE, FALSE, FALSE,
-               FALSE, FALSE, FALSE),
-             ncol = 3, byrow = TRUE)
+M1 <- matrix(c(
+  TRUE, TRUE, TRUE,
+  TRUE, TRUE, FALSE,
+  TRUE, FALSE, TRUE,
+  TRUE, FALSE, FALSE,
+  FALSE, TRUE, TRUE,
+  FALSE, TRUE, FALSE,
+  FALSE, FALSE, TRUE,
+  FALSE, FALSE, FALSE
+),
+ncol = 3, byrow = TRUE
+)
+M2 <- matrix(c(
+  FALSE, FALSE, TRUE,
+  TRUE, FALSE, FALSE,
+  FALSE, FALSE, FALSE
+),
+ncol = 3, byrow = TRUE
+)

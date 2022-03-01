@@ -41,7 +41,8 @@ predict_donor(ds_donors, ds_mis, i = 2)
 predict_donor(ds_donors, ds_mis, i = 4)
 # with partly_complete, knn and average of neighbors
 ds_donors <- model_donor(
-  ds_mis, i = 5, model_arg = list(selection = "knn_partly_complete_rows", k = 2)
+  ds_mis,
+  i = 5, model_arg = list(selection = "knn_partly_complete_rows", k = 2)
 )
 ds_donors
 predict_donor(ds_donors, ds_mis, i = 5, donor_aggregation = "average")

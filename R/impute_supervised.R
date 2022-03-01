@@ -62,22 +62,23 @@
 #' ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1)
 #' impute_supervised(ds_mis)
 impute_supervised <- function(ds,
-                            model_spec_parsnip = linear_reg(),
-                            cols_used_for_imputation = "only_complete",
-                            cols_order = seq_len(ncol(ds)),
-                            rows_used_for_imputation = "only_complete",
-                            rows_order = seq_len(nrow(ds)),
-                            update_model = "each_column",
-                            update_ds_model = "each_column",
-                            M = is.na(ds),
-                            show_warning_incomplete_imputation = TRUE,
-                            ...) {
+                              model_spec_parsnip = linear_reg(),
+                              cols_used_for_imputation = "only_complete",
+                              cols_order = seq_len(ncol(ds)),
+                              rows_used_for_imputation = "only_complete",
+                              rows_order = seq_len(nrow(ds)),
+                              update_model = "each_column",
+                              update_ds_model = "each_column",
+                              M = is.na(ds),
+                              show_warning_incomplete_imputation = TRUE,
+                              ...) {
   # Warning: never change M_start, ds_old in this function!
   M_start <- M
   ds_old <- ds
 
-  if (!is.data.frame(ds) || is.null(colnames(ds)))
+  if (!is.data.frame(ds) || is.null(colnames(ds))) {
     stop("ds must be a data frame with colnames")
+  }
 
   if (is.character(cols_order) && length(cols_order) == 1 && !(cols_order %in% colnames(ds))) {
     cols_order <- order_cols(ds, order_option = cols_order, M = M)
@@ -91,7 +92,7 @@ impute_supervised <- function(ds,
   check_update_combinations(update_model, update_ds_model, rows_used_for_imputation)
 
   for (k in cols_order) {
-    if(update_model == "each_column") {
+    if (update_model == "each_column") {
       cols_used_imp <- get_col_indices(cols_used_for_imputation, M_start, M, k)
       rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, k, cols_used_imp)
 
@@ -114,8 +115,7 @@ impute_supervised <- function(ds,
 
       ds[M_start[, k], k] <- predict(model_fit, ds_mis_k, ...)
       M[M_start[, k], k] <- FALSE
-
-    } else{
+    } else {
       for (i in rows_order) {
         if (!M[i, k]) { # only impute, if ds[i,k] is missing
           next
