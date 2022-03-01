@@ -164,7 +164,8 @@ impute_iterative <- function(ds,
         list(M = M, nr_iterations = nr_iterations, max_iter = max_iter),
         stop_fun_args, res_stop_fun
       )
-      if (!(is.list(res_stop_fun) && identical(res_stop_fun$stop_iter, FALSE))) {
+      if (!(is.list(res_stop_fun) &&
+            identical(res_stop_fun$stop_iter, FALSE))) {
         return(res_stop_fun)
       }
     }

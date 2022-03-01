@@ -54,7 +54,7 @@ anyNA(ds_imp)
 #> [1] FALSE
 ```
 
-To use other `parsnip` models insted of regression trees, only the
+To use other `parsnip` models instead of regression trees, only the
 `model_spec_parsnip` must be altered. E. g. for linear regression
 instead of regression trees use `linear_reg()`.
 
