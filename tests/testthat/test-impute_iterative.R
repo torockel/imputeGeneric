@@ -10,8 +10,8 @@ test_that("initial_imputation_fun works", {
 
 test_that("Warning for incomplete ds is shown (only once)", {
   expect_snapshot(impute_iterative(
-    df_XYZ_10_mis,
-    max_iter = 2, rows_used_for_imputation = "all", cols_used_for_imputation = "all"
+    df_XYZ_10_mis, max_iter = 2,
+     rows_used_for_imputation = "all", cols_used_for_imputation = "all"
   ))
 })
 
@@ -68,7 +68,7 @@ test_that("supervised and unsupervised at once throwns an error", {
       model_fun_unsupervised = model_donor,
       predict_fun_unsupervised = predict_donor
     ),
-    "Either use `model_spec_parsnip` or `model_fun_unsupervised` and `predict_fun_unsupervised`."
+    "Either use `model_spec_parsnip` or `model_fun_unsupervised` and"
   )
 })
 

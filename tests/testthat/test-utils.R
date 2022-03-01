@@ -134,8 +134,11 @@ test_that("get_row_indices() errors for wrong option", {
 
 # check_update_combinations() -------------------------------------------------
 test_that("check_update_combinations() works", {
-  test_fun <- function(update_model, update_ds_model, rows_used_for_imputation) {
-    check_update_combinations(update_model, update_ds_model, rows_used_for_imputation)
+  test_fun <- function(update_model, update_ds_model,
+                       rows_used_for_imputation) {
+    check_update_combinations(
+      update_model, update_ds_model, rows_used_for_imputation
+    )
     1 + 1
     list(update_model, update_ds_model, rows_used_for_imputation)
   }

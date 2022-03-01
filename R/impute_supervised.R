@@ -9,13 +9,13 @@
 #'   via the `parsnip` package.
 #' @param cols_used_for_imputation Which columns should be used to impute other
 #'   columns? Possible choices: "only_complete", "already_imputed", "all"
-#' @param cols_order Ordering of the columns for imputation. This can be a vector with
-#'   indices or an `order_option` from [order_cols()].
+#' @param cols_order Ordering of the columns for imputation. This can be a
+#'   vector with indices or an `order_option` from [order_cols()].
 #' @param rows_used_for_imputation Which rows should be used to impute other
-#'   rows? Possible choices: "only_complete", "partly_complete", "complete_in_k",
-#'   "already_imputed", "all_except_i", "all"
-#' @param rows_order Ordering of the rows for imputation. This can be a vector with
-#'   indices or an `order_option` from [order_rows()].
+#'   rows? Possible choices: "only_complete", "partly_complete",
+#'   "complete_in_k", "already_imputed", "all_except_i", "all"
+#' @param rows_order Ordering of the rows for imputation. This can be a vector
+#'   with indices or an `order_option` from [order_rows()].
 #' @param update_model How often should the model for imputation be updated?
 #'   Possible choices are: "everytime" (after every imputed value),
 #'   "each_column" (only one update per column) and "every_iteration" (an alias
@@ -29,8 +29,8 @@
 #' @param ... Arguments passed on to [stats::predict()].
 #'
 #' @details
-#' This function imputes the columns of the data set `ds` column by
-#' column. The imputation order of the columns can be specified by `cols_order`.
+#' This function imputes the columns of the data set `ds` column by column. The
+#' imputation order of the columns can be specified by `cols_order`.
 #' Furthermore, `cols_used_for_imputation` controls which columns are used for
 #' the imputation. The same options are available for the rows of `ds` via
 #' `rows_order` and `rows_used_for_imputation`. If `ds` is pre-imputed, the
@@ -59,7 +59,9 @@
 #' @importFrom stats predict
 #'
 #' @examples
-#' ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1)
+#' ds_mis <- missMethods::delete_MCAR(
+#'   data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1
+#' )
 #' impute_supervised(ds_mis)
 impute_supervised <- function(ds,
                               model_spec_parsnip = linear_reg(),
@@ -80,28 +82,41 @@ impute_supervised <- function(ds,
     stop("ds must be a data frame with colnames")
   }
 
-  if (is.character(cols_order) && length(cols_order) == 1 && !(cols_order %in% colnames(ds))) {
+  if (is.character(cols_order) && length(cols_order) == 1 &&
+      !(cols_order %in% colnames(ds))) {
     cols_order <- order_cols(ds, order_option = cols_order, M = M)
   }
 
   rows_order <- ckeck_and_set_rows_order(rows_order, ds, M)
 
-  update_model <- match.arg(update_model, c("everytime", "each_column", "every_iteration"))
-  update_model <- ifelse(update_model == "every_iteration", "each_column", update_model)
-  update_ds_model <- match.arg(update_ds_model, c("everytime", "each_column", "every_iteration"))
-  check_update_combinations(update_model, update_ds_model, rows_used_for_imputation)
+  update_model <- match.arg(
+    update_model, c("everytime", "each_column", "every_iteration")
+    )
+  update_model <- ifelse(
+    update_model == "every_iteration", "each_column", update_model
+  )
+  update_ds_model <- match.arg(
+    update_ds_model, c("everytime", "each_column", "every_iteration")
+  )
+  check_update_combinations(
+    update_model, update_ds_model, rows_used_for_imputation
+  )
 
   for (k in cols_order) {
     if (update_model == "each_column") {
       cols_used_imp <- get_col_indices(cols_used_for_imputation, M_start, M, k)
-      rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, k, cols_used_imp)
+      rows_used_imp <- get_row_indices(
+        rows_used_for_imputation, M_start, M, k, cols_used_imp
+      )
 
       if (update_ds_model == "every_iteration") {
         ds_used <- ds_old
       } else if (update_ds_model %in% c("everytime", "each_column")) {
         ds_used <- ds
       } else {
-        stop("Combination of update_model and update_ds_model is not implemented.")
+        stop(
+          "Combination of update_model and update_ds_model is not implemented."
+        )
       }
 
       ds_train <- ds_used[rows_used_imp, ]
@@ -122,15 +137,19 @@ impute_supervised <- function(ds,
         }
 
         # Get row and column indices
-        cols_used_imp <- get_col_indices(cols_used_for_imputation, M_start, M, k)
-        rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, k, cols_used_imp, i)
+        cols_used_imp <- get_col_indices(
+          cols_used_for_imputation, M_start, M, k
+        )
+        rows_used_imp <- get_row_indices(
+          rows_used_for_imputation, M_start, M, k, cols_used_imp, i
+        )
 
         if (update_ds_model == "every_iteration") {
           ds_used <- ds_old
         } else if (update_ds_model == "everytime") {
           ds_used <- ds
         } else { # "each_column" is not implemented
-          stop("Combination of update_model and update_ds_model is not implemented.")
+          stop("Combination of update model and data set is not implemented.")
         }
 
         ds_train <- ds_used[rows_used_imp, ]

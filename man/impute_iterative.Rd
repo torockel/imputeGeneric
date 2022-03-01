@@ -49,15 +49,15 @@ choices like mean imputation are implemented in the package missMethods.}
 \item{cols_used_for_imputation}{Which columns should be used to impute other
 columns? Possible choices: "only_complete", "already_imputed", "all"}
 
-\item{cols_order}{Ordering of the columns for imputation. This can be a vector with
-indices or an \code{order_option} from \code{\link[=order_cols]{order_cols()}}.}
+\item{cols_order}{Ordering of the columns for imputation. This can be a
+vector with indices or an \code{order_option} from \code{\link[=order_cols]{order_cols()}}.}
 
 \item{rows_used_for_imputation}{Which rows should be used to impute other
-rows? Possible choices: "only_complete", "partly_complete", "complete_in_k",
-"already_imputed", "all_except_i", "all"}
+rows? Possible choices: "only_complete", "partly_complete",
+"complete_in_k", "already_imputed", "all_except_i", "all"}
 
-\item{rows_order}{Ordering of the rows for imputation. This can be a vector with
-indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
+\item{rows_order}{Ordering of the rows for imputation. This can be a vector
+with indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
 
 \item{update_model}{How often should the model for imputation be updated?}
 
@@ -109,13 +109,21 @@ normally include the imputed data set \code{ds} or \code{ds_old}.
 \examples{
 set.seed(123)
 # simple example
-ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1)
+ds_mis <- missMethods::delete_MCAR(
+  data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1
+)
 impute_iterative(ds_mis, max_iter = 2)
 # using pre-imputation
-ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2)
-impute_iterative(ds_mis, max_iter = 2, initial_imputation_fun = missMethods::impute_mean)
+ds_mis <- missMethods::delete_MCAR(
+  data.frame(X = rnorm(20), Y = rnorm(20)), 0.2
+)
+impute_iterative(
+  ds_mis, max_iter = 2, initial_imputation_fun = missMethods::impute_mean
+)
 # example using stop_ds_difference() as stop_fun
-ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2)
+ds_mis <- missMethods::delete_MCAR(
+  data.frame(X = rnorm(20), Y = rnorm(20)), 0.2
+)
 ds_imp <- impute_iterative(
   ds_mis,
   initial_imputation_fun = missMethods::impute_mean,
@@ -125,8 +133,8 @@ attr(ds_imp, "nr_iterations")
 }
 \seealso{
 \itemize{
-\item \code{\link[=impute_supervised]{impute_supervised()}} and \code{\link[=impute_unsupervised]{impute_unsupervised()}} as the workhorses for the
-imputation.
+\item \code{\link[=impute_supervised]{impute_supervised()}} and \code{\link[=impute_unsupervised]{impute_unsupervised()}} as the workhorses for
+the imputation.
 \item \code{\link[=stop_ds_difference]{stop_ds_difference()}} as an example of a stop function.
 }
 }

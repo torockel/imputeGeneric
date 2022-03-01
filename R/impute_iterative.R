@@ -48,20 +48,28 @@
 #' @return an imputed data set (or a return value of `stop_fun`)
 #' @export
 #' @seealso
-#'   * [impute_supervised()] and [impute_unsupervised()] as the workhorses for the
-#'     imputation.
+#'   * [impute_supervised()] and [impute_unsupervised()] as the workhorses for
+#'     the imputation.
 #'   * [stop_ds_difference()] as an example of a stop function.
 #'
 #' @examples
 #' set.seed(123)
 #' # simple example
-#' ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1)
+#' ds_mis <- missMethods::delete_MCAR(
+#'   data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1
+#' )
 #' impute_iterative(ds_mis, max_iter = 2)
 #' # using pre-imputation
-#' ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2)
-#' impute_iterative(ds_mis, max_iter = 2, initial_imputation_fun = missMethods::impute_mean)
+#' ds_mis <- missMethods::delete_MCAR(
+#'   data.frame(X = rnorm(20), Y = rnorm(20)), 0.2
+#' )
+#' impute_iterative(
+#'   ds_mis, max_iter = 2, initial_imputation_fun = missMethods::impute_mean
+#' )
 #' # example using stop_ds_difference() as stop_fun
-#' ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2)
+#' ds_mis <- missMethods::delete_MCAR(
+#'   data.frame(X = rnorm(20), Y = rnorm(20)), 0.2
+#' )
 #' ds_imp <- impute_iterative(
 #'   ds_mis,
 #'   initial_imputation_fun = missMethods::impute_mean,
@@ -97,7 +105,8 @@ impute_iterative <- function(ds,
   nr_iterations <- 1
   while (nr_iterations <= max_iter) {
     ds_old <- ds
-    if (!is.null(model_spec_parsnip) && is.null(model_fun_unsupervised) && is.null(predict_fun_unsupervised)) {
+    if (!is.null(model_spec_parsnip) &&
+        is.null(model_fun_unsupervised) && is.null(predict_fun_unsupervised)) {
       ds <- impute_supervised(
         ds,
         model_spec_parsnip = model_spec_parsnip,
@@ -111,7 +120,9 @@ impute_iterative <- function(ds,
         warn_incomplete_imputation = FALSE, # checked only once at the end
         ...
       )
-    } else if (is.null(model_spec_parsnip) && !is.null(model_fun_unsupervised) && !is.null(predict_fun_unsupervised)) {
+    } else if (is.null(model_spec_parsnip) &&
+               !is.null(model_fun_unsupervised) &&
+               !is.null(predict_fun_unsupervised)) {
       ds <- impute_unsupervised(
         ds,
         model_fun = model_fun_unsupervised,
@@ -124,7 +135,10 @@ impute_iterative <- function(ds,
         M = M, ...
       )
     } else {
-      stop("Either use `model_spec_parsnip` or `model_fun_unsupervised` and `predict_fun_unsupervised`. The other(s) must be NULL.")
+      stop(
+        "Either use `model_spec_parsnip` or `model_fun_unsupervised` and ",
+        "`predict_fun_unsupervised`. The other(s) must be NULL."
+      )
     }
 
     nr_iterations <- nr_iterations + 1

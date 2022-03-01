@@ -27,15 +27,15 @@ via the \code{parsnip} package.}
 \item{cols_used_for_imputation}{Which columns should be used to impute other
 columns? Possible choices: "only_complete", "already_imputed", "all"}
 
-\item{cols_order}{Ordering of the columns for imputation. This can be a vector with
-indices or an \code{order_option} from \code{\link[=order_cols]{order_cols()}}.}
+\item{cols_order}{Ordering of the columns for imputation. This can be a
+vector with indices or an \code{order_option} from \code{\link[=order_cols]{order_cols()}}.}
 
 \item{rows_used_for_imputation}{Which rows should be used to impute other
-rows? Possible choices: "only_complete", "partly_complete", "complete_in_k",
-"already_imputed", "all_except_i", "all"}
+rows? Possible choices: "only_complete", "partly_complete",
+"complete_in_k", "already_imputed", "all_except_i", "all"}
 
-\item{rows_order}{Ordering of the rows for imputation. This can be a vector with
-indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
+\item{rows_order}{Ordering of the rows for imputation. This can be a vector
+with indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
 
 \item{update_model}{How often should the model for imputation be updated?
 Possible choices are: "everytime" (after every imputed value),
@@ -62,8 +62,8 @@ function which can be used inside of \code{\link[=impute_iterative]{impute_itera
 pre-imputation or iterations, directly use \code{\link[=impute_iterative]{impute_iterative()}}.
 }
 \details{
-This function imputes the columns of the data set \code{ds} column by
-column. The imputation order of the columns can be specified by \code{cols_order}.
+This function imputes the columns of the data set \code{ds} column by column. The
+imputation order of the columns can be specified by \code{cols_order}.
 Furthermore, \code{cols_used_for_imputation} controls which columns are used for
 the imputation. The same options are available for the rows of \code{ds} via
 \code{rows_order} and \code{rows_used_for_imputation}. If \code{ds} is pre-imputed, the
@@ -86,6 +86,8 @@ The choice \code{update_model = "each_column"} can be much faster than
 missing values in some columns.
 }
 \examples{
-ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1)
+ds_mis <- missMethods::delete_MCAR(
+  data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1
+)
 impute_supervised(ds_mis)
 }

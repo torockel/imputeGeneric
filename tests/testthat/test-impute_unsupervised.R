@@ -1,6 +1,9 @@
 test_that("impute_unsupervised() error for wrong rows_used_for_imputation", {
   expect_error(
-    impute_unsupervised(df_XYZ_10_mis, model_donor, predict_donor, rows_used_for_imputation = "asdfa"),
+    impute_unsupervised(
+      df_XYZ_10_mis, model_donor, predict_donor,
+      rows_used_for_imputation = "asdfa"
+    ),
     "invalid choice for rows_used_for_imputation"
   )
 })

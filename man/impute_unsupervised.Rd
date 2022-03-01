@@ -33,19 +33,20 @@ should take the arguments \code{model_imp}, \code{ds_used}, \code{M} and \code{i
 rows? Possible choices:
 "only_complete", "already_imputed", "all_except_i", "all"}
 
-\item{rows_order}{Ordering of the rows for imputation. This can be a vector with
-indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
+\item{rows_order}{Ordering of the rows for imputation. This can be a vector
+with indices or an \code{order_option} from \code{\link[=order_rows]{order_rows()}}.}
 
 \item{update_model}{How often should the model for imputation be updated?
 Possible choices are: "everytime" (after every imputed value) and
-"every_iteration" (only one model is created and used for all missing values).}
+"every_iteration" (only one model is created and used for all missing
+values).}
 
 \item{update_ds_model}{How often should the data set for the inner model be
 updated? Possible choices are: "everytime" (after every imputed value),
 and "every_iteration".}
 
-\item{model_arg}{Further arguments for \code{model_fun}. This can be a list, if it
-is more than one argument.}
+\item{model_arg}{Further arguments for \code{model_fun}. This can be a list, if
+it is more than one argument.}
 
 \item{M}{Missing data indicator matrix}
 
@@ -55,8 +56,8 @@ is more than one argument.}
 The imputed data set.
 }
 \description{
-Impute a data set with an unsupervised inner method. This function is one main
-function which can be used inside of \code{\link[=impute_iterative]{impute_iterative()}}. If you need
+Impute a data set with an unsupervised inner method. This function is one
+main function which can be used inside of \code{\link[=impute_iterative]{impute_iterative()}}. If you need
 pre-imputation or iterations, directly use \code{\link[=impute_iterative]{impute_iterative()}}.
 }
 \details{
@@ -76,13 +77,15 @@ in a row \code{i}. The \code{model_fun} and \code{predict_fun} can be self-writt
 predefined one (see below) can be used.
 
 If \code{update_model = "every_iteration"} only one model is fitted and the
-argument \code{update_ds_model} is ignored. This option can be considerably faster
-than \code{update_model = "everytime"}, especially, for data sets with many rows
-with missing values. However, some methods (like nearest neighbors) need
-\code{update_model = "everytime"}.
+argument \code{update_ds_model} is ignored. This option can be considerably
+faster than \code{update_model = "everytime"}, especially, for data sets with
+many rows with missing values. However, some methods (like nearest
+neighbors) need \code{update_model = "everytime"}.
 }
 \examples{
-ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1)
+ds_mis <- missMethods::delete_MCAR(
+  data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1
+)
 impute_unsupervised(ds_mis, model_donor, predict_donor)
 # knn imputation with k = 2
 impute_unsupervised(ds_mis, model_donor, predict_donor,
