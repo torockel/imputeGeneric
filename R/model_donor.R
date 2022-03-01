@@ -18,6 +18,18 @@
 #' @seealso [predict_donor()]
 #' @importFrom gower gower_topn
 #' @importFrom stats complete.cases
+#' @examples
+#' set.seed(123)
+#' ds_mis <- data.frame(X = rnorm(10), Y = rnorm(10))
+#' ds_mis[2:4, 1] <- NA
+#' ds_mis[4:6, 2] <- NA
+#' # default returns only complete rows (like complete.cases() which is used internally)
+#' model_donor(ds_mis)
+#' # with partly_complete and knn returned objects depends on i
+#' model_donor(ds_mis, i = 2, model_arg = list(selection = "partly_complete_rows"))
+#' model_donor(ds_mis, i = 4, model_arg = list(selection = "partly_complete_rows"))
+#' model_donor(ds_mis, i = 5, model_arg = list(selection = "partly_complete_rows"))
+#' model_donor(ds_mis, i = 5, model_arg = list(selection = "knn_partly_complete_rows", k = 2))
 model_donor <- function(ds, M = is.na(ds), i = NULL, model_arg = NULL) {
   if (is.null(model_arg)) {
     model_arg <- list()
@@ -56,6 +68,21 @@ model_donor <- function(ds, M = is.na(ds), i = NULL, model_arg = NULL) {
 #' @return The imputation values for row `i`.
 #' @seealso [model_donor()]
 #' @export
+#' @examples
+#' set.seed(123)
+#' ds_mis <- data.frame(X = rnorm(10), Y = rnorm(10))
+#' ds_mis[2:4, 1] <- NA
+#' ds_mis[4:6, 2] <- NA
+#' # default for ds_donors and predict_donors
+#' ds_donors <- model_donor(ds_mis)
+#' predict_donor(ds_donors, ds_mis, i = 2)
+#' predict_donor(ds_donors, ds_mis, i = 4)
+#' # with partly_complete, knn and average of neighbors
+#' ds_donors <- model_donor(
+#'   ds_mis, i = 5, model_arg = list(selection = "knn_partly_complete_rows", k = 2)
+#' )
+#' ds_donors
+#' predict_donor(ds_donors, ds_mis, i = 5, donor_aggregation = "average")
 predict_donor <- function(ds_donors, ds, M = is.na(ds), i, donor_aggregation = "choose_random") {
   if (donor_aggregation == "choose_random") {
     return(ds_donors[sample.int(nrow(ds_donors), 1), M[i, ]])

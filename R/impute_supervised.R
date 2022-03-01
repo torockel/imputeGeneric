@@ -58,7 +58,9 @@
 #' @import parsnip
 #' @importFrom stats predict
 #'
-#'
+#' @examples
+#' ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1)
+#' impute_supervised(ds_mis)
 impute_supervised <- function(ds,
                             model_spec_parsnip = linear_reg(),
                             cols_used_for_imputation = "only_complete",

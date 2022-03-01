@@ -25,7 +25,14 @@
 #' @export
 #'
 #' @examples
-#' # See impute_iterative()
+#' set.seed(123)
+#' ds1 <- data.frame(X = rnorm(10), Y = rnorm(10))
+#' ds2 <- data.frame(X = rnorm(10), Y = rnorm(10))
+#' all.equal(
+#'   stop_ds_difference(ds1, ds1, list(nr_iterations = 3)),
+#'   structure(ds1, nr_iterations = 3)
+#' )
+#' stop_ds_difference(ds1, ds2, list(nr_iterations = 42))
 stop_ds_difference <- function(ds, ds_old, info_list, stop_args = list(
   eps = 1e-6, p = 1, sum_diffs = TRUE, na_rm = TRUE
   )) {

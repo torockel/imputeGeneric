@@ -85,3 +85,7 @@ The choice \code{update_model = "each_column"} can be much faster than
 \code{update_model = "everytime"}, especially, if the data set has many
 missing values in some columns.
 }
+\examples{
+ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1)
+impute_supervised(ds_mis)
+}

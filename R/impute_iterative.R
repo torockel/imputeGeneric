@@ -53,9 +53,19 @@
 #'   * [stop_ds_difference()] as an example of a stop function.
 #'
 #' @examples
-#' # ToDo
+#' set.seed(123)
 #' # simple example
-#' # example using stop_ds_difference()
+#' ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1)
+#' impute_iterative(ds_mis, max_iter = 2)
+#' # using pre-imputation
+#' ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2)
+#' impute_iterative(ds_mis, max_iter = 2, initial_imputation_fun = missMethods::impute_mean)
+#' # example using stop_ds_difference() as stop_fun
+#' ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2)
+#' ds_imp <- impute_iterative(
+#'   ds_mis, initial_imputation_fun = missMethods::impute_mean,
+#'   stop_fun = stop_ds_difference, stop_fun_args = list(eps = 0.5))
+#' attr(ds_imp, "nr_iterations")
 impute_iterative <- function(ds,
                              model_spec_parsnip = linear_reg(),
                              model_fun_unsupervised = NULL,

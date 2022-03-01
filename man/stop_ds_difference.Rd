@@ -43,5 +43,12 @@ This function is intended to be used as \code{stop_fun} inside of
 and return \code{ds}, if difference is small enough (less than \code{stop_args$eps}).
 }
 \examples{
-# See impute_iterative()
+set.seed(123)
+ds1 <- data.frame(X = rnorm(10), Y = rnorm(10))
+ds2 <- data.frame(X = rnorm(10), Y = rnorm(10))
+all.equal(
+  stop_ds_difference(ds1, ds1, list(nr_iterations = 3)),
+  structure(ds1, nr_iterations = 3)
+)
+stop_ds_difference(ds1, ds2, list(nr_iterations = 42))
 }

@@ -81,6 +81,13 @@ than \code{update_model = "everytime"}, especially, for data sets with many rows
 with missing values. However, some methods (like nearest neighbors) need
 \code{update_model = "everytime"}.
 }
+\examples{
+ds_mis <- missMethods::delete_MCAR(data.frame(X = rnorm(20), Y = rnorm(20)), 0.2, 1)
+impute_unsupervised(ds_mis, model_donor, predict_donor)
+# knn imputation with k = 2
+impute_unsupervised(ds_mis, model_donor, predict_donor,
+                    update_model = "everytime", model_arg = list(k = 2))
+}
 \seealso{
 \code{\link[=model_donor]{model_donor()}} and \code{\link[=predict_donor]{predict_donor()}} for a pair of predefined
 functions for \code{model_fun} and \code{predict_fun}.

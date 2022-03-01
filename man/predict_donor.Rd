@@ -30,6 +30,22 @@ The imputation values for row \code{i}.
 \description{
 This function is intended to be used inside of \code{\link[=impute_unsupervised]{impute_unsupervised()}} as \code{predict_fun}.
 }
+\examples{
+set.seed(123)
+ds_mis <- data.frame(X = rnorm(10), Y = rnorm(10))
+ds_mis[2:4, 1] <- NA
+ds_mis[4:6, 2] <- NA
+# default for ds_donors and predict_donors
+ds_donors <- model_donor(ds_mis)
+predict_donor(ds_donors, ds_mis, i = 2)
+predict_donor(ds_donors, ds_mis, i = 4)
+# with partly_complete, knn and average of neighbors
+ds_donors <- model_donor(
+  ds_mis, i = 5, model_arg = list(selection = "knn_partly_complete_rows", k = 2)
+)
+ds_donors
+predict_donor(ds_donors, ds_mis, i = 5, donor_aggregation = "average")
+}
 \seealso{
 \code{\link[=model_donor]{model_donor()}}
 }

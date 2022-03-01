@@ -30,6 +30,19 @@ A "model" for \code{\link[=predict_donor]{predict_donor()}} which is merely a da
 This function is intended to be used inside of \code{\link[=impute_unsupervised]{impute_unsupervised()}} as
 \code{model_fun}.
 }
+\examples{
+set.seed(123)
+ds_mis <- data.frame(X = rnorm(10), Y = rnorm(10))
+ds_mis[2:4, 1] <- NA
+ds_mis[4:6, 2] <- NA
+# default returns only complete rows (like complete.cases() which is used internally)
+model_donor(ds_mis)
+# with partly_complete and knn returned objects depends on i
+model_donor(ds_mis, i = 2, model_arg = list(selection = "partly_complete_rows"))
+model_donor(ds_mis, i = 4, model_arg = list(selection = "partly_complete_rows"))
+model_donor(ds_mis, i = 5, model_arg = list(selection = "partly_complete_rows"))
+model_donor(ds_mis, i = 5, model_arg = list(selection = "knn_partly_complete_rows", k = 2))
+}
 \seealso{
 \code{\link[=predict_donor]{predict_donor()}}
 }
