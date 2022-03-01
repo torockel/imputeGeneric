@@ -75,10 +75,8 @@ given to \code{predict_fun} to generate imputation values for the missing values
 in a row \code{i}. The \code{model_fun} and \code{predict_fun} can be self-written or a
 predefined one (see below) can be used.
 
-If \code{rows_used_for_imputation = "only_complete"} only one model is fitted
-and the arguments \code{update_model} and \code{update_ds_model} are ignored. If
-\code{update_model = "every_iteration"} only one model is fitted and the argument
-\code{update_ds_model} is ignored. Both of these cases can be considerably faster
+If \code{update_model = "every_iteration"} only one model is fitted and the
+argument \code{update_ds_model} is ignored. This option can be considerably faster
 than \code{update_model = "everytime"}, especially, for data sets with many rows
 with missing values. However, some methods (like nearest neighbors) need
 \code{update_model = "everytime"}.

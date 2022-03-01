@@ -43,10 +43,8 @@
 #' in a row `i`. The `model_fun` and `predict_fun` can be self-written or a
 #' predefined one (see below) can be used.
 #'
-#' If `rows_used_for_imputation = "only_complete"` only one model is fitted
-#' and the arguments `update_model` and `update_ds_model` are ignored. If
-#' `update_model = "every_iteration"` only one model is fitted and the argument
-#' `update_ds_model` is ignored. Both of these cases can be considerably faster
+#' If `update_model = "every_iteration"` only one model is fitted and the
+#' argument `update_ds_model` is ignored. This option can be considerably faster
 #' than `update_model = "everytime"`, especially, for data sets with many rows
 #' with missing values. However, some methods (like nearest neighbors) need
 #' `update_model = "everytime"`.
@@ -75,7 +73,7 @@ impute_unsupervised <- function(ds,
   update_ds_model <- match.arg(update_ds_model, c("everytime", "every_iteration"))
   rows_incomplete <- which(apply(M[rows_order, ], 1, any))
 
-  if (update_model == "every_iteration" || rows_used_for_imputation == "only_complete") {
+  if (update_model == "every_iteration") {
     rows_used_imp <- get_row_indices(rows_used_for_imputation, M_start, M, cols_used_imp = seq_len(ncol(ds)))
     model_imp <- model_fun(ds[rows_used_imp, ], M, NULL, model_arg)
     for(i in rows_incomplete) {
