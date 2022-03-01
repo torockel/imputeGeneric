@@ -24,7 +24,7 @@
 #'   updated? Possible choices are: "everytime" (after every imputed value),
 #'   "each_column" (only one update per column) and "every_iteration".
 #' @param M Missing data indicator matrix
-#' @param show_warning_incomplete_imputation Should a warning be given, if the
+#' @param warn_incomplete_imputation Should a warning be given, if the
 #'   returned data set still contains `NA`?
 #' @param ... Arguments passed on to [stats::predict()].
 #'
@@ -70,7 +70,7 @@ impute_supervised <- function(ds,
                               update_model = "each_column",
                               update_ds_model = "each_column",
                               M = is.na(ds),
-                              show_warning_incomplete_imputation = TRUE,
+                              warn_incomplete_imputation = TRUE,
                               ...) {
   # Warning: never change M_start, ds_old in this function!
   M_start <- M
@@ -148,6 +148,6 @@ impute_supervised <- function(ds,
     }
   }
 
-  warn_incomplete(show_warning_incomplete_imputation, ds)
+  warn_incomplete(warn_incomplete_imputation, ds)
   ds
 }

@@ -14,7 +14,7 @@ impute_supervised(
   update_model = "each_column",
   update_ds_model = "each_column",
   M = is.na(ds),
-  show_warning_incomplete_imputation = TRUE,
+  warn_incomplete_imputation = TRUE,
   ...
 )
 }
@@ -48,7 +48,7 @@ updated? Possible choices are: "everytime" (after every imputed value),
 
 \item{M}{Missing data indicator matrix}
 
-\item{show_warning_incomplete_imputation}{Should a warning be given, if the
+\item{warn_incomplete_imputation}{Should a warning be given, if the
 returned data set still contains \code{NA}?}
 
 \item{...}{Arguments passed on to \code{\link[stats:predict]{stats::predict()}}.}

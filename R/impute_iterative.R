@@ -84,7 +84,7 @@ impute_iterative <- function(ds,
                              stop_fun_args = NULL,
                              M = is.na(ds),
                              model_arg = NULL,
-                             show_warning_incomplete_imputation = TRUE,
+                             warn_incomplete_imputation = TRUE,
                              ...) {
 
   # force M before initial imputation, later it will be wrong (all FALSE)
@@ -108,7 +108,7 @@ impute_iterative <- function(ds,
         update_model = update_model,
         update_ds_model = update_ds_model,
         M = M,
-        show_warning_incomplete_imputation = FALSE, # checked only once at the end
+        warn_incomplete_imputation = FALSE, # checked only once at the end
         ...
       )
     } else if (is.null(model_spec_parsnip) && !is.null(model_fun_unsupervised) && !is.null(predict_fun_unsupervised)) {
@@ -140,6 +140,6 @@ impute_iterative <- function(ds,
     }
   }
 
-  warn_incomplete(show_warning_incomplete_imputation, ds)
+  warn_incomplete(warn_incomplete_imputation, ds)
   structure(ds, nr_iterations = max_iter)
 }

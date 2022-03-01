@@ -21,7 +21,7 @@ impute_iterative(
   stop_fun_args = NULL,
   M = is.na(ds),
   model_arg = NULL,
-  show_warning_incomplete_imputation = TRUE,
+  warn_incomplete_imputation = TRUE,
   ...
 )
 }
@@ -71,7 +71,7 @@ updated?}
 \item{model_arg}{Further arguments for \code{model_fun_unsupervised} (see
 \code{\link[=impute_unsupervised]{impute_unsupervised()}} for details).}
 
-\item{show_warning_incomplete_imputation}{Should a warning be given, if the
+\item{warn_incomplete_imputation}{Should a warning be given, if the
 returned data set still contains \code{NA}?}
 
 \item{...}{Further arguments passed on to \code{\link[stats:predict]{stats::predict()}} or
