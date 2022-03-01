@@ -18,7 +18,7 @@ impute_unsupervised(
 )
 }
 \arguments{
-\item{ds}{the data set to be imputed, must be a data frame with column names}
+\item{ds}{The data set to be imputed. Must be a data frame with column names.}
 
 \item{model_fun}{An unsupervised model function which take as arguments
 \code{ds_used} (the data set used to build the model, specified via
@@ -47,7 +47,7 @@ and "every_iteration".}
 \item{model_arg}{Further arguments for \code{model_fun}. This can be a list, if it
 is more than one argument.}
 
-\item{M}{missing data indicator matrix}
+\item{M}{Missing data indicator matrix}
 
 \item{...}{Further arguments given to \code{predict_fun}.}
 }
@@ -61,7 +61,7 @@ pre-imputation or iterations, directly use \code{\link[=impute_iterative]{impute
 }
 \details{
 This function imputes the rows of the data set \code{ds} row by
-row The imputation order of the rows can be specified by \code{rows_order}.
+row. The imputation order of the rows can be specified by \code{rows_order}.
 Furthermore, \code{rows_used_for_imputation} controls which rows are used for
 the imputation. If \code{ds} is pre-imputed, the missing data indicator matrix
 can be supplied via \code{M}.
@@ -79,7 +79,7 @@ If \code{rows_used_for_imputation = "only_complete"} only one model is fitted
 and the arguments \code{update_model} and \code{update_ds_model} are ignored. If
 \code{update_model = "every_iteration"} only one model is fitted and the argument
 \code{update_ds_model} is ignored. Both of these cases can be considerably faster
-than \code{update_model = "everytime"} especially for data sets with many rows
+than \code{update_model = "everytime"}, especially, for data sets with many rows
 with missing values. However, some methods (like nearest neighbors) need
 \code{update_model = "everytime"}.
 }

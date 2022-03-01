@@ -26,7 +26,7 @@ impute_iterative(
 )
 }
 \arguments{
-\item{ds}{the data set to be imputed, must be a data frame with column names}
+\item{ds}{The data set to be imputed. Must be a data frame with column names.}
 
 \item{model_spec_parsnip}{The model type used for supervised imputation (see
 (\code{\link[=impute_supervised]{impute_supervised()}} for details).}
@@ -37,9 +37,9 @@ impute_iterative(
 \item{predict_fun_unsupervised}{A predict function for unsupervised
 imputation (see \code{\link[=impute_unsupervised]{impute_unsupervised()}} for details).}
 
-\item{max_iter}{maximum number of iterations}
+\item{max_iter}{Maximum number of iterations}
 
-\item{stop_fun}{a stopping function (see details below) or \code{NULL}. If \code{NULL},
+\item{stop_fun}{A stopping function (see details below) or \code{NULL}. If \code{NULL},
 iterations are only stopped after \code{max_iter} is reached.}
 
 \item{initial_imputation_fun}{This function will do the initial imputation of
@@ -49,7 +49,7 @@ choices like mean imputation are implemented in the package missMethods.}
 \item{cols_used_for_imputation}{Which columns should be used to impute other
 columns? Possible choices: "only_complete", "already_imputed", "all"}
 
-\item{cols_order}{ordering of the columns for imputation. This can be a vector with
+\item{cols_order}{Ordering of the columns for imputation. This can be a vector with
 indices or an \code{order_option} from \code{\link[=order_cols]{order_cols()}}.}
 
 \item{rows_used_for_imputation}{Which rows should be used to impute other
@@ -66,7 +66,7 @@ updated?}
 
 \item{stop_fun_args}{Further arguments passed on to \code{stop_fun}.}
 
-\item{M}{missing data indicator matrix}
+\item{M}{Missing data indicator matrix}
 
 \item{model_arg}{Further arguments for \code{model_fun_unsupervised} (see
 \code{\link[=impute_unsupervised]{impute_unsupervised()}} for details).}
@@ -78,7 +78,7 @@ returned data set still contains \code{NA}?}
 \code{predict_fun_unsupervised}.}
 }
 \value{
-an imputed data set.
+an imputed data set (or a return value of \code{stop_fun})
 }
 \description{
 Iterative imputation of a data set
@@ -90,7 +90,7 @@ values of \code{model_spec_parsnip}, \code{model_fun_unsupervised} and
 \code{predict_fun_unsupervised}. If you want to use a supervised inner method,
 \code{model_spec_parsnip} must be specified and \code{model_fun_unsupervised} and
 \code{predict_fun_unsupervised} must both be \code{NULL}. For an unsupervised inner
-method \code{model_fun_unsupervised} and \code{predict_fun_unsupervised} must be
+method, \code{model_fun_unsupervised} and \code{predict_fun_unsupervised} must be
 specified and \code{model_spec_parsnip} must be \code{NULL}. Some arguments of this
 function are only meaningful for \code{\link[=impute_supervised]{impute_supervised()}} or
 \code{\link[=impute_unsupervised]{impute_unsupervised()}}.
@@ -98,7 +98,7 @@ function are only meaningful for \code{\link[=impute_supervised]{impute_supervis
 \section{stop_fun}{
  The \code{stop_fun} should take the arguments \code{ds} (the data
 set imputed in the current iteration), \code{ds_old} (the data set imputed in
-the last iteration), a list (with named elements \code{M} \code{nr_iterations},
+the last iteration), a list (with named elements \code{M}, \code{nr_iterations},
 \code{max_iter}) and \code{stop_fun_args} in this order. The \code{stop_fun} must return
 \code{FALSE} to allow for a next iteration. If \code{stop_fun} returns not \code{FALSE}
 the iteration is stopped and the return value of \code{stop_fun} is returned as

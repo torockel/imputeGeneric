@@ -8,7 +8,7 @@
 #' `predict_fun_unsupervised`. If you want to use a supervised inner method,
 #' `model_spec_parsnip` must be specified and `model_fun_unsupervised` and
 #' `predict_fun_unsupervised` must both be `NULL`. For an unsupervised inner
-#' method `model_fun_unsupervised` and `predict_fun_unsupervised` must be
+#' method, `model_fun_unsupervised` and `predict_fun_unsupervised` must be
 #' specified and `model_spec_parsnip` must be `NULL`. Some arguments of this
 #' function are only meaningful for [impute_supervised()] or
 #' [impute_unsupervised()].
@@ -21,8 +21,8 @@
 #'   [impute_unsupervised()] for details).
 #' @param predict_fun_unsupervised A predict function for unsupervised
 #'   imputation (see [impute_unsupervised()] for details).
-#' @param max_iter maximum number of iterations
-#' @param stop_fun a stopping function (see details below) or `NULL`. If `NULL`,
+#' @param max_iter Maximum number of iterations
+#' @param stop_fun A stopping function (see details below) or `NULL`. If `NULL`,
 #'   iterations are only stopped after `max_iter` is reached.
 #' @param initial_imputation_fun This function will do the initial imputation of
 #'   the missing values. If `NULL`, no initial imputation is done. Some common
@@ -38,14 +38,14 @@
 #'
 #' @section stop_fun: The `stop_fun` should take the arguments `ds` (the data
 #'   set imputed in the current iteration), `ds_old` (the data set imputed in
-#'   the last iteration), a list (with named elements `M` `nr_iterations`,
+#'   the last iteration), a list (with named elements `M`, `nr_iterations`,
 #'   `max_iter`) and `stop_fun_args` in this order. The `stop_fun` must return
 #'   `FALSE` to allow for a next iteration. If `stop_fun` returns not `FALSE`
 #'   the iteration is stopped and the return value of `stop_fun` is returned as
 #'   result of `impute_iterative()`. Therefore, this return value should
 #'   normally include the imputed data set `ds` or `ds_old`.
 #'
-#' @return an imputed data set.
+#' @return an imputed data set (or a return value of `stop_fun`)
 #' @export
 #' @seealso
 #'   * [impute_supervised()] and [impute_unsupervised()] as the workhorses for the

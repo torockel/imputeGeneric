@@ -7,13 +7,13 @@
 order_cols(ds, order_option, M = is.na(ds))
 }
 \arguments{
-\item{ds}{a data frame}
+\item{ds}{A data frame}
 
 \item{order_option}{This option defines the ordering of the indices. Possible
 choices are "lowest_md_first", "highest_md_first", "increasing_index",
 "decreasing_index".}
 
-\item{M}{missing data indicator matrix}
+\item{M}{Missing data indicator matrix}
 }
 \value{
 The ordered column indices of \code{ds} as a vector.

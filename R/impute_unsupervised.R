@@ -29,7 +29,7 @@
 #'
 #' @details
 #' This function imputes the rows of the data set `ds` row by
-#' row The imputation order of the rows can be specified by `rows_order`.
+#' row. The imputation order of the rows can be specified by `rows_order`.
 #' Furthermore, `rows_used_for_imputation` controls which rows are used for
 #' the imputation. If `ds` is pre-imputed, the missing data indicator matrix
 #' can be supplied via `M`.
@@ -47,7 +47,7 @@
 #' and the arguments `update_model` and `update_ds_model` are ignored. If
 #' `update_model = "every_iteration"` only one model is fitted and the argument
 #' `update_ds_model` is ignored. Both of these cases can be considerably faster
-#' than `update_model = "everytime"` especially for data sets with many rows
+#' than `update_model = "everytime"`, especially, for data sets with many rows
 #' with missing values. However, some methods (like nearest neighbors) need
 #' `update_model = "everytime"`.
 #'

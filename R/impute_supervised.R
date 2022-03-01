@@ -4,12 +4,12 @@
 #' function which can be used inside of [impute_iterative()]. If you need
 #' pre-imputation or iterations, directly use [impute_iterative()].
 #'
-#' @param ds the data set to be imputed, must be a data frame with column names
+#' @param ds The data set to be imputed. Must be a data frame with column names.
 #' @param model_spec_parsnip The model type used for imputation. It is defined
 #'   via the `parsnip` package.
 #' @param cols_used_for_imputation Which columns should be used to impute other
 #'   columns? Possible choices: "only_complete", "already_imputed", "all"
-#' @param cols_order ordering of the columns for imputation. This can be a vector with
+#' @param cols_order Ordering of the columns for imputation. This can be a vector with
 #'   indices or an `order_option` from [order_cols()].
 #' @param rows_used_for_imputation Which rows should be used to impute other
 #'   rows? Possible choices: "only_complete", "partly_complete", "complete_in_k",
@@ -23,14 +23,14 @@
 #' @param update_ds_model How often should the data set for the inner model be
 #'   updated? Possible choices are: "everytime" (after every imputed value),
 #'   "each_column" (only one update per column) and "every_iteration".
-#' @param M missing data indicator matrix
+#' @param M Missing data indicator matrix
 #' @param show_warning_incomplete_imputation Should a warning be given, if the
 #'   returned data set still contains `NA`?
-#' @param ... arguments passed on to [stats::predict()]
+#' @param ... Arguments passed on to [stats::predict()].
 #'
 #' @details
 #' This function imputes the columns of the data set `ds` column by
-#' column. The imputation order of the column can be specified by `cols_order`.
+#' column. The imputation order of the columns can be specified by `cols_order`.
 #' Furthermore, `cols_used_for_imputation` controls which columns are used for
 #' the imputation. The same options are available for the rows of `ds` via
 #' `rows_order` and `rows_used_for_imputation`. If `ds` is pre-imputed, the

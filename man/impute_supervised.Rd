@@ -19,7 +19,7 @@ impute_supervised(
 )
 }
 \arguments{
-\item{ds}{the data set to be imputed, must be a data frame with column names}
+\item{ds}{The data set to be imputed. Must be a data frame with column names.}
 
 \item{model_spec_parsnip}{The model type used for imputation. It is defined
 via the \code{parsnip} package.}
@@ -27,7 +27,7 @@ via the \code{parsnip} package.}
 \item{cols_used_for_imputation}{Which columns should be used to impute other
 columns? Possible choices: "only_complete", "already_imputed", "all"}
 
-\item{cols_order}{ordering of the columns for imputation. This can be a vector with
+\item{cols_order}{Ordering of the columns for imputation. This can be a vector with
 indices or an \code{order_option} from \code{\link[=order_cols]{order_cols()}}.}
 
 \item{rows_used_for_imputation}{Which rows should be used to impute other
@@ -46,12 +46,12 @@ for "each_column").}
 updated? Possible choices are: "everytime" (after every imputed value),
 "each_column" (only one update per column) and "every_iteration".}
 
-\item{M}{missing data indicator matrix}
+\item{M}{Missing data indicator matrix}
 
 \item{show_warning_incomplete_imputation}{Should a warning be given, if the
 returned data set still contains \code{NA}?}
 
-\item{...}{arguments passed on to \code{\link[stats:predict]{stats::predict()}}}
+\item{...}{Arguments passed on to \code{\link[stats:predict]{stats::predict()}}.}
 }
 \value{
 The imputed data set.
@@ -63,7 +63,7 @@ pre-imputation or iterations, directly use \code{\link[=impute_iterative]{impute
 }
 \details{
 This function imputes the columns of the data set \code{ds} column by
-column. The imputation order of the column can be specified by \code{cols_order}.
+column. The imputation order of the columns can be specified by \code{cols_order}.
 Furthermore, \code{cols_used_for_imputation} controls which columns are used for
 the imputation. The same options are available for the rows of \code{ds} via
 \code{rows_order} and \code{rows_used_for_imputation}. If \code{ds} is pre-imputed, the

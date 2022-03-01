@@ -4,21 +4,21 @@
 #' [impute_iterative()]. It compares the difference of two (numeric) data sets
 #' and return `ds`, if difference is small enough (less than `stop_args$eps`).
 #'
-#' @param ds a numeric data set
-#' @param ds_old a numeric data set
-#' @param info_list info_list used inside of [impute_iterative()]. Only the list
+#' @param ds A numeric data set
+#' @param ds_old A numeric data set
+#' @param info_list `info_list` used inside of [impute_iterative()]. Only the list
 #'   element `nr_iterations` is used/needed.
 #' @param stop_args A list with following named components:
 #'   * `eps` Threshold value for the difference.
-#'   * `p` exponent used for the calculation of differences similar to
+#'   * `p` Exponent used for the calculation of differences similar to
 #'     Minkowski distance. For `p = 1` the absolute differences are used. For
-#'     `p = 2` the quadratic differences are summed and the square root of
+#'     `p = 2` The quadratic differences are summed and the square root of
 #'     this sum is compared with `stop_eps`.
 #'   * `sum_diffs` Should differences be summed or averaged (`sum_diffs = FALSE`)?
 #'   * `na_rm` Should `NA`-values be removed when calculating the sum/average?
-#'     If `na_rm = FALSE` and there are `NA`s, the function returns `FALSE``.`
+#'     If `na_rm = FALSE` and there are `NA`s, the function returns `FALSE`.
 #'
-#' @return `FALSE`, if difference is too big. Otherwise `ds` with number of
+#' @return `FALSE`, if the difference is too big. Otherwise `ds` with number of
 #'   iterations (`nr_iterations`) as attribute.
 #' @export
 #'

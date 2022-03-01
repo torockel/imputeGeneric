@@ -7,13 +7,13 @@
 model_donor(ds, M, i = NULL, model_arg = NULL)
 }
 \arguments{
-\item{ds}{the data set to be imputed, must be a data frame with column names}
+\item{ds}{The data set to be imputed. Must be a data frame with column names.}
 
-\item{M}{missing data indicator matrix}
+\item{M}{Missing data indicator matrix}
 
-\item{i}{index for row of \code{ds} or \code{NULL}}
+\item{i}{Index for row of \code{ds} or \code{NULL}}
 
-\item{model_arg}{a list with two named elements (missing elements will be
+\item{model_arg}{A list with two named elements (missing elements will be
 replaced by default values):
 \itemize{
 \item \code{selection} How to select the donors? Possible choices are:
@@ -29,4 +29,7 @@ A "model" for \code{\link[=predict_donor]{predict_donor()}} which is merely a da
 \description{
 This function is intended to be used inside of \code{\link[=impute_unsupervised]{impute_unsupervised()}} as
 \code{model_fun}.
+}
+\seealso{
+\code{\link[=predict_donor]{predict_donor()}}
 }

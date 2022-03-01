@@ -12,27 +12,27 @@ stop_ds_difference(
 )
 }
 \arguments{
-\item{ds}{a numeric data set}
+\item{ds}{A numeric data set}
 
-\item{ds_old}{a numeric data set}
+\item{ds_old}{A numeric data set}
 
-\item{info_list}{info_list used inside of \code{\link[=impute_iterative]{impute_iterative()}}. Only the list
+\item{info_list}{\code{info_list} used inside of \code{\link[=impute_iterative]{impute_iterative()}}. Only the list
 element \code{nr_iterations} is used/needed.}
 
 \item{stop_args}{A list with following named components:
 \itemize{
 \item \code{eps} Threshold value for the difference.
-\item \code{p} exponent used for the calculation of differences similar to
+\item \code{p} Exponent used for the calculation of differences similar to
 Minkowski distance. For \code{p = 1} the absolute differences are used. For
-\code{p = 2} the quadratic differences are summed and the square root of
+\code{p = 2} The quadratic differences are summed and the square root of
 this sum is compared with \code{stop_eps}.
 \item \code{sum_diffs} Should differences be summed or averaged (\code{sum_diffs = FALSE})?
 \item \code{na_rm} Should \code{NA}-values be removed when calculating the sum/average?
-If \code{na_rm = FALSE} and there are \code{NA}s, the function returns \verb{FALSE``.}
+If \code{na_rm = FALSE} and there are \code{NA}s, the function returns \code{FALSE}.
 }}
 }
 \value{
-\code{FALSE}, if difference is too big. Otherwise \code{ds} with number of
+\code{FALSE}, if the difference is too big. Otherwise \code{ds} with number of
 iterations (\code{nr_iterations}) as attribute.
 }
 \description{

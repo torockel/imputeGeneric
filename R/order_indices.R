@@ -1,10 +1,10 @@
 #' Order row or column indices
 #'
 #' @inheritParams order_rows
-#' @param dimension should be "rows" or "cols" (is not checked, everything
-#'   except "cols" will return the value for "rows")
+#' @param dimension Should be "rows" or "cols" (is not checked, everything
+#'   except "cols" will return the value for "rows").
 #'
-#' @return the ordered indices
+#' @return The ordered indices
 #' @noRd
 order_indices <- function(ds, order_option, dimension, M = is.na(ds)) {
   if (dimension == "cols") {
@@ -28,11 +28,11 @@ order_indices <- function(ds, order_option, dimension, M = is.na(ds)) {
 #'
 #' Order the indices of the rows of `ds` for imputation.
 #'
-#' @param ds a data frame
+#' @param ds A data frame
 #' @param order_option This option defines the ordering of the indices. Possible
 #'   choices are "lowest_md_first", "highest_md_first", "increasing_index",
 #'   "decreasing_index".
-#' @param M missing data indicator matrix
+#' @param M Missing data indicator matrix
 #'
 #' @return The ordered row indices of `ds` as a vector.
 #' @export
