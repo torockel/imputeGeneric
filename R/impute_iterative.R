@@ -39,11 +39,14 @@
 #' @section stop_fun: The `stop_fun` should take the arguments `ds` (the data
 #'   set imputed in the current iteration), `ds_old` (the data set imputed in
 #'   the last iteration), a list (with named elements `M`, `nr_iterations`,
-#'   `max_iter`) and `stop_fun_args` in this order. The `stop_fun` must return
-#'   `FALSE` to allow for a next iteration. If `stop_fun` returns not `FALSE`
-#'   the iteration is stopped and the return value of `stop_fun` is returned as
-#'   result of `impute_iterative()`. Therefore, this return value should
-#'   normally include the imputed data set `ds` or `ds_old`.
+#'   `max_iter`) and `stop_fun_args` in this order. The `stop_fun` must return a
+#'   list which contains the named element `stop_iter = FALSE` to allow for a
+#'   next iteration. The simple return `list(stop_iter = FALSE)` will allow the
+#'   iteration to continue. If `stop_fun` does not return a list or the list
+#'   does not contain  `stop_iter = FALSE` the iteration is stopped and the
+#'   return value of `stop_fun` is returned as result of `impute_iterative()`.
+#'   Therefore, this return value should normally include the imputed data set
+#'   `ds` or `ds_old`.
 #'
 #' @return an imputed data set (or a return value of `stop_fun`)
 #' @export
@@ -142,17 +145,18 @@ impute_iterative <- function(ds,
       )
     }
 
-    nr_iterations <- nr_iterations + 1
+
     if (!is.null(stop_fun)) {
       res_stop_fun <- stop_fun(
         ds, ds_old,
         list(M = M, nr_iterations = nr_iterations, max_iter = max_iter),
         stop_fun_args
       )
-      if (!isTRUE(all.equal(FALSE, res_stop_fun))) {
+      if (!(is.list(res_stop_fun) && identical(res_stop_fun$stop_iter, FALSE))) {
         return(res_stop_fun)
       }
     }
+    nr_iterations <- nr_iterations + 1
   }
 
   warn_incomplete(warn_incomplete_imputation, ds)

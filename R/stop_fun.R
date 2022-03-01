@@ -21,8 +21,8 @@
 #'      sum/average? If `na_rm = FALSE` and there are `NA`s, the function
 #'      returns `FALSE`.
 #'
-#' @return `FALSE`, if the difference is too big. Otherwise `ds` with number of
-#'   iterations (`nr_iterations`) as attribute.
+#' @return `list(stop_iter = FALSE)`, if the difference is too big. Otherwise
+#'   `ds` with number of iterations (`nr_iterations`) as attribute.
 #' @export
 #'
 #' @examples
@@ -44,7 +44,7 @@ stop_ds_difference <- function(ds, ds_old, info_list, stop_args = list(
 
   differences <- abs(ds - ds_old)^stop_args$p
   if (!stop_args$na_rm && anyNA(differences)) {
-    return(FALSE)
+    return(do_not_stop_iter())
   }
   if (stop_args$sum_diffs) {
     difference <- sum(differences, na.rm = stop_args$na_rm)
@@ -55,5 +55,5 @@ stop_ds_difference <- function(ds, ds_old, info_list, stop_args = list(
   if (difference < stop_args$eps) {
     return(structure(ds, nr_iterations = info_list$nr_iterations))
   }
-  FALSE
+  do_not_stop_iter()
 }

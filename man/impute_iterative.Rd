@@ -99,11 +99,14 @@ function are only meaningful for \code{\link[=impute_supervised]{impute_supervis
  The \code{stop_fun} should take the arguments \code{ds} (the data
 set imputed in the current iteration), \code{ds_old} (the data set imputed in
 the last iteration), a list (with named elements \code{M}, \code{nr_iterations},
-\code{max_iter}) and \code{stop_fun_args} in this order. The \code{stop_fun} must return
-\code{FALSE} to allow for a next iteration. If \code{stop_fun} returns not \code{FALSE}
-the iteration is stopped and the return value of \code{stop_fun} is returned as
-result of \code{impute_iterative()}. Therefore, this return value should
-normally include the imputed data set \code{ds} or \code{ds_old}.
+\code{max_iter}) and \code{stop_fun_args} in this order. The \code{stop_fun} must return a
+list which contains the named element \code{stop_iter = FALSE} to allow for a
+next iteration. The simple return \code{list(stop_iter = FALSE)} will allow the
+iteration to continue. If \code{stop_fun} does not return a list or the list
+does not contain  \code{stop_iter = FALSE} the iteration is stopped and the
+return value of \code{stop_fun} is returned as result of \code{impute_iterative()}.
+Therefore, this return value should normally include the imputed data set
+\code{ds} or \code{ds_old}.
 }
 
 \examples{

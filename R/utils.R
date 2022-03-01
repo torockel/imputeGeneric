@@ -6,6 +6,10 @@ ckeck_and_set_rows_order <- function(rows_order, ds, M) {
   rows_order
 }
 
+do_not_stop_iter <- function() {
+  list(stop_iter = FALSE)
+}
+
 warn_incomplete <- function(show_warning, ds) {
   if (show_warning && anyNA(ds)) {
     warning(

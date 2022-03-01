@@ -35,8 +35,8 @@ returns \code{FALSE}.
 }}
 }
 \value{
-\code{FALSE}, if the difference is too big. Otherwise \code{ds} with number of
-iterations (\code{nr_iterations}) as attribute.
+\code{list(stop_iter = FALSE)}, if the difference is too big. Otherwise
+\code{ds} with number of iterations (\code{nr_iterations}) as attribute.
 }
 \description{
 This function is intended to be used as \code{stop_fun} inside of

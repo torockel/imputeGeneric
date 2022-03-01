@@ -95,4 +95,18 @@ test_that("impute_iterative() works out of the box,
   # impute data set
   ds_imp3 <- impute_iterative(ds_mis, max_iter = 1)
   expect_false(anyNA(ds_imp3))
- })
+})
+
+test_that("impute_iterative() works with stop_fun", {
+  ds_imp <- impute_iterative(
+    df_XYZ_10_mis,
+    initial_imputation_fun = missMethods::impute_mean,
+    stop_fun = stop_ds_difference,
+    cols_used_for_imputation = "all",
+    rows_used_for_imputation = "all",
+    stop_fun_args = list(eps = 0.4)
+  )
+  expect_true(is.data.frame(ds_imp))
+  expect_equal(dim(ds_imp), c(10, 3))
+  expect_equal(attr(ds_imp, "nr_iterations"), 3)
+})

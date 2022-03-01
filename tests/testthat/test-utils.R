@@ -1,3 +1,11 @@
+# do_not_stop_iter() ----------------------------------------------------------
+test_that("do_not_stop_iter() works", {
+  expect_equal(
+    do_not_stop_iter(),
+    list(stop_iter = FALSE)
+  )
+})
+
 # get_col_indices() -----------------------------------------------------------
 test_that("get_col_indices() works with only_complete", {
   expect_equal(
