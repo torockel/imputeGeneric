@@ -1,6 +1,6 @@
 Package: imputeGeneric
 Title: Ease the Implementation of Imputation Methods
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person("Tobias", "Rockel", , "Rockel.To@gmail.com", role = c("aut", "cre"))
 Description: The general workflow of most imputation methods is quite
