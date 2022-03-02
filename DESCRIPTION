@@ -11,7 +11,7 @@ Description: The general workflow of most imputation methods is quite
     specifications. The rest of an imputation method are more technical
     specification e.g. which columns and rows should be used for
     imputation and in which order. These technical specifications can be
-    easily set inside the imputation functions.
+    set inside the imputation functions.
 License: GPL (>= 3)
 URL: https://github.com/torockel/imputeGeneric
 BugReports: https://github.com/torockel/imputeGeneric/issues
