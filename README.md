@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/torockel/imputeGeneric/workflows/R-CMD-check/badge.svg)](https://github.com/torockel/imputeGeneric/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/imputeGeneric)](https://CRAN.R-project.org/package=imputeGeneric)
 <!-- badges: end -->
 
 The goal of imputeGeneric is to ease the implementation of imputation
